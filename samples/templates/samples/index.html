@@ -1,0 +1,48 @@
+{% include "samples/base.html" %}
+{% load render_table from django_tables2 %}
+<h1>Welcome to LabMan's Sample App</h1>
+
+<div class="link"><a href="{% url "material_add" %}">Add Material</a></div>
+<div class="link"><a href="{% url "project_add" %}">Add Project</a></div>
+<div class="link"><a href="{% url "sample_add" %}">Add Sample</a></div>
+<div class="link"><a href="{% url "sample_image_add" %}">Add Sample Image</a></div>
+
+<table>
+    <tr>
+        <td>
+            <table border="1">
+                <tr>
+                    <td>
+                        Materials
+                    </td>
+                </tr>
+                <tr>
+                    <td>{% render_table materials %}</td>
+                </tr>
+            </table>
+        </td>
+        <td valign="top">
+            <table border="1">
+                <tr>
+                    <td>
+                        Projects
+                    </td>
+                </tr>
+                <tr>
+                    <td>{% render_table projects %}</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+<table border="1">
+    <tr>
+        <td>
+            Samples
+        </td>
+    </tr>
+    <tr>
+        <td>{% render_table samples %}</td>
+    </tr>
+</table>

@@ -1,0 +1,40 @@
+{% include "status/base.html" %}
+
+{% load static %}
+<script type="text/javascript" src={% static 'js/jquery.js' %}></script>
+<script type="text/javascript" src={% static 'js/jquery.flot.js' %}></script>
+<script type="text/javascript" src={% static 'js/jquery.flot.time.js' %}></script>
+<body>
+
+    <h1>Welcome to LabMan's Status App</h1>
+    <form action="{% url "index" %}" method="post">
+        {% csrf_token %}
+        {{ date_selector_form }}
+        <input type="submit" value="Submit" />
+    </form>
+
+
+    <table class="paleblue">
+        <tr>
+            <td><div id="ylabel">Temp (F)</div></td>
+            <td><div id="temp_graph" style="width:600px;height:300px;"></div></td>
+        </tr>
+        <tr><td></td><td><div align="center">Time</div></td></tr>
+    </table>
+
+    <table class="paleblue">
+        <tr>
+            <td><div id="ylabel">Humidity (%)</div></td>
+            <td><div id="hum_graph" style="width:600px;height:300px;"></div></td>
+        </tr>
+        <tr><td></td><td><div align="center">Time</div></td></tr>
+    </table>
+
+    <script type='text/javascript'>
+        $.plot($("#temp_graph"), {{ temp.json_data|safe}}, {{ temp.options|safe }});
+    </script>
+    <script type='text/javascript'>
+        $.plot($("#hum_graph"), {{ hum.json_data|safe}}, {{ hum.options|safe }});
+    </script>
+
+</body>

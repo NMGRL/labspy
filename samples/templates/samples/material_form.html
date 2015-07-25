@@ -1,0 +1,10 @@
+{#<form action="" method="post">#}
+{#    {% csrf_token %}#}
+{#    <input id="material_name" name='name' type="text">#}
+{#    <input type="submit" value="OK">#}
+{#</form>#}
+<form action="{% url "material_add" %}" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Submit" />
+</form>

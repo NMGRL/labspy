@@ -1,0 +1,8 @@
+{% load staticfiles %}
+<link rel="stylesheet" type="text/css" href="{% static 'samples/style.css' %}" />
+
+<table border="2">
+    <tr><td id="name">Sample</td><td>{{ object.name }}</td></tr>
+    <tr><td id="name">Material</td><td>{{ object.material.name }}</td></tr>
+    <tr><td id="name">Project</td><td>{{ object.project.name }}</td></tr>
+</table>
