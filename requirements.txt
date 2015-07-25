@@ -1,0 +1,5 @@
+Django==1.8.3
+django-tables2==1.0.4
+PyFlot==0.2
+PyMySQL==0.6.6
+six==1.9.0
