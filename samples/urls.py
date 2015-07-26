@@ -25,6 +25,13 @@ urlpatterns = [
     url(r'^project/add/$', views.project_add, name='project_add'),
     url(r'^image/add/$', views.sample_image_add, name='sample_image_add'),
 
+    url(r'^assignment/add/$', views.assignment, name='assignment'),
+    # url(r'^sample/prep/(?P<pk>[0-9]+)/$', views.sample_prep, name='sampleprep'),
+    url(r'^sample/prep/(?P<pk>[0-9]*)/$', views.sample_prep, name='sampleprep'),
+    # url(r'^sampleprep/$', views.sample_prep, name='sample_prep'),
+
+
+
     url(r'^material/(?P<pk>[0-9]+)/$', views.MaterialView.as_view(), name='material_detail'),
     url(r'^sample/(?P<pk>[0-9]+)/$', views.SampleView.as_view(), name='sample_detail'),
 

@@ -4,26 +4,26 @@ from django.shortcuts import render
 # Create your views here.
 from django.views import generic
 from django_tables2 import Table, RequestConfig
-from samples.forms import MaterialForm, SampleForm, ProjectForm
-from samples.models import Material, Project, Sample
+from samples.forms import MaterialForm, SampleForm, ProjectForm, AssignmentForm, SamplePrepForm
+from samples.models import Material, Project, Sample, SamplePrep
 
 
 class MaterialTable(Table):
     class Meta:
         model = Material
-        attrs = {'class':'paleblue'}
+        attrs = {'class': 'paleblue'}
 
 
 class ProjectTable(Table):
     class Meta:
         model = Project
-        attrs = {'class':'paleblue'}
+        attrs = {'class': 'paleblue'}
 
 
 class SampleTable(Table):
     class Meta:
         model = Sample
-        attrs = {'class':'paleblue'}
+        attrs = {'class': 'paleblue'}
 
 
 def index(request):
@@ -82,6 +82,44 @@ def project_add(request):
 def sample_image_add(request):
     return HttpResponse('Sample Image Add not enabled')
 
+
+def assignment(request):
+    if request.method == 'POST':
+        form = AssignmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+            sample = form.cleaned_data['sample']
+            SamplePrep.objects.create(sample=sample)
+
+            return HttpResponse('thanks')
+    else:
+        form = AssignmentForm()
+
+    return render(request, 'samples/assignment_form.html', {'form': form})
+
+
+def sample_prep(request, pk):
+    if pk:
+        if request.method == 'POST':
+            instance = SamplePrep.objects.get(pk=pk)
+            form = SamplePrepForm(request.POST, instance=instance)
+            if form.is_valid():
+                form.save()
+
+                # sample = form.cleaned_data['sample']
+                # SamplePrep.objects.create(sample=sample)
+
+                # return HttpResponse('thanks')
+        else:
+            instance = SamplePrep.objects.get(pk=pk)
+            form = SamplePrepForm(instance=instance)
+    else:
+        return HttpResponse('no prep')
+
+    return render(request, 'samples/sample_prep_form.html',
+                  {'form': form,
+                   'prep': instance})
 
 
 # report views

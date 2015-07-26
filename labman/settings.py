@@ -10,6 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
+try:
+    import pymysql
+    pymysql.install_as_MySQLdb()
+except ImportError:
+    print 'asdfasdf'
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
@@ -84,20 +90,19 @@ WSGI_APPLICATION = 'labman.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
-    #     'default': {
-    #         'ENGINE': 'django.db.backends.sqlite3',
-    #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    #         # 'ENGINE': 'django.db.backends.mysql',
-    #         # 'USER': 'root',
-    #         # 'PASSWORD': 'Argon',
-    #         # 'HOST':'localhost',
-    #         # 'NAME':'labman'
-    #     }
+        'default': {
+            # 'ENGINE': 'django.db.backends.sqlite3',
+            # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'ENGINE': 'django.db.backends.mysql',
+            'USER': 'root',
+            'PASSWORD': 'Argon',
+            'HOST':'localhost',
+            'NAME':'labman'
+        }
 }
 
-import dj_database_url
-
-DATABASES['default'] = dj_database_url.config()
+# import dj_database_url
+# DATABASES['default'] = dj_database_url.config()
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -117,3 +122,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# AUTH_USER_MODEL = 'django.contrib.auth.User'

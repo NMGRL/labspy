@@ -17,7 +17,7 @@
 # ============= enthought library imports =======================
 # ============= local library imports  ==========================
 from django.forms import ModelForm
-from samples.models import Sample, Material, Project
+from samples.models import Sample, Material, Project, Assignment, SamplePrep
 
 
 class MaterialForm(ModelForm):
@@ -36,5 +36,24 @@ class SampleForm(ModelForm):
     class Meta:
         model = Sample
         fields = ('name', 'material', 'project')
+
+
+class AssignmentForm(ModelForm):
+    class Meta:
+        model = Assignment
+        fields = ('sample', 'worker')
+
+
+class SamplePrepForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(SamplePrepForm, self).__init__(*args, **kwargs)
+
+        for key in self.fields:
+            self.fields[key].required = False
+
+    class Meta:
+        model = SamplePrep
+        fields = ('sample','crushed', 'sieved', 'frantz', 'hf', 'hl', 'hcl', 'crushed_note', 'sieved_note', 'frantz_note',
+                  'hf_note', 'hl_note', 'hcl_note', 'general_note')
 
 # ============= EOF =============================================
