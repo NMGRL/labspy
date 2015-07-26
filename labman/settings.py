@@ -13,8 +13,8 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 try:
     import pymysql
     pymysql.install_as_MySQLdb()
-except ImportError:
-    print 'asdfasdf'
+except ImportError, e:
+    print 'failed importing. {}'.format(e)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -33,6 +33,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CRISPY_TEMPLATE_PACK='bootstrap'
 
 # Application definition
 
@@ -46,6 +47,7 @@ INSTALLED_APPS = (
 
     # third party
     'django_tables2',
+    'crispy_forms',
 
     # local
     'samples',

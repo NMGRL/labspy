@@ -16,6 +16,8 @@
 
 # ============= enthought library imports =======================
 # ============= local library imports  ==========================
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit, Layout, Fieldset, ButtonHolder
 from django.forms import ModelForm
 from samples.models import Sample, Material, Project, Assignment, SamplePrep
 
@@ -47,13 +49,33 @@ class AssignmentForm(ModelForm):
 class SamplePrepForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(SamplePrepForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        # self.helper.add_input(Submit('submit', 'Submit'))
 
+        self.helper.layout = Layout(
+            Fieldset(
+                'Sample Prep',
+                # 'sample',
+                'general_note',
+                'crushed',
+                'crushed_note',
+                'sieved',
+                'sieved_note',
+                'frantz',
+                'frantz_note',
+                'hf', 'hl', 'hcl',
+                'hf_note',
+                'hl_note',
+                'hcl_note'),
+            ButtonHolder(
+                Submit('submit', 'Submit', css_class='button white')))
         for key in self.fields:
             self.fields[key].required = False
 
     class Meta:
         model = SamplePrep
-        fields = ('sample','crushed', 'sieved', 'frantz', 'hf', 'hl', 'hcl', 'crushed_note', 'sieved_note', 'frantz_note',
-                  'hf_note', 'hl_note', 'hcl_note', 'general_note')
+        fields = (
+             'crushed', 'sieved', 'frantz', 'hf', 'hl', 'hcl', 'crushed_note', 'sieved_note', 'frantz_note',
+            'hf_note', 'hl_note', 'hcl_note', 'general_note')
 
-# ============= EOF =============================================
+# ============= EOF =====================================

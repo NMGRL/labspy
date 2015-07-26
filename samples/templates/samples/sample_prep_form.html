@@ -1,7 +1,9 @@
 {% include 'samples/base.html' %}
+{% load crispy_forms_tags %}
 
 <form action="{% url "sampleprep" prep.id %}" method="post">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit" />
+    {% crispy form %}
+{#    {{ form|crispy }}#}
+{#    <input type="submit" value="Submit" />#}
 </form>
