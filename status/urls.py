@@ -18,7 +18,7 @@ from django.contrib import admin
 from status import views
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
+    url(r'^$', views.index, name='status_index'),
     # url(r'^material/add/$', views.MaterialEntryView.as_view(), name='material_add'),
     # url(r'^material/(?P<pk>[0-9]+)/$', views.MaterialView.as_view(), name='material_detail'),
     # url(r'^sample/(?P<pk>[0-9]+)/$', views.SampleView.as_view(), name='sample_detail'),

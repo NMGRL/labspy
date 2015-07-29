@@ -21,7 +21,7 @@ from django.views import generic
 
 
 class Home(generic.TemplateView):
-    template_name = 'home.html'
+    template_name = 'index.html'
 
 
 # ============= EOF =============================================

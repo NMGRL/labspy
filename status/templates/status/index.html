@@ -1,14 +1,17 @@
-{% include "status/base.html" %}
+{% extends "status/base.html" %}
 
-{% load static %}
-{#<script type="text/javascript" src={% static 'js/jquery.js' %}></script>#}
-<script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js'></script>
-<script type="text/javascript" src={% static 'js/jquery.flot.js' %}></script>
-<script type="text/javascript" src={% static 'js/jquery.flot.time.js' %}></script>
-<body>
+{% block staticfiles %}
+    {% load static %}
+    <script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js'></script>
+    <script type="text/javascript" src='http://www.flotcharts.org/flot/jquery.flot.js'></script>
+    <script type="text/javascript" src='http://www.flotcharts.org/flot/jquery.flot.time.js'></script>
+{#    <script type="text/javascript" src="{% static 'js/jquery.flot.js' %}"></script>#}
+{#    <script type="text/javascript" src="{% static 'js/jquery.flot.time.js' %}"></script>#}
+{% endblock %}
 
-    <h1>Welcome to LabMan's Status App</h1>
-    <form action="{% url "index" %}" method="post">
+
+{% block body %}
+    <form action="{% url "status_index" %}" method="post">
         {% csrf_token %}
         {{ date_selector_form }}
         <input type="submit" value="Submit" />
@@ -36,5 +39,4 @@
     <script type='text/javascript'>
         $.plot($("#hum_graph"), {{ hum.json_data|safe}}, {{ hum.options|safe }});
     </script>
-
-</body>
+{% endblock %}

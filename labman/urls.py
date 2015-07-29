@@ -19,7 +19,7 @@ from labman.views import Home
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', Home.as_view()),
+    url(r'^$', Home.as_view(), name='home'),
     url(r'^status/', include('status.urls')),
     # url(r'^samples/', include('samples.urls')),
 

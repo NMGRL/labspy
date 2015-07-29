@@ -1,4 +1,49 @@
 {% load staticfiles %}
 
 <link rel="stylesheet" type="text/css" href="{% static 'status/style.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'status/template.css' %}" />
 <link rel="stylesheet" type="text/css" href="{% static 'status/screen.css' %}" />
+
+{% block staticfiles %}{% endblock %}
+
+<header class="art-header clearfix">
+    <div class="art-shapes">
+        <h1 class="art-headline" data-left="15.52%">
+            <a href="#">New Mexico Geochronology Laboratory</a>
+        </h1>
+        <h2 class="art-slogan" data-left="15.63%">New Mexico Bureau of Geology and Mineral Resources</h2>
+
+        <div class="art-object0" data-left="2.62%"></div>
+    </div>
+    <nav class="art-nav clearfix">
+    <div class="art-nav-inner">
+        <ul class="art-hmenu">
+
+            <li><a href={% url "home" %} class="active">Home</a></li>
+            <li><a href={% url "status_index" %} class="active">Status</a></li>
+{#            <li><a href={% url "index" %} class="active">Status</a></li>#}
+{#            <li><a href="contacts.html">Contacts</a></li>#}
+        </ul>
+        </div>
+    </nav>
+</header>
+
+{% block body %}{% endblock %}
+
+<footer class="art-footer clearfix">
+  <div class="art-footer-inner">
+<div class="art-content-layout">
+    <div class="art-content-layout-row">
+    <div class="art-layout-cell layout-item-0" style="width: 50%">
+        <p>Copyright © 2011-2012</p>
+    </div><div class="art-layout-cell layout-item-0" style="width: 50%">
+        <p style="text-align: right;">Vectors by <a href="http://www.bazaardesigns.com">www.bazaardesigns.com</a>. Icons by <a class="external" href="http://www.iconeden.com">IconEden</a>.</p>
+    </div>
+    </div>
+</div>
+
+    <p class="art-page-footer">
+        <span id="art-footnote-links"><a href="http://www.artisteer.com/" target="_blank">Web Template</a> created with Artisteer.</span>
+    </p>
+  </div>
+</footer>
