@@ -26,8 +26,9 @@ urlpatterns = [
     url(r'^image/add/$', views.sample_image_add, name='sample_image_add'),
 
     url(r'^assignment/add/$', views.assignment, name='assignment'),
-    # url(r'^sample/prep/(?P<pk>[0-9]+)/$', views.sample_prep, name='sampleprep'),
-    url(r'^sample/prep/(?P<pk>[0-9]*)/$', views.sample_prep, name='sampleprep'),
+    url(r'^prep/(?P<username>.*)/$', views.worker_sample_prep, name='worker_sample_prep'),
+    url(r'^prep/(?P<pk>[0-9]*)/$', views.sample_prep, name='sampleprep'),
+
     # url(r'^sampleprep/$', views.sample_prep, name='sample_prep'),
 
 

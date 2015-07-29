@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.views import generic
 from django_tables2 import Table, RequestConfig
 from samples.forms import MaterialForm, SampleForm, ProjectForm, AssignmentForm, SamplePrepForm
-from samples.models import Material, Project, Sample, SamplePrep
+from samples.models import Material, Project, Sample, SamplePrep, Assignment
 
 
 class MaterialTable(Table):
@@ -120,6 +120,26 @@ def sample_prep(request, pk):
     return render(request, 'samples/sample_prep_form.html',
                   {'form': form,
                    'prep': instance})
+
+
+def worker_sample_prep(request, username):
+    if request.method == 'POST':
+        instance = Assignment.objects.get(worker__username=username)
+        samples = []
+        # form = SamplePrepList(instance=instance)
+        # form = SamplePrepForm(request.POST, instance=instance)
+        # if form.is_valid():
+        #     form.save()
+
+            # sample = form.cleaned_data['sample']
+            # SamplePrep.objects.create(sample=sample)
+
+            # return HttpResponse('thanks')
+    else:
+        samples = Assignment.objects.filter(worker__username=username).all()
+        # form = SamplePrepList(instance=instance)
+
+    return render(request, 'samples/worker_sample_prep.html', {'samples': samples})
 
 
 # report views

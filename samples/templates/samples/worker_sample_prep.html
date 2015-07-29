@@ -1,0 +1,10 @@
+{% include 'samples/base.html' %}
+{% load render_table from django_tables2 %}
+
+{% render_table samples %}
+{#<form action="{% url "sampleprep" prep.id %}" method="post">#}
+{#    {% csrf_token %}#}
+{#    {% crispy form %}#}
+{#    {{ form|crispy }}#}
+{#    <input type="submit" value="Submit" />#}
+{#</form>#}

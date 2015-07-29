@@ -72,7 +72,7 @@ TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request',)
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,6 +87,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'labman.wsgi.application'
 
+
+# TEMPLATE_LOADERS = (
+#     'django.template.loaders.filesystem.Loader',
+#     'django.template.loaders.app_directories.Loader',
+# )
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
