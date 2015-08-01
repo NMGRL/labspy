@@ -19,6 +19,7 @@ from status import views
 
 urlpatterns = [
     url(r'^$', views.index, name='status_index'),
+    #url(r'^(?P<dr>.*)/$', views.graph_view, name='status_graph'),
     # url(r'^material/add/$', views.MaterialEntryView.as_view(), name='material_add'),
     # url(r'^material/(?P<pk>[0-9]+)/$', views.MaterialView.as_view(), name='material_detail'),
     # url(r'^sample/(?P<pk>[0-9]+)/$', views.SampleView.as_view(), name='sample_detail'),

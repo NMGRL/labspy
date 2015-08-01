@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 
 try:
     import pymysql
+
     pymysql.install_as_MySQLdb()
 except ImportError, e:
     print 'failed importing. {}'.format(e)
@@ -33,7 +34,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CRISPY_TEMPLATE_PACK='bootstrap'
+CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 # Application definition
 
@@ -50,7 +51,7 @@ INSTALLED_APPS = (
     'crispy_forms',
 
     # local
-    'samples',
+    # 'samples',
     'status'
 )
 
@@ -65,7 +66,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-ROOT_URLCONF = 'labman.urls'
+ROOT_URLCONF = 'labspy.urls'
 
 TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request',)
 
@@ -85,7 +86,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'labman.wsgi.application'
+WSGI_APPLICATION = 'labspy.wsgi.application'
 
 
 # TEMPLATE_LOADERS = (
@@ -97,15 +98,15 @@ WSGI_APPLICATION = 'labman.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
-        'default': {
-            # 'ENGINE': 'django.db.backends.sqlite3',
-            # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-            'ENGINE': 'django.db.backends.mysql',
-            'USER': 'root',
-            'PASSWORD': 'Argon',
-            'HOST':'localhost',
-            'NAME':'labman'
-        }
+    'default': {
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'USER': os.environ.get('ARGONSERVER_DB_USER'),
+        'PASSWORD': os.environ.get('ARGONSERVER_DB_PWD'),
+        'HOST': os.environ.get('ARGONSERVER_HOST'),
+        'NAME': 'labspy'
+    }
 }
 
 # import dj_database_url

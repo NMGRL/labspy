@@ -11,26 +11,92 @@
 
 
 {% block body %}
-    <form action="{% url "status_index" %}" method="post">
+
+    <div class='art-postcontent'>
+        <table>
+            <tr>
+            {% for spec, exp, ai in experiments %}
+                <td>
+                    <div class="spectrometer_box">
+                        <h1>{{ spec }}</h1>
+                        <h3>Current Experiment: {{ exp }}</h3>
+                        <h2>Current Analysis: {{ ai }}</h2>
+                    </div>
+                </td>
+            {% endfor %}
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <td>
+                    <div class="spectrometer_box">
+                        <h2>Current Temperature: {{ current_temp }} ({{ temp_units }})</h2>
+                    </div>
+                </td>
+                <td>
+                    <div class="spectrometer_box">
+                        <h2>Current Humidity: {{ current_humidity }} ({{ humidity_units }})</h2>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <form action={% url "status_index" %} method="post">
         {% csrf_token %}
         {{ date_selector_form }}
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Refresh" />
     </form>
 
-    <table class="paleblue">
-        <tr>
-            <td><div id="ylabel">Temp (F)</div></td>
-            <td><div id="temp_graph" style="width:600px;height:300px;"></div></td>
-        </tr>
-        <tr><td></td><td><div align="center">Time</div></td></tr>
+    <table>
+    <tr>
+        <td>
+            <table class="paleblue">
+                <tr><td></td><td><div id='graphtitle' align="center">Lab Temperature</div></td></tr>
+                <tr>
+                    <td><div id="ylabel">Temp (F)</div></td>
+                    <td><div id="temp_graph" style="width:500px;height:300px;"></div></td>
+                </tr>
+                <tr><td></td><td><div align="center">Time</div></td></tr>
+            </table>
+        </td>
+        <td>
+            <table class="paleblue">
+                <tr><td></td><td><div id='graphtitle' align="center">Lab Humidity</div></td></tr>
+                <tr>
+                    <td><div id="ylabel">Humidity (%)</div></td>
+                    <td><div id="hum_graph" style="width:500px;height:300px;"></div></td>
+                </tr>
+                <tr><td></td><td><div align="center">Time</div></td></tr>
+            </table>
+        </td>
+    </tr>
     </table>
 
-    <table class="paleblue">
-        <tr>
-            <td><div id="ylabel">Humidity (%)</div></td>
-            <td><div id="hum_graph" style="width:600px;height:300px;"></div></td>
-        </tr>
-        <tr><td></td><td><div align="center">Time</div></td></tr>
+    <table>
+    <tr>
+        <td>
+            <table class="paleblue">
+                <tr><td></td><td><div id='graphtitle' align="center">Coolant Temperature</div></td></tr>
+                <tr>
+                    <td><div id="ylabel">Temp ({{ coolant_units }})</div></td>
+                    <td><div id="coolant_graph" style="width:500px;height:300px;"></div></td>
+                </tr>
+                <tr><td></td><td><div align="center">Time</div></td></tr>
+            </table>
+        </td>
+        <td>
+            <table class="paleblue">
+                <tr><td></td><td><div id='graphtitle' align="center">ColdFinger Temperature</div></td></tr>
+                <tr>
+                    <td><div id="ylabel">Temp ({{ coldfinger_units }})</div></td>
+                    <td><div id="cf_graph" style="width:500px;height:300px;"></div></td>
+                </tr>
+                <tr><td></td><td><div align="center">Time</div></td></tr>
+            </table>
+        </td>
+    </tr>
     </table>
 
     <script type='text/javascript'>
@@ -38,5 +104,11 @@
     </script>
     <script type='text/javascript'>
         $.plot($("#hum_graph"), {{ hum.json_data|safe}}, {{ hum.options|safe }});
+    </script>
+    <script type='text/javascript'>
+        $.plot($("#coolant_graph"), {{ coolant.json_data|safe}}, {{ coolant.options|safe }});
+    </script>
+    <script type='text/javascript'>
+        $.plot($("#cf_graph"), {{ cfinger.json_data|safe}}, {{ cfinger.options|safe }});
     </script>
 {% endblock %}

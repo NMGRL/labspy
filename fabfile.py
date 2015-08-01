@@ -17,14 +17,20 @@
 # ============= enthought library imports =======================
 # ============= standard library imports ========================
 # ============= local library imports  ==========================
-from django.views import generic
+from fabric.api import local, lcd
 
 
-class Home(generic.TemplateView):
-    template_name = 'index.html'
+def prepare_deploymoent(branch_name):
+    local('python manage.py test labspy')
+    local('git add -p && git commit')
 
+
+def deploy():
+    with lcd('/opt/labspy'):
+        local('git pull origin master')
+
+        local('python manage.py migrate labspy')
+        local('python manage.py test labspy')
+        local('gunicorn labspy.wsgi')
 
 # ============= EOF =============================================
-
-
-

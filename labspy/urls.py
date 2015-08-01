@@ -15,11 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from labman.views import Home
+from labspy.views import Home, People
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$', Home.as_view(), name='home'),
+    url(r'^people$', People.as_view(), name='people'),
     url(r'^status/', include('status.urls')),
     # url(r'^samples/', include('samples.urls')),
 
