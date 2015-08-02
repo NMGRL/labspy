@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block body %}
+    <figure class="right" style="width: 210px;">
+        <img src={% static  "images/nmgrl_logo.jpg" %}>
+    </figure>
+    <h2>Introduction</h2>
+    <p>The New Mexico Geochronology Research Laboratory
+      (NMGRL) in Socorro is a state-of-the-art <sup>40</sup>Ar/<sup>39</sup>Ar
+      dating facility administered by the New Mexico Bureau of Geology
+      at the New Mexico Institute of Mining and Technology. <sup>40</sup>Ar/<sup>39</sup>Ar
+      research at NMGRL is directed by Drs. <a href={% url "people" %}>Bill McIntosh</a> and <a href={% url "people" %} >Matt Heizler</a> who have over 30 years combined experience in the field of argon
+      geochronology and thermochronology. The lab also employs a full-time
+      technician, <a href={% url "people" %}>Lisa Peters</a>  who supervises mineral
+      separation, sample irradiation and analyses and data reduction.</p>
+
+    <p>Since its christening in the winter of 1992, the NMGRL laboratory
+      has performed over 75,000 single sample analyses.
+
+        <div id="rewrite_highlight">Necessary in
+      this regard is the <a href="/labs/argon/software/home.html">software</a> developed by Dr. Al Deino at the Berkeley Geochronology Center in Berkeley, California which allows for full
+      automation of extraction line and mass spectrometer functions
+      . The software controls all crucial extraction line and mass spectrometer valves which are operated
+      via pneumatic air drivers. Additional automation comes from laser
+      and furnace sample &quot;packages&quot; which can contain up to 221 and
+      17 individual samples per load, respectively.</div>
+
+            Once under vacuum,
+      sample analyses do not require the physical presence of laboratory
+      personnel for extended periods of time.</p>
+
+    <p> Argon gas extraction at NMGRL is accomplished either by resistance
+      furnace or CO<sub>2</sub> laser heating. The first method consists of a double
+      vacuum resistance furnace with molybdenum crucible and crucible
+      liner. Temperatures accuracy is &plusmn;10&deg;C; precision is &plusmn;1&deg;C; maximum
+      temperature is 1750&deg;C. Argon blanks for the entire furnace extraction
+      line (dual stage) are on the order of 5x10<sup>-16</sup> moles of <sup>40</sup>Ar. The
+      addition of a gate valve between the crucible and sample holder
+      in the near future will likely decrease system blank as well as
+      reduce turn around time for sample changes.</p>
+
+    <p> The second argon extraction method employs a 50 watt CO<sub>2</sub> laser.
+      The CO<sub>2</sub> laser provides many of the advantages of other lasers
+      used in argon extraction (e.g. Ar-ion and Nd-Yag) but requires
+      only a fraction of the cost to set up. The CO<sub>2</sub> laser at NMGRL
+      is used mainly for the total-fusion of sanidine crystals which
+      include J-value determinations from Fish Canyon Tuff (FC-1) sanidine
+      monitors. System blanks for the laser (single stage) are on the
+      order of 2xE-16 moles of <sup>40</sup>Ar.</p>
+    <figure><img alt="Lab panorama" src={%  static "images/NMGRL_pano3.jpg" %}>
+    <figcaption class="center">The argon geochronolgy lab in 2014</figcaption></figure>
+
+{% endblock %}
+

@@ -1,4 +1,4 @@
-{% extends "status/base.html" %}
+{% extends "base.html" %}
 
 {% block staticfiles %}
     {% load static %}
@@ -31,12 +31,12 @@
             <tr>
                 <td>
                     <div class="spectrometer_box">
-                        <h2>Current Temperature: {{ current_temp }} ({{ temp_units }})</h2>
+                        <h2>Current Temperature: {{ current_temp|floatformat }} ({{ temp_units }})</h2>
                     </div>
                 </td>
                 <td>
                     <div class="spectrometer_box">
-                        <h2>Current Humidity: {{ current_humidity }} ({{ humidity_units }})</h2>
+                        <h2>Current Humidity: {{ current_humidity|floatformat }} ({{ humidity_units }})</h2>
                     </div>
                 </td>
             </tr>

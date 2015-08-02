@@ -27,4 +27,12 @@ class Home(generic.TemplateView):
 class People(generic.TemplateView):
     template_name = 'people.html'
 
+
+class Hardware(generic.TemplateView):
+    template_name = 'hardware.html'
+
+
+class Software(generic.TemplateView):
+    template_name = 'software.html'
+
 # ============= EOF =============================================
