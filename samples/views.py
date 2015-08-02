@@ -9,7 +9,11 @@ from samples.models import Material, Project, Sample, SamplePrep, Assignment
 
 
 def index(request):
-    ctx = {}
+    ctx = {'points': [(34.060765, -106.890713),
+                      (34.160765, -106.890713),
+                      (34.260765, -106.890713),
+                      (34.360765, -106.890713),
+                      (34.460765, -106.890713)]}
     return render(request, 'samples/map.html', ctx)
 
 #

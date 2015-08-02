@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block body %}
+
+    <figure class="right" style="width: 168px;">
+        <img src="http://geoinfo.nmt.edu/labs/argon/software/Images/msicon.jpg" alt="Pychron icon"
+             title="Evolution of a geologist" width="207" height="232">
+    </figure>
+  <h2><a name="overview"></a>Pychron </h2>
+  <p><strong>Pychron</strong> is a comprehensive hardware control and data reduction package developed and maintained by
+      Jake Ross of the <a href="http://www.geoinfo.nmt.edu">New Mexico Geochronology Research Laboratory</a>.
+      Written in Pychron <strong>Pychron</strong> interfaces with the digital electronics  supplied by MAP via
+      the GPIB interface (IEEE-488) to control and/or monitor  all of the critical mass spectrometer components.
+      The <strong>Pychron</strong> software is also interfaced (GPIB and RS-232) to most of the extraction system.
+      The <strong>Pychron</strong> spectrometer and extraction system control features allow the NMGRL to run
+      completely automated for several days at a time, with little or no human interaction. </p>
+  <p>After data is collected by the <strong>Pychron</strong> program, it is stored in a MySQL database accessible to
+      all staff and students of the NMGRL. The data reduction features of the program allow unsurpassed control in
+      handling of background, baseline, regression, discrimination, J-value and irradiation constant values, statistics
+      and their application to a sample's <sup>40</sup>Ar/<sup>39</sup>Ar apparent age. Manuscript-quality graphs and
+      tables are easily generated and modified by the <strong>Pychron</strong> software. </p>
+  <p>Without the <strong>Pychron</strong> software package, the NMGRL would not be capable of producing the quality
+      or quantity of data that it does. </p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+
+  <figure class="center add-border" style="width:700px">
+    <div align="center"><img src="http://geoinfo.nmt.edu/labs/argon/software/Images/specsetup.jpg"
+                             alt="Plot options" width="700" height="653"> </div>
+    <figcaption class="center">Throughout the data collection and data reduction process, it is nice to be able to
+        display the resulting age information in a graphical format. The Mass Spec program will readily recall data
+        saved in the MySQL database and plot it in  an age spectrum, isochron (inverse or normal) or probability
+        distribution (ideogram) diagram. Each plot can be configured according to the user's preference
+        (e.g. supplemental plots, error statistics, aesthetics).</figcaption>
+    <div class="credits">courtesy: Mass Spec software by Al Deino (<a href="http://www.bgc.org">BGC</a>). </div>
+  </figure>
+
+{% endblock %}

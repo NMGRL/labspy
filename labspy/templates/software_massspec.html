@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block body %}
+
+    <figure class="right" style="width: 168px;">
+{#        <img src="Images/msicon.jpg" alt="Mass Spec icon" title="Evolution of a geologist" width="207" height="232">#}
+        <img src="http://geoinfo.nmt.edu/labs/argon/software/Images/msicon.jpg" alt="Mass Spec icon" title="Evolution of a geologist" width="207" height="232">
+    </figure>
+  <h2><a name="overview"></a>Mass Spec </h2>
+  <p><strong>Mass Spec</strong> is a comprehensive hardware control and data reduction package developed and maintained by Al Deino of the <a href="http://www.bgc.org">Berkeley Geochronology Center</a>. Written in RealBasic for the MacOS X operating system, <strong>Mass Spec</strong> interfaces with the digital electronics  supplied by MAP via the GPIB interface (IEEE-488) to control and/or monitor  all of the critical mass spectrometer components. The <strong>Mass Spec</strong> software is also interfaced (GPIB and RS-232) to most of the extraction system. The <strong>Mass Spec</strong> spectrometer and extraction system control features allow the NMGRL to run completely automated for several days at a time, with little or no human interaction. </p>
+  <p>After data is collected by the <strong>Mass Spec</strong> program, it is stored in a MySQL database accessible to all staff and students of the NMGRL. The data reduction features of the program allow unsurpassed control in handling of background, baseline, regression, discrimination, J-value and irradiation constant values, statistics and their application to a sample's <sup>40</sup>Ar/<sup>39</sup>Ar apparent age. Manuscript-quality graphs and tables are easily generated and modified by the <strong>Mass Spec</strong> software. </p>
+  <p>Without the <strong>Mass Spec</strong> software package, the NMGRL would not be capable of producing the quality or quantity of data that it does. </p>
+  <p>&nbsp;</p>
+  <p>&nbsp;</p>
+  <h4><a name="hardware"></a>Sample of the hardware that is controlled and monitored by the Mass Spec program.  </h4>
+  <table cellspacing=0 cellpadding=3>
+    <thead>
+    </thead>
+    <tbody>
+      <tr align="left" valign="top">
+        <td width="189"><div align="center"><strong>Component</strong></div></td>
+        <td width="189"><div align="center"><strong>Interface</strong></div></td>
+        <td width="536" class="price"><div align="left"><strong>Control/Measurement</strong></div></td>
+      </tr>
+      <tr align="left" valign="top">
+        <td>MAP digital electronics </td>
+        <td><p align="center">GPIB</p></td>
+        <td class="price"><p align="left">source high voltage, magnet current, electron multiplier voltage and current, faraday cup voltage</p></td>
+      </tr>
+      <tr align="left" valign="top">
+        <td>Agilent 34970A </td>
+        <td><p align="center">GPIB</p></td>
+        <td class="price"><p align="left">pneumatically operated valves, laser output, lab temperature/humidity, cooling water status, air compressor status, V-70 turbo pump status</p></td>
+      </tr>
+      <tr align="left" valign="top">
+        <td>Newport X-Y stage controller </td>
+        <td><p align="center">GPIB</p></td>
+        <td class="price"><p align="left">CO<sub>2</sub> laser stage, UV laser stage <br>
+        </p></td>
+      </tr>
+      <tr align="left" valign="top">
+        <td>Porter (Rose) </td>
+        <td><p align="center">RS-232 (serial) </p></td>
+        <td class="price"><p align="left">Eurotherm furnace power, furnace loader system, UPS, extraction line vacuum status </p></td>
+      </tr>
+      <tr align="left" valign="top">
+        <td>Video capture </td>
+        <td><p align="center">PCI card</p></td>
+        <td class="price"><p align="left">video capture of CO<sub>2</sub> laser fusion, UV laser ablation or furnace step-heating</p></td>
+      </tr>
+    </tbody>
+  </table>
+  <p>&nbsp;</p>
+  <p onClick="MM_swapImage('test','','/labs/argon/software/images/actuatorcontrol.jpg',1)">&nbsp;</p>
+  <h2 onClick="MM_swapImage('test','','/labs/argon/software/images/actuatorcontrol.jpg',1)"><a name="collection"></a>Mass Spec screenshots (hardware control) </h2>
+  <p onClick="MM_swapImage('test','','/labs/argon/software/images/actuatorcontrol.jpg',1)">&nbsp;</p>
+  <figure class="center add-border" style="width:700px">
+    <div align="center"><img src="http://geoinfo.nmt.edu/labs/argon/software/Images/configurerun.jpg" alt="Argon Configuration window" width="659" height="413">    </div>
+    <figcaption class="center">Window used to configure the Mass Spec program for laser or furnace analyses. Time at temperature/fusion and the spectrometer operation (# of cycles, counts, mass positions, baselines, etc.). </figcaption>
+    <div class="credits">courtesy: Mass Spec software by Al Deino (<a href="http://www.bgc.org">BGC</a>). </div>
+  </figure>
+  <p onClick="MM_swapImage('test','','/labs/argon/software/images/actuatorcontrol.jpg',1)">&nbsp;</p>
+  <figure class="center add-border" style="width:700px">
+    <div align="center"><img src="http://geoinfo.nmt.edu/labs/argon/software/Images/isotopesetup.jpg" alt="Argon isotope setup" width="700" height="576"> </div>
+    <figcaption class="center">Configuration screen to specify which isotopes of argon to measure for an analyses set, how often to center on the calibration isotope (usually <sup>40</sup>Ar), and what detector to use (electron multiplier or faraday cup). Other 'tabs' in this window allow a user to specify how long to count on each isotope and baseline, how many cycles of each isotope and which isotope of argon to use for detector intercalibrations (when multiplier and faraday are used on same analysis). </figcaption>
+    <div class="credits">courtesy: Mass Spec software by Al Deino (<a href="http://www.bgc.org">BGC</a>). </div>
+  </figure>
+  <p onClick="MM_swapImage('test','','/labs/argon/software/images/actuatorcontrol.jpg',1)">&nbsp;</p>
+  <figure class="center add-border" style="width:700px">
+    <div align="center"><img src="http://geoinfo.nmt.edu/labs/argon/software/Images/actuatorcontrol.jpg" alt="Actuator control window" width="700" height="593"> </div>
+    <figcaption class="center">Window that is used to interface with the CO<sub>2</sub> laser stage. The variety of sample holder planchets that NMGRL uses are accessed through this window. The Mass Spec program keeps track of which sample pits have already been fused and displays a gray dot over those holes. </figcaption>
+    <div class="credits">courtesy: Mass Spec software by Al Deino (<a href="http://www.bgc.org">BGC</a>). </div>
+  </figure>
+  <p onClick="MM_swapImage('test','','/labs/argon/software/images/actuatorcontrol.jpg',1)">&nbsp;</p>
+  <figure class="center add-border" style="width:700px">
+    <div align="center"><img src="http://geoinfo.nmt.edu/labs/argon/software/Images/extractionwindow.jpg" alt="Extraction line window" width="700" height="498"> </div>
+    <figcaption class="center">This display is used by the Mass Spec program to both show the status of valve state (open/close) and to allow the user to override computer control and actuate valves with the click of the mouse. Additional information displayed in this window is a text message of the current analysis, the time remaining of each analysis stage, the laser power or furnace temperature,  vacuum pressures of the extraction system and the environmental conditions in the lab (temperature/humidity) </figcaption>
+    <div class="credits">courtesy: Mass Spec software by Al Deino (<a href="http://www.bgc.org">BGC</a>). </div>
+  </figure>
+  <p onClick="MM_swapImage('test','','/labs/argon/software/images/actuatorcontrol.jpg',1)">&nbsp;</p>
+  <figure class="center add-border" style="width:700px">
+    <div align="center"><img src="http://geoinfo.nmt.edu/labs/argon/software/Images/scanwindow.jpg" alt="Scan window" width="700" height="502"> </div>
+    <figcaption class="center">The &quot;scan window&quot; shows the status of the analysis of the sample gas by the mass spectrometer. Because all of the isotopes of argon are measured on only one or two collectors, each isotope (colored line segments above) is measured successively several times to determine a slope that is regressed back to &quot;time zero&quot; (when the gas was equilibrated with the mass spectrometer). The subsequent ratios are used to eventually calculate the age of the sample. </figcaption>
+    <div class="credits">courtesy: Mass Spec software by Al Deino (<a href="http://www.bgc.org">BGC</a>). </div>
+  </figure>
+  <p onClick="MM_swapImage('test','','/labs/argon/software/images/actuatorcontrol.jpg',1)">&nbsp;</p>
+  <h2><a name="reduction" id="reduction"></a>Mass Spec screenshots (data reduction) </h2>
+  <p>&nbsp;</p>
+  <figure class="center add-border" style="width:700px">
+    <div align="center"><img src="http://geoinfo.nmt.edu/labs/argon/software/Images/findindb.jpg" alt="Database search" width="700" height="565"> </div>
+    <figcaption class="center">The Mass Spec program uses a MySQL database to store all collected isotopic and machine data. Because of the power of a relational database, Mass Spec can search for data and data relationships quickly and easily (e.g. room temperature during a given analyses,  signal size as a function of electron multiplier voltage, mass spectrometer discrimination versus source high voltage, etc.) </figcaption>
+    <div class="credits">courtesy: Mass Spec software by Al Deino (<a href="http://www.bgc.org">BGC</a>). </div>
+  </figure>
+  <h2>&nbsp;</h2>
+  <figure class="center add-border" style="width:700px">
+    <div align="center"><img src="http://geoinfo.nmt.edu/labs/argon/software/Images/blankaveraging.jpg" alt="Background interpolation" width="699" height="552"> </div>
+    <figcaption class="center">During the data reduction process, the user must be aware of the variety of  factors that potentially influence the precision and accuracy of the <sup>40</sup>Ar/<sup>39</sup>Ar apparent age. The above example illustrates the variability of extraction line and mass spectrometer background levels for the different isotopes (here <sup>40</sup>Ar) that precede and follow analyses of sample gas. The program allows the user to look at virtually any number of background measurements, fit a curve/line/average to those values and interpolate new background values to a sample measurement. </figcaption>
+    <div class="credits">courtesy: Mass Spec software by Al Deino (<a href="http://www.bgc.org">BGC</a>). </div>
+  </figure>
+  <p>&nbsp;</p>
+  <figure class="center add-border" style="width:700px">
+    <div align="center"><img src="http://geoinfo.nmt.edu/labs/argon/software/Images/summary.jpg" alt="Analysis summary" width="700" height="323"> </div>
+    <figcaption class="center">Above is a tabulated display of one single analysis (CO<sub>2</sub> laser). A variety of information is displayed in this one window (and by additional columns at left), including background measurements applied to the sample measurments, the isotopic regression fit type, and of course age. The MySQL database also stores other information pertinent to this analysis (history of data reduction methods applied to the analysis, the spectrometer preferences used to collect the data, the scripts that were used to extract the argon, etc.). </figcaption>
+    <div class="credits">courtesy: Mass Spec software by Al Deino (<a href="http://www.bgc.org">BGC</a>). </div>
+  </figure>
+  <p>&nbsp;</p>
+  <figure class="center add-border" style="width:700px">
+    <div align="center"><img src="http://geoinfo.nmt.edu/labs/argon/software/Images/specsetup.jpg" alt="Plot options" width="700" height="653"> </div>
+    <figcaption class="center">Throughout the data collection and data reduction process, it is nice to be able to display the resulting age information in a graphical format. The Mass Spec program will readily recall data saved in the MySQL database and plot it in  an age spectrum, isochron (inverse or normal) or probability distribution (ideogram) diagram. Each plot can be configured according to the user's preference (e.g. supplemental plots, error statistics, aesthetics).</figcaption>
+    <div class="credits">courtesy: Mass Spec software by Al Deino (<a href="http://www.bgc.org">BGC</a>). </div>
+  </figure>
+
+{% endblock %}

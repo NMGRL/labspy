@@ -19,7 +19,9 @@
 
     <script type="text/javascript">
     function map_init_basic (map, options) {
-        L.marker([34.060765, -106.890713]).addTo(map);
+        {% for x,y in  points %}
+            L.marker([{{ x }},{{ y }}]).addTo(map);
+        {% endfor %}
     }
 
     </script>

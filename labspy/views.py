@@ -35,4 +35,11 @@ class Hardware(generic.TemplateView):
 class Software(generic.TemplateView):
     template_name = 'software.html'
 
+
+class SoftwareMassSpec(generic.TemplateView):
+    template_name = 'software_massspec.html'
+
+
+class SoftwarePychron(generic.TemplateView):
+    template_name = 'software_pychron.html'
 # ============= EOF =============================================
