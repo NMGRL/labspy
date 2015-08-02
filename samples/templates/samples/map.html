@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load leaflet_tags %}
+{% load staticfiles %}
+
+{% block staticfiles %}
+    {% leaflet_js %}
+    {% leaflet_css %}
+    <link rel="stylesheet" type="text/css" href="{% static 'leaflet.css' %}" />
+
+{% endblock %}
+
+{% block body %}
+    <div id='map'>
+	<nav id='map-ui' class='menu-ui'>
+    <a href='#' class='active' id='temperature'>Temperature</a>
+    <a href='#' class='active' id='precipitation'>Precipitation</a>
+    </nav>
+    </div>
+
+    <script type="text/javascript">
+    function map_init_basic (map, options) {
+        L.marker([34.060765, -106.890713]).addTo(map);
+    }
+
+    </script>
+
+    {% leaflet_map "yourmap" callback="window.map_init_basic"%}
+{% endblock %}

@@ -592,11 +592,11 @@ a[href $='.mp3'], a[href $='.MP3'], a[href $='.m3u'] {
 a[href^="http:"]:link, a[href^="HTTP:"]:link, a[href^="https:"]:link, a[href^="HTTPS:"]:link {
 	color: #0066CC;
 	padding-right: 1.125em;
-	background: transparent url(/images/icons/external.png) no-repeat center right;
+	/*background: transparent url(/images/icons/external.png) no-repeat center right;*/
 }
 a[href^="http:"]:visited, a[href^="HTTP:"]:visited, a[href^="http:"]:visited, a[href^="HTTP:"]:visited {
 	padding-right: 1.125em;
-	background: transparent url(/images/icons/external.png) no-repeat center right;
+	/*background: transparent url(/images/icons/external.png) no-repeat center right;*/
 }
 a[href^="#"]:link {
 	color: #990066;

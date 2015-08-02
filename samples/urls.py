@@ -18,7 +18,7 @@ from django.contrib import admin
 from samples import views
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
+    url(r'^$', views.index, name='sample_index'),
 
     # url(r'^material/add/$', views.material_add, name='material_add'),
     # url(r'^sample/add/$', views.sample_add, name='sample_add'),

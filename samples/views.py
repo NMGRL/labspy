@@ -10,7 +10,7 @@ from samples.models import Material, Project, Sample, SamplePrep, Assignment
 
 def index(request):
     ctx = {}
-    return render(request, 'samples/index.html', ctx)
+    return render(request, 'samples/map.html', ctx)
 
 #
 # class MaterialTable(Table):

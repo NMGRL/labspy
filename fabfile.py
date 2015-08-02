@@ -21,7 +21,7 @@ from fabric.api import local, lcd
 
 
 def prepare_deploymoent(branch_name):
-    local('python manage.py test labspy')
+    # local('python manage.py test labspy')
     local('git add -p && git commit')
 
 

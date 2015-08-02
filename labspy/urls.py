@@ -24,6 +24,6 @@ urlpatterns = [
     url(r'^hardware', Hardware.as_view(), name='hardware'),
     url(r'^software', Software.as_view(), name='software'),
     url(r'^status/', include('status.urls')),
-    # url(r'^samples/', include('samples.urls')),
+    url(r'^samples/', include('samples.urls')),
 
 ]
