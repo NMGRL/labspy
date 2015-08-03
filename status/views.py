@@ -17,6 +17,11 @@ class DateSelectorForm(Form):
                                                            (3, 'Last Month')))
 
 
+def make_current(ti, di, ui):
+    obj = di.order_by('-pub_date').first()
+    return ti, obj.value, ui, obj.pub_date
+
+
 def index(request):
     temps = Measurement.objects.filter(process_info__name='Lab Temp.')
     hums = Measurement.objects.filter(process_info__name='Lab Hum.')
@@ -34,9 +39,12 @@ def index(request):
     coldfinger_units = pis.get(name='ColdFinger Temp.').units
     pneumatic_units = pis.get(name='Pressure').units
 
-    current_temp = temps.order_by('-pub_date').first().value
-    current_hum = hums.order_by('-pub_date').first().value
-
+    cs = (('Temperature', temps, temp_units),
+          ('Humidity', hums, humidity_units),
+          ('Air Pressure', pneumatic, pneumatic_units),
+          ('Coolant', coolant, coolant_units))
+    # current = [(ti, ci.order_by('-pub_date').first().value, cu, ) for ti, ci, cu in cs]
+    current = [make_current(*a) for a in cs]
     jan_tag = 'jan'
     ob_tag = 'obama'
 
@@ -81,8 +89,12 @@ def index(request):
                'coolant_units': coolant_units,
                'coldfinger_units': coldfinger_units,
                'pneumatic_units': pneumatic_units,
-               'current_temp': current_temp,
-               'current_humidity': current_hum,
+
+               'current': current,
+               # 'current_temp': current_temp,
+               # 'current_humidity': current_hum,
+               # 'current_pneumatic': current_pneumatic,
+               # 'current_coolant': current_coolant,
                'date_selector_form': form}
     return render(request, 'status/index.html', context)
 

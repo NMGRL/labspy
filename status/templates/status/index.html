@@ -14,7 +14,7 @@
 
 {% block body %}
 
-    <div class='art-postcontent'>
+    <div class='add-border'>
         <table>
             <tr>
             {% for spec, exp, ai in experiments %}
@@ -29,22 +29,43 @@
             </tr>
         </table>
 
-        <table>
-            <tr>
-                <td>
-                    <div class="spectrometer_box">
-                        <h2>Current Temperature: {{ current_temp|floatformat }} ({{ temp_units }})</h2>
-                    </div>
-                </td>
-                <td>
-                    <div class="spectrometer_box">
-                        <h2>Current Humidity: {{ current_humidity|floatformat }} ({{ humidity_units }})</h2>
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
+    <div class="add-border">
 
+        <h4>Current</h4>
+        <table class="paleblue">
+            <thead><td>Name</td><td>Value</td><td>Units</td><td>Timestamp</td></thead>
+            {% for ti,ci,ui, tsi in current %}
+                <tr><td>{{ ti }}</td><td>{{ ci }}</td><td>{{ ui }}</td><td>{{ tsi|date:"m/d/Y h:i:s A" }}</td></tr>
+            {% endfor %}
+        </table>
+{#        <table>#}
+{#            <tr>#}
+{#                <td>#}
+{#                    <div class="spectrometer_box">#}
+{#                        <h2>Temperature: {{ current_temp|floatformat }} ({{ temp_units }})</h2>#}
+{#                    </div>#}
+{#                </td>#}
+{#                <td>#}
+{#                    <div class="spectrometer_box">#}
+{#                        <h2>Humidity: {{ current_humidity|floatformat }} ({{ humidity_units }})</h2>#}
+{#                    </div>#}
+{#                </td>#}
+{#            </tr>#}
+{#            <tr>#}
+{#                <td>#}
+{#                    <div class="spectrometer_box">#}
+{#                        <h2>Air Pressure: {{ current_pneumatic|floatformat }} ({{ pneumatic_units }})</h2>#}
+{#                    </div>#}
+{#                </td>#}
+{#                <td>#}
+{#                    <div class="spectrometer_box">#}
+{#                        <h2>Coolant: {{ current_coolant|floatformat }} ({{ coolant_units }})</h2>#}
+{#                    </div>#}
+{#                </td>#}
+{#            </tr>#}
+{#        </table>#}
+    </div>
+</div>
     <form action={% url "status_index" %} method="post">
         {% csrf_token %}
         {{ date_selector_form }}

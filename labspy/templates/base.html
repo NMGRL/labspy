@@ -7,20 +7,16 @@
 
 {% block staticfiles %}{% endblock %}
 
-<header class="art-header clearfix">
-    <div class="art-shapes">
-        <h1 class="art-headline" data-left="15.52%">
+<header>
+    <div>
+        <h1 data-left="15.52%">
             <a href="#">New Mexico Geochronology Laboratory</a>
         </h1>
-        <h2 class="art-slogan" data-left="15.63%">New Mexico Bureau of Geology and Mineral Resources</h2>
-
-        <div class="art-object0" data-left="2.62%"></div>
+        <h2 >New Mexico Bureau of Geology and Mineral Resources</h2>
     </div>
-    <nav class="art-nav clearfix">
-    <div class="art-nav-inner">
-        <ul class="art-hmenu">
-
-            <li><a href={% url "home" %} class="active">Home</a></li>
+    <nav id="subsitenav">
+        <ul>
+            <li><a href={% url "home" %}>Home</a></li>
             <li><a href={% url "status_index" %}>Status</a></li>
             <li><a href={% url "sample_index" %}>Samples</a></li>
             <li><a href={% url "people" %}>People</a></li>
@@ -28,7 +24,6 @@
             <li><a href={% url "software" %}>Software</a></li>
 
         </ul>
-        </div>
     </nav>
 </header>
 

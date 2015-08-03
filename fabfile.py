@@ -17,7 +17,10 @@
 # ============= enthought library imports =======================
 # ============= standard library imports ========================
 # ============= local library imports  ==========================
-from fabric.api import local, lcd
+from fabric.api import local, lcd, cd, run
+from fabric.state import env
+
+env.hosts = ['argonlab4@argon158.nmt.edu']
 
 
 def prepare_deploymoent(branch_name):
@@ -26,11 +29,13 @@ def prepare_deploymoent(branch_name):
 
 
 def deploy():
-    with lcd('/opt/labspy'):
-        local('git pull origin master')
+    with cd('~/Programming/labspy'):
+        run('git pull origin master')
 
-        local('python manage.py migrate labspy')
-        local('python manage.py test labspy')
-        local('gunicorn labspy.wsgi')
+        # run('/anaconda/envs/labspy/bin/gunicorn labspy.wsgi --bind=129.138.12.158:8000')
+
+        # local('python manage.py migrate labspy')
+        # local('python manage.py test labspy')
+        # local('gunicorn labspy.wsgi -bargon158.nmt.edu')
 
 # ============= EOF =============================================
