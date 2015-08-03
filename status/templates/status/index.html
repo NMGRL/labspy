@@ -2,6 +2,8 @@
 
 {% block staticfiles %}
     {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'status/graph.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'status/style.css' %}" />
     <script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js'></script>
     <script type="text/javascript" src='http://www.flotcharts.org/flot/jquery.flot.js'></script>
     <script type="text/javascript" src='http://www.flotcharts.org/flot/jquery.flot.time.js'></script>
@@ -53,22 +55,22 @@
     <tr>
         <td>
             <table class="paleblue">
-                <tr><td></td><td><div id='graphtitle' align="center">Lab Temperature</div></td></tr>
+                <tr><td></td><td><div class='graphtitle'>Lab Temperature</div></td></tr>
                 <tr>
-                    <td><div id="ylabel">Temp (F)</div></td>
+                    <td id="ylabel"><div>Temp (F)</div></td>
                     <td><div id="temp_graph" style="width:500px;height:300px;"></div></td>
                 </tr>
-                <tr><td></td><td><div align="center">Time</div></td></tr>
+                <tr><td></td><td><div id="xlabel">Time</div></td></tr>
             </table>
         </td>
         <td>
             <table class="paleblue">
-                <tr><td></td><td><div id='graphtitle' align="center">Lab Humidity</div></td></tr>
+                <tr><td></td><td><div class='graphtitle'>Lab Humidity</div></td></tr>
                 <tr>
-                    <td><div id="ylabel">Humidity (%)</div></td>
+                    <td id="ylabel"><div>Humidity (%)</div></td>
                     <td><div id="hum_graph" style="width:500px;height:300px;"></div></td>
                 </tr>
-                <tr><td></td><td><div align="center">Time</div></td></tr>
+                <tr><td></td><td><div id="xlabel">Time</div></td></tr>
             </table>
         </td>
     </tr>
@@ -78,27 +80,55 @@
     <tr>
         <td>
             <table class="paleblue">
-                <tr><td></td><td><div id='graphtitle' align="center">Coolant Temperature</div></td></tr>
+                <tr><td></td><td><div class='graphtitle'>Coolant Temperature</div></td></tr>
                 <tr>
-                    <td><div id="ylabel">Temp ({{ coolant_units }})</div></td>
+                    <td id="ylabel"><div>Temp ({{ coolant_units }})</div></td>
                     <td><div id="coolant_graph" style="width:500px;height:300px;"></div></td>
                 </tr>
-                <tr><td></td><td><div align="center">Time</div></td></tr>
+                <tr><td></td><td><div id="xlabel">Time</div></td></tr>
             </table>
         </td>
         <td>
             <table class="paleblue">
-                <tr><td></td><td><div id='graphtitle' align="center">ColdFinger Temperature</div></td></tr>
+                <tr><td></td><td><div class='graphtitle'>ColdFinger Temperature</div></td></tr>
                 <tr>
-                    <td><div id="ylabel">Temp ({{ coldfinger_units }})</div></td>
+                    <td id="ylabel"><div>Temp ({{ coldfinger_units }})</div></td>
                     <td><div id="cf_graph" style="width:500px;height:300px;"></div></td>
                 </tr>
-                <tr><td></td><td><div align="center">Time</div></td></tr>
+                <tr><td></td><td><div id="xlabel">Time</div></td></tr>
             </table>
         </td>
     </tr>
     </table>
 
+    <table>
+    <tr>
+        <td>
+            <table class="paleblue">
+                <tr><td></td><td><div class='graphtitle'>Air Pressure</div></td></tr>
+                <tr>
+                    <td id="ylabel"><div>Pressure ({{ pneumatic_units }})</div></td>
+                    <td><div id="pneumatic_graph" style="width:500px;height:300px;"></div></td>
+                </tr>
+                <tr><td></td><td><div id="xlabel">Time</div></td></tr>
+            </table>
+        </td>
+        <td>
+            <table class="paleblue">
+                <tr><td></td><td><div class='graphtitle'></div></td></tr>
+                <tr>
+                    <td><div id="ylabel"></div></td>
+{#                    <td><div id="cf_graph" style="width:500px;height:300px;"></div></td>#}
+                </tr>
+                <tr><td></td><td><div id="xlabel">Time</div></td></tr>
+            </table>
+        </td>
+    </tr>
+    </table>
+
+    <script type='text/javascript'>
+        $.plot($("#pneumatic_graph"), {{ pneumatic.json_data|safe}}, {{ pneumatic.options|safe }});
+    </script>
     <script type='text/javascript'>
         $.plot($("#temp_graph"), {{ temp.json_data|safe}}, {{ temp.options|safe }});
     </script>

@@ -22,6 +22,7 @@ def index(request):
     hums = Measurement.objects.filter(process_info__name='Lab Hum.')
     cfinger = Measurement.objects.filter(process_info__name='ColdFinger Temp.')
     coolant = Measurement.objects.filter(process_info__name='Coolant Temp.')
+    pneumatic = Measurement.objects.filter(process_info__name='Pressure')
 
     temp_data = None
     hum_data = None
@@ -31,6 +32,7 @@ def index(request):
     humidity_units = pis.get(name='Lab Hum.').units
     coolant_units = pis.get(name='Coolant Temp.').units
     coldfinger_units = pis.get(name='ColdFinger Temp.').units
+    pneumatic_units = pis.get(name='Pressure').units
 
     current_temp = temps.order_by('-pub_date').first().value
     current_hum = hums.order_by('-pub_date').first().value
@@ -54,6 +56,7 @@ def index(request):
             hum_data = hums.filter(pub_date__gte=post).all()
             cf_data = cfinger.filter(pub_date__gte=post).all()
             cool_data = coolant.filter(pub_date__gte=post).all()
+            pneumatic_data = pneumatic.filter(pub_date__gte=post).all()
 
             fmt = FMTS[d]
     else:
@@ -62,11 +65,13 @@ def index(request):
         temp_data = temps.all()
         cf_data = cfinger.all()
         cool_data = coolant.all()
+        pneumatic_data = pneumatic.all()
 
     context = {'temp': make_graph(temp_data, fmt),
                'hum': make_graph(hum_data, fmt),
                'cfinger': make_graph(cf_data, fmt),
                'coolant': make_graph(cool_data, fmt),
+               'pneumatic': make_graph(pneumatic_data, fmt),
                'experiments': [(jan_tag, cur_jan_exp,
                                 cur_jan_an),
                                (ob_tag, cur_ob_exp,
@@ -75,6 +80,7 @@ def index(request):
                'humidity_units': humidity_units,
                'coolant_units': coolant_units,
                'coldfinger_units': coldfinger_units,
+               'pneumatic_units': pneumatic_units,
                'current_temp': current_temp,
                'current_humidity': current_hum,
                'date_selector_form': form}

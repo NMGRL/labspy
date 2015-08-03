@@ -680,7 +680,7 @@ h1 a, h1 a:visited {
 	color: black;
 }
 h1 a:hover {
-	color: blue;
+	/*color: blue;*/
 	text-decoration: none;
 }
 h2 {
@@ -803,9 +803,9 @@ tfoot {
 	font-weight: bold;
 	background-color: #E8E8E8;
 }
-tr:hover td {
-	background-color: #CCFFFF;
-}
+/*tr:hover td {*/
+	/*background-color: #CCFFFF;*/
+/*}*/
 /* aside (sidebar), figures, etc, */
 aside {
 	background: #f0ede4;
