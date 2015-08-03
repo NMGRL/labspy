@@ -19,8 +19,8 @@
                 <td>
                     <div class="spectrometer_box">
                         <h1>{{ spec }}</h1>
-                        <h3>Current Experiment: {{ exp }}</h3>
-                        <h2>Current Analysis: {{ ai }}</h2>
+                        <h3>Experiment: {{ exp.name }} {{ exp.start_time|date:"m/d/Y h:i:s A" }}</h3>
+                        <h2>Analysis: {{ ai.name }} {{ ai.start_time|date:"m/d/Y h:i:s A" }}</h2>
                     </div>
                 </td>
             {% endfor %}

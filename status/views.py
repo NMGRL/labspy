@@ -4,7 +4,7 @@ from django.forms import Form
 from django.shortcuts import render
 import flot
 # Create your views here.
-from status.models import Measurement, ProcessInfo
+from status.models import Measurement, ProcessInfo, CurrentExperiment, CurrentAnalysis
 
 DS = [{"hours": 1}, {'hours': 24}, {'weeks': 1}, {'weeks': 4}]
 FMTS = ['%M:%S', '%H:%M', '%m/%d', '%m/%d']
@@ -35,6 +35,14 @@ def index(request):
     current_temp = temps.reverse().first().value
     current_hum = hums.reverse().first().value
 
+    jan_tag = 'jan'
+    ob_tag = 'obama'
+    cur_jan_exp = CurrentExperiment.objects.get(system=jan_tag)
+    cur_ob_exp = CurrentExperiment.objects.get(system=ob_tag)
+    cur_jan_an = CurrentAnalysis.objects.get(experiment=cur_jan_exp)
+    cur_ob_an = CurrentAnalysis.objects.get(experiment=cur_ob_exp)
+    print cur_jan_an
+
     if request.method == 'POST':
         form = DateSelectorForm(request.POST)
         if form.is_valid():
@@ -58,7 +66,10 @@ def index(request):
                'hum': make_graph(hum_data, fmt),
                'cfinger': make_graph(cf_data, fmt),
                'coolant': make_graph(cool_data, fmt),
-               'experiments': [('Jan', '', ''), ('Obama', '', '')],
+               'experiments': [(jan_tag, cur_jan_exp,
+                                cur_jan_an),
+                               (ob_tag, cur_ob_exp,
+                                cur_ob_an)],
                'temp_units': temp_units,
                'humidity_units': humidity_units,
                'coolant_units': coolant_units,

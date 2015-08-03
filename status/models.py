@@ -1,6 +1,7 @@
 from datetime import datetime
 from django.db import models
 
+
 # Create your models here.
 
 
@@ -27,3 +28,16 @@ class Measurement(models.Model):
 
     def __str__(self):
         return '{}: {}'.format(self.process_info.name, self.value)
+
+
+class CurrentExperiment(models.Model):
+    system = models.CharField(max_length=80)
+    name = models.CharField(max_length=140)
+    user = models.CharField(max_length=80)
+    start_time = models.DateTimeField(default=datetime.now)
+
+
+class CurrentAnalysis(models.Model):
+    experiment = models.ForeignKey(CurrentExperiment)
+    runid = models.CharField(max_length=80)
+    start_time = models.DateTimeField(default=datetime.now)
