@@ -4,7 +4,7 @@ from django.forms import Form
 from django.shortcuts import render
 import flot
 # Create your views here.
-from status.models import Measurement, ProcessInfo, CurrentExperiment, CurrentAnalysis
+from status.models import Measurement, ProcessInfo, Analysis, Experiment
 
 DS = [{"hours": 1}, {'hours': 24}, {'weeks': 1}, {'weeks': 4}]
 FMTS = ['%M:%S', '%H:%M', '%m/%d', '%m/%d']
@@ -32,16 +32,17 @@ def index(request):
     coolant_units = pis.get(name='Coolant Temp.').units
     coldfinger_units = pis.get(name='ColdFinger Temp.').units
 
-    current_temp = temps.reverse().first().value
-    current_hum = hums.reverse().first().value
+    current_temp = temps.order_by('-pub_date').first().value
+    current_hum = hums.order_by('-pub_date').first().value
 
     jan_tag = 'jan'
     ob_tag = 'obama'
-    cur_jan_exp = CurrentExperiment.objects.get(system=jan_tag)
-    cur_ob_exp = CurrentExperiment.objects.get(system=ob_tag)
-    cur_jan_an = CurrentAnalysis.objects.get(experiment=cur_jan_exp)
-    cur_ob_an = CurrentAnalysis.objects.get(experiment=cur_ob_exp)
-    print cur_jan_an
+
+    cur_jan_exp = Experiment.objects.filter(system=jan_tag).order_by('-start_time').first()
+    cur_ob_exp = Experiment.objects.filter(system=ob_tag).order_by('-start_time').first()
+
+    cur_jan_an = Analysis.objects.filter(experiment=cur_jan_exp).order_by('-start_time').first()
+    cur_ob_an = Analysis.objects.filter(experiment=cur_ob_exp).order_by('-start_time').first()
 
     if request.method == 'POST':
         form = DateSelectorForm(request.POST)

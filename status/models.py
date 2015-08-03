@@ -30,14 +30,16 @@ class Measurement(models.Model):
         return '{}: {}'.format(self.process_info.name, self.value)
 
 
-class CurrentExperiment(models.Model):
+class Experiment(models.Model):
     system = models.CharField(max_length=80)
     name = models.CharField(max_length=140)
     user = models.CharField(max_length=80)
     start_time = models.DateTimeField(default=datetime.now)
+    state = models.CharField(max_length=80)
 
 
-class CurrentAnalysis(models.Model):
-    experiment = models.ForeignKey(CurrentExperiment)
+class Analysis(models.Model):
+    experiment = models.ForeignKey(Experiment)
     runid = models.CharField(max_length=80)
     start_time = models.DateTimeField(default=datetime.now)
+    analysis_type = models.CharField(max_length=80)
