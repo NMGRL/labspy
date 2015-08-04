@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 {% load staticfiles %}
 {% block body %}
-    <div style="height: 225px">
+    <div class="add-border" style="height: 225px">
         <figure class="right" style="width: 168px;">
             <img src="http://geoinfo.nmt.edu/labs/argon/software/Images/msicon.jpg" alt="Mass Spec icon" title="Evolution of a geologist" width="207" height="232">
         </figure>
         <a href="{% url "software_massspec" %}"><h2>MassSpec</h2></a>
     </div>
-    <div style="height: 225px;">
+    <div class="add-border" style="height: 225px;">
         <figure class="right" style="width: 168px;">
-        <img src="http://geoinfo.nmt.edu/labs/argon/software/Images/msicon.jpg" alt="Mass Spec icon" title="Evolution of a geologist" width="207" height="232">
+        <img src="{% static "images/pyexperiment_icon.png" %}"
+             alt="Mass Spec icon" title="Evolution of a geologist" width="207" height="232">
         </figure>
     <a href="{% url "software_pychron" %}"><h2>Pychron</h2></a>
     </div>

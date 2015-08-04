@@ -36,6 +36,6 @@ def deploy():
 
         # local('python manage.py migrate labspy')
         # local('python manage.py test labspy')
-        # local('gunicorn labspy.wsgi -bargon158.nmt.edu')
+        # run('gunicorn labspy.wsgi -bargon158.nmt.edu &')
 
 # ============= EOF =============================================

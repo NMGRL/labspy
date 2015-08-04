@@ -1,20 +1,23 @@
 {% extends "base.html" %}
-
+{% load staticfiles %}
 {% block body %}
     <h2>People</h2>
-    <div>
+    <div class="add-border">
         <h3>William McIntosh, Ph.D</h3>
+        <img src="{% static "images/people/mcintosh.jpg" %}" width=25%>
     </div>
-    <div>
+    <div class="add-border">
         <h3>Matthew Heizler, Ph.D</h3>
+        <img src="{% static "images/people/heizler.jpg" %}" width=25%>
     </div>
-    <div>
+    <div class="add-border">
         <h3>Lisa Peters</h3>
-        <h4>Lab Technician</h4>
+        <h5>Lab Technician</h5>
     </div>
-    <div>
+    <div class="add-border">
         <h3>Jake Ross, Ph.D</h3>
-        <h4>Post Doctoral Researcher/Software Development</h4>
+        <h5>Post Doctoral Researcher/Software Development</h5>
+    <img src="{% static "images/people/ross.jpg" %}" width=25%>
     </div>
 
 {% endblock %}

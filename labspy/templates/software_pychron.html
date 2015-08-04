@@ -1,14 +1,15 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 {% block body %}
 
     <figure class="right" style="width: 168px;">
-        <img src="http://geoinfo.nmt.edu/labs/argon/software/Images/msicon.jpg" alt="Pychron icon"
+        <img src="{% static "images/pyexperiment_icon.png" %}" alt="Pychron icon"
              title="Evolution of a geologist" width="207" height="232">
     </figure>
   <h2><a name="overview"></a>Pychron </h2>
   <p><strong>Pychron</strong> is a comprehensive hardware control and data reduction package developed and maintained by
       Jake Ross of the <a href="http://www.geoinfo.nmt.edu">New Mexico Geochronology Research Laboratory</a>.
-      Written in Pychron <strong>Pychron</strong> interfaces with the digital electronics  supplied by MAP via
+      Written in Python2.7 <strong>Pychron</strong> interfaces with the digital electronics  supplied by MAP via
       the GPIB interface (IEEE-488) to control and/or monitor  all of the critical mass spectrometer components.
       The <strong>Pychron</strong> software is also interfaced (GPIB and RS-232) to most of the extraction system.
       The <strong>Pychron</strong> spectrometer and extraction system control features allow the NMGRL to run
