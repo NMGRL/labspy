@@ -71,9 +71,6 @@ ROOT_URLCONF = 'labspy.urls'
 
 TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request',)
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "labspy/static"),
-)
 
 TEMPLATES = [
     {
@@ -138,5 +135,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "labspy/static"),
+)
+STATIC_ROOT = os.path.join(BASE_DIR, 'STATIC')
 # AUTH_USER_MODEL = 'django.contrib.auth.User'
