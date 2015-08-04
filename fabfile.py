@@ -20,8 +20,9 @@
 from fabric.api import local, lcd, cd, run
 from fabric.state import env
 
-env.hosts = ['argonlab4@argon158.nmt.edu']
-
+env.hosts = ['jross@129.138.12.10']
+env.project_root = '/home/jross/web/labspy'
+env.python_url = '/home/jross/anaconda/envs/labspy/bin/python'
 
 def prepare_deploymoent(branch_name):
     # local('python manage.py test labspy')
@@ -29,9 +30,9 @@ def prepare_deploymoent(branch_name):
 
 
 def deploy():
-    with cd('~/Programming/labspy'):
+    with cd(env.project_root):
         run('git pull origin master')
-
+        run('{} manage.py collectstatic -v0 --noinput'.format(env.python_url))
         # run('/anaconda/envs/labspy/bin/gunicorn labspy.wsgi --bind=129.138.12.158:8000')
 
         # local('python manage.py migrate labspy')

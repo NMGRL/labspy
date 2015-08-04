@@ -30,7 +30,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '&n%^9-qj8!e2dvir1#4eii^!vy=h^v!0fel5d62+57c*=bjsr1'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -49,9 +49,10 @@ INSTALLED_APPS = (
     # third party
     'django_tables2',
     'crispy_forms',
+    'leaflet',
 
     # local
-    # 'samples',
+    'samples',
     'status'
 )
 
@@ -70,10 +71,12 @@ ROOT_URLCONF = 'labspy.urls'
 
 TEMPLATE_CONTEXT_PROCESSORS = ('django.core.context_processors.request',)
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'main/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates'),
+                 os.path.join(BASE_DIR, 'labspy/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,7 +91,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'labspy.wsgi.application'
 
+from leaflet_conf import config
 
+LEAFLET_CONFIG = config()
 # TEMPLATE_LOADERS = (
 #     'django.template.loaders.filesystem.Loader',
 #     'django.template.loaders.app_directories.Loader',
@@ -130,5 +135,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "labspy/static"),
+)
+STATIC_ROOT = os.path.join(BASE_DIR, 'STATIC')
 # AUTH_USER_MODEL = 'django.contrib.auth.User'
