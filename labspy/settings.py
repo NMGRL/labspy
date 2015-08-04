@@ -32,7 +32,7 @@ SECRET_KEY = '&n%^9-qj8!e2dvir1#4eii^!vy=h^v!0fel5d62+57c*=bjsr1'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['nmgrl.nmbgmr.nmt.edu','129.138.12.10']
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'
 
