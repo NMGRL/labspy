@@ -3,7 +3,7 @@
 {% block staticfiles %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'status/graph.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'status/style.css' %}" />
+{#    <link rel="stylesheet" type="text/css" href="{% static 'status/style.css' %}" />#}
     <link rel="stylesheet" type="text/css" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
 
     <script type="text/javascript" src='http://www.flotcharts.org/flot/jquery.flot.js'></script>
@@ -15,33 +15,46 @@
 
 {% block body %}
 
-    <div class='add-border'>
-        <table>
-            <tr>
-            {% for spec, exp, ai in experiments %}
-                <td>
-                    <div class="spectrometer_box">
-                        <h1>{{ spec }}</h1>
-                        <h3>Experiment: {{ exp.name }} {{ exp.start_time|date:"m/d/y h:i:s A" }}</h3>
-                        <h2>Analysis: {{ ai.name }} {{ ai.start_time|date:"m/d/y h:i:s A" }}</h2>
-                    </div>
-                </td>
-            {% endfor %}
-            </tr>
-        </table>
-    </div>
-
-    <div class="add-border" style="background-color: #bbffb9">
-        <h4>Current</h4>
-        <table class="paleblue">
-            <thead><td>Name</td><td>Value</td><td>Units</td><td>Timestamp</td></thead>
-            {% for ti,ci,ui, tsi in current %}
-                <tr><td>{{ ti }}</td><td>{{ ci }}</td><td>{{ ui }}</td><td>{{ tsi|date:"m/d/Y h:i:s A" }}</td></tr>
-            {% endfor %}
-        </table>
-    </div>
 
     <div id="maincontainer">
+        <div id="experimentscontainer">
+            <table>
+                <tr>
+                {% for spec, exp, ai in experiments %}
+                    <td>
+                        <div id="experimentcontainer">
+                            <h1>{{ spec }}</h1>
+                            <table class="paleblue">
+                                <thead>
+                                <td></td><td>Name</td><td>Timestamp</td>
+                                </thead>
+                                <tr><td>Experiment</td><td>{{ exp.name }}</td><td>{{ exp.start_time|date:"m/d/y h:i:s A" }}</td></tr>
+                                <tr><td>Analysis</td><td>{{ ai.name }}</td><td>{{ ai.start_time|date:"m/d/y h:i:s A" }}</td></tr>
+                            </table>
+{#                            <h3>Experiment: {{ exp.name }} {{ exp.start_time|date:"m/d/y h:i:s A" }}</h3>#}
+{#                            <h2>Analysis: {{ ai.name }} {{ ai.start_time|date:"m/d/y h:i:s A" }}</h2>#}
+                        </div>
+                    </td>
+                {% endfor %}
+                </tr>
+            </table>
+        </div>
+        <div id="currentcontainer">
+            <h4>Current</h4>
+            <table>
+            <tr>
+                <td>
+                    <table class="paleblue">
+                        <thead><td>Name</td><td>Value</td><td>Units</td><td>Timestamp</td></thead>
+                        {% for ti,ci,ui, tsi in current %}
+                            <tr><td>{{ ti }}</td><td>{{ ci }}</td><td>{{ ui }}</td><td>{{ tsi|date:"m/d/Y h:i:s A" }}</td></tr>
+                        {% endfor %}
+                    </table>
+                </td>
+            </tr>
+            </table>
+
+        </div>
         <div id="connectioncontainer">
             <h4>Connection Status</h4>
                 <table>
@@ -49,7 +62,7 @@
                         {% for name, ts, connections in connections_list %}
                             <td>
                                 <p class="connection"><strong>{{ name }}</strong> {{ ts|date:"m/d/y h:i:s A"}}</p>
-                                <table class="paleblue" style="background-color: #eaeaea;">
+                                <table class="paleblue">
                                     <thead>
 {#                                        <td>Application</td>#}
                                         <td>Device</td>

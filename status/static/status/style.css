@@ -1,5 +1,5 @@
 
-.spectrometer_box {border: 2px solid #083c80;
+.experimentcontainer {border: 2px solid #083c80;
     padding-left: 10px;
     width: 580px}
 
@@ -12,6 +12,10 @@
     /*background-color: lightcoral;*/
     font-weight: bold;
     color: red;
+}
+
+table.paleblue {
+    background-color: #eaeaea;
 }
 
 /*.ylabel {*/

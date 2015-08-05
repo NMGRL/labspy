@@ -1,3 +1,8 @@
+h4 {
+    padding-left: 0.1em;
+    margin-top: 0.5em;
+}
+
 .graphtitle {
     text-align: center;
     font-size: 24px;
@@ -22,34 +27,58 @@
     /*background-color: lightblue;*/
 }
 
+.status_true {
+
+}
+.status_false
+{
+    /*background-color: lightcoral;*/
+    font-weight: bold;
+    color: red;
+}
+
+table.paleblue {
+    background-color: #eaeaea;
+}
+
 #maincontainer{
-    /*background-color: lightblue;*/
+    padding-left: 1em;
     /*position: relative;*/
 }
-#connectioncontainer{
-    background-color: #bbffb9;
-    /*position: relative;*/
-    /*position: absolute;*/
-    /*z-index: 2;*/
-    /*left: 0;*/
+#currentcontainer, #connectioncontainer, #graphcontainer, #experimentscontainer {
+    background-color: lightblue;
+    border: 0.1em solid;
+    border-radius: 0.25em;
+    margin-bottom: 0.5em;
+    padding-left: 0.25em;
 }
+#experimentcontainer {
+    width: 20em;
+}
+#experimentcontainer h3 {
+    background-color: red;
+}
+
+
+
 #connectioncontainer td {
     vertical-align: top;
+    /*border: solid;*/
 }
 p.connection {
     font-size: 10pt;
 }
 
 #graphcontainer {
-    background-color: #bbffb9;
-    /*z-index: 1;*/
-    /*position: absolute;*/
-    /*left: 0;*/
+    border: solid;
+    border-width: 0.1em;
 }
 
 table.graph {
-    border: solid;
-    border-color: green;
+    border: 0.2em solid green;
+    -webkit-border-radius: 0.25em;
+    -moz-border-radius: 0.25em;
+    border-radius: .5em;
     background-color: #eaeaea;
     font: normal 11px/14px 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif;
 }
