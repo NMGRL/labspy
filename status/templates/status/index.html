@@ -165,15 +165,13 @@
         </div>
     </div>
 
+{#    auto reload script#}
     <script type='text/javascript'>
-
-
- //       setTimeout(function(){
- //  window.location.reload(1);
- //       }, 5000);
-
-
+        setTimeout(function(){
+   window.location.reload(1);
+        }, 60000);
     </script>
+
     <script type='text/javascript'>
         $.plot($("#pneumatic_graph"), {{ pneumatic.json_data|safe}}, {{ pneumatic.options|safe }});
     </script>
