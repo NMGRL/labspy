@@ -32,10 +32,12 @@ class Measurement(models.Model):
 
 class Connections(models.Model):
     appname = models.CharField(max_length=120)
+    username = models.CharField(max_length=120)
     devname = models.CharField(max_length=120)
     com = models.CharField(max_length=120)
     address = models.CharField(max_length=120)
     status = models.BooleanField()
+    timestamp = models.DateTimeField(default=datetime.now)
 
 
 class Experiment(models.Model):

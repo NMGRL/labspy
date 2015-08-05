@@ -22,8 +22,8 @@
                 <td>
                     <div class="spectrometer_box">
                         <h1>{{ spec }}</h1>
-                        <h3>Experiment: {{ exp.name }} {{ exp.start_time|date:"m/d/Y h:i:s A" }}</h3>
-                        <h2>Analysis: {{ ai.name }} {{ ai.start_time|date:"m/d/Y h:i:s A" }}</h2>
+                        <h3>Experiment: {{ exp.name }} {{ exp.start_time|date:"m/d/y h:i:s A" }}</h3>
+                        <h2>Analysis: {{ ai.name }} {{ ai.start_time|date:"m/d/y h:i:s A" }}</h2>
                     </div>
                 </td>
             {% endfor %}
@@ -46,9 +46,9 @@
             <h4>Connection Status</h4>
                 <table>
                     <tr>
-                        {% for name, connections in connections_list %}
+                        {% for name, ts, connections in connections_list %}
                             <td>
-                                <h5>{{ name }}</h5>
+                                <p class="connection"><strong>{{ name }}</strong> {{ ts|date:"m/d/y h:i:s A"}}</p>
                                 <table class="paleblue" style="background-color: #eaeaea;">
                                     <thead>
 {#                                        <td>Application</td>#}

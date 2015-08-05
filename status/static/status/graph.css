@@ -36,6 +36,9 @@
 #connectioncontainer td {
     vertical-align: top;
 }
+p.connection {
+    font-size: 10pt;
+}
 
 #graphcontainer {
     background-color: #bbffb9;
