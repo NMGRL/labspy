@@ -27,7 +27,9 @@ def make_connections(name):
 
 
 def connection_timestamp(name):
-    return Connections.objects.filter(appname=name).first().timestamp
+    f = Connections.objects.filter(appname=name).first()
+    if f:
+        return f.timestamp
 
 
 def index(request):
