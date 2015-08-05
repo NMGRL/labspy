@@ -186,3 +186,8 @@ figure.right img, figure.left img, figure.center img {
 	margin-bottom: 0;
 	margin-bottom: 1em;
 }
+
+
+#links li {
+    display: inline;
+}

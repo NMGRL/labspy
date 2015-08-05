@@ -40,6 +40,17 @@ class SoftwareMassSpec(generic.TemplateView):
     template_name = 'software_massspec.html'
 
 
+LINKS = [('Source', 'https://github.com/NMGRL/pychron'),
+         ('Documentation', 'http://pychron.readthedocs.org/en/latest/')
+         ]
+
+
 class SoftwarePychron(generic.TemplateView):
     template_name = 'software_pychron.html'
+
+    def get_context_data(self, **kwargs):
+        kwargs = super(SoftwarePychron, self).get_context_data(**kwargs)
+        kwargs['links'] = LINKS
+        return kwargs
+
 # ============= EOF =============================================

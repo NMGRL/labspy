@@ -100,8 +100,8 @@ def index(request):
                'coldfinger_units': coldfinger_units,
                'pneumatic_units': pneumatic_units,
 
-               'connections_list': (('PyValve', connection_timestamp('pyValve - root'),
-                                     make_connections('pyValve - root')),
+               'connections_list': (('PyValve', connection_timestamp('pyValve'),
+                                     make_connections('pyValve')),
                                     ('PyCO2', connection_timestamp('pyCO2'),
                                      make_connections('pyCO2'))),
                'current': current,

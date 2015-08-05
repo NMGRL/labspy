@@ -24,6 +24,15 @@
   <p>&nbsp;</p>
   <p>&nbsp;</p>
 
+    <div id="links">
+        <ul>
+        {% for name, url in links %}
+            <li><a href="{{ url }}">{{ name }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+
+
   <figure class="center add-border" style="width:700px">
     <div align="center"><img src="http://geoinfo.nmt.edu/labs/argon/software/Images/specsetup.jpg"
                              alt="Plot options" width="700" height="653"> </div>
