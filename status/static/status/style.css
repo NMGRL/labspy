@@ -7,6 +7,16 @@ li h1 { color: brown}
     width: 580px}
 
 
+.status_true {
+
+}
+.status_false
+{
+    /*background-color: lightcoral;*/
+    font-weight: bold;
+    color: red;
+}
+
 /*.ylabel {*/
     /*/!*-webkit-transform: rotate(-90deg);*!/*/
     /*/!*-moz-transform: rotate(-90deg);*!/*/

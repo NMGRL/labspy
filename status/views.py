@@ -4,7 +4,7 @@ from django.forms import Form
 from django.shortcuts import render
 import flot
 # Create your views here.
-from status.models import Measurement, ProcessInfo, Analysis, Experiment
+from status.models import Measurement, ProcessInfo, Analysis, Experiment, Connections
 
 DS = [{"hours": 1}, {'hours': 24}, {'weeks': 1}, {'weeks': 4}]
 FMTS = ['%M:%S', '%H:%M', '%m/%d', '%m/%d']
@@ -20,6 +20,10 @@ class DateSelectorForm(Form):
 def make_current(ti, di, ui):
     obj = di.order_by('-pub_date').first()
     return ti, obj.value, ui, obj.pub_date
+
+
+def make_connections():
+    return Connections.objects.values().order_by('appname')
 
 
 def index(request):
@@ -90,11 +94,8 @@ def index(request):
                'coldfinger_units': coldfinger_units,
                'pneumatic_units': pneumatic_units,
 
+               'connections': make_connections(),
                'current': current,
-               # 'current_temp': current_temp,
-               # 'current_humidity': current_hum,
-               # 'current_pneumatic': current_pneumatic,
-               # 'current_coolant': current_coolant,
                'date_selector_form': form}
     return render(request, 'status/index.html', context)
 

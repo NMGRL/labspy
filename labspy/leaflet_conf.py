@@ -72,7 +72,8 @@ def config(tiles=None, overlays=None, **kw):
            'MIN_ZOOM': 3,
            'MAX_ZOOM': 18,
            'TILES': tiles,
-           'OVERLAYS': overlays}
+           'OVERLAYS': overlays,
+           'MINIMAP': True}
 
     cfg.update(kw)
     return cfg

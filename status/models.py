@@ -30,6 +30,14 @@ class Measurement(models.Model):
         return '{}: {}'.format(self.process_info.name, self.value)
 
 
+class Connections(models.Model):
+    appname = models.CharField(max_length=120)
+    devname = models.CharField(max_length=120)
+    com = models.CharField(max_length=120)
+    address = models.CharField(max_length=120)
+    status = models.BooleanField()
+
+
 class Experiment(models.Model):
     system = models.CharField(max_length=80)
     name = models.CharField(max_length=140)

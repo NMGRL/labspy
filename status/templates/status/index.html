@@ -4,6 +4,7 @@
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'status/graph.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'status/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
     <script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js'></script>
     <script type="text/javascript" src='http://www.flotcharts.org/flot/jquery.flot.js'></script>
     <script type="text/javascript" src='http://www.flotcharts.org/flot/jquery.flot.time.js'></script>
@@ -30,7 +31,6 @@
         </table>
 
     <div class="add-border">
-
         <h4>Current</h4>
         <table class="paleblue">
             <thead><td>Name</td><td>Value</td><td>Units</td><td>Timestamp</td></thead>
@@ -38,33 +38,40 @@
                 <tr><td>{{ ti }}</td><td>{{ ci }}</td><td>{{ ui }}</td><td>{{ tsi|date:"m/d/Y h:i:s A" }}</td></tr>
             {% endfor %}
         </table>
-{#        <table>#}
-{#            <tr>#}
-{#                <td>#}
-{#                    <div class="spectrometer_box">#}
-{#                        <h2>Temperature: {{ current_temp|floatformat }} ({{ temp_units }})</h2>#}
-{#                    </div>#}
-{#                </td>#}
-{#                <td>#}
-{#                    <div class="spectrometer_box">#}
-{#                        <h2>Humidity: {{ current_humidity|floatformat }} ({{ humidity_units }})</h2>#}
-{#                    </div>#}
-{#                </td>#}
-{#            </tr>#}
-{#            <tr>#}
-{#                <td>#}
-{#                    <div class="spectrometer_box">#}
-{#                        <h2>Air Pressure: {{ current_pneumatic|floatformat }} ({{ pneumatic_units }})</h2>#}
-{#                    </div>#}
-{#                </td>#}
-{#                <td>#}
-{#                    <div class="spectrometer_box">#}
-{#                        <h2>Coolant: {{ current_coolant|floatformat }} ({{ coolant_units }})</h2>#}
-{#                    </div>#}
-{#                </td>#}
-{#            </tr>#}
-{#        </table>#}
     </div>
+    <div class="add-border">
+        <h4>Connection Status</h4>
+        <table class="paleblue">
+            <thead>
+                <td>Application</td>
+                <td>Device</td>
+                <td>Communicator</td>
+                <td>Address</td>
+                <td>Status</td>
+            </thead>
+            {% for conn in connections %}
+                {% if conn.status %}
+                    <tr class="status_true">
+                {% else %}
+                    <tr class="status_false">
+                {% endif %}
+                <td>{{ conn.appname }}</td>
+                <td>{{ conn.devname }}</td>
+                <td>{{ conn.com }}</td>
+                <td>{{ conn.address }}</td>
+                {% if conn.status %}
+                    <td>OK</td>
+                {% else %}
+                    <td>FAIL</td>
+                {% endif %}
+
+{#                <td>{{ conn.status }}</td>#}
+                </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+
 </div>
     <form action={% url "status_index" %} method="post">
         {% csrf_token %}
@@ -147,6 +154,15 @@
     </tr>
     </table>
 
+    <script type='text/javascript'>
+
+
+ //       setTimeout(function(){
+ //  window.location.reload(1);
+ //       }, 5000);
+
+
+    </script>
     <script type='text/javascript'>
         $.plot($("#pneumatic_graph"), {{ pneumatic.json_data|safe}}, {{ pneumatic.options|safe }});
     </script>
