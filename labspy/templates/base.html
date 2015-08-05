@@ -1,72 +1,68 @@
 {% load staticfiles %}
 
+<script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js'></script>
 {#<link rel="stylesheet" type="text/css" href="{% static 'status/style.css' %}" />#}
 {#<link rel="stylesheet" type="text/css" href="{% static 'status/template.css' %}" />#}
-<link rel="stylesheet" type="text/css" href="{% static 'bureau_style.css' %}" />
+{#<link rel="stylesheet" type="text/css" href="{% static 'bureau_style.css' %}" />#}
+<link rel="stylesheet" type="text/css" href="{% static 'nmgrl.css' %}" />
+
 
 {% block staticfiles %}{% endblock %}
 
 <header>
     <div>
-        <h1 data-left="15.52%">
-            <a href="#">New Mexico Geochronology Laboratory</a>
+        <h1>
+            New Mexico Geochronology Laboratory
         </h1>
         <h2 >New Mexico Bureau of Geology and Mineral Resources</h2>
     </div>
-    <nav id="subsitenav">
+    <div>
+    <nav id="sitenav">
         <ul>
-            <li><a href={% url "home" %}>Home</a></li>
+            <li><a href="{% url "home" %}">Home</a></li>
             <li><a href={% url "status_index" %}>Status</a></li>
-            <li><a href={% url "sample_index" %}>Samples</a></li>
+{#            <li><a href={% url "sample_index" %}>Samples</a></li>#}
             <li><a href={% url "people" %}>People</a></li>
             <li><a href={% url "hardware" %}>Hardware</a></li>
             <li><a href={% url "software" %}>Software</a></li>
-
         </ul>
     </nav>
+            <script type="text/javascript">
+        $(document).ready(function() {
+    $('#sitenav li a').on('click', changeClass);
+});
+
+function changeClass(e) {
+{#    e.stopPropagation();#}
+{#    e.preventBubble();#}
+{#    e.preventDefault();#}
+    $('#sitenav li a').removeClass('current');
+    $(this).addClass('current');
+}
+    </script>
+    </div>
 </header>
 
 {% block body %}{% endblock %}
 
-  <div id="contact-info">
-        <div id="mainaddress"> <em><strong><a href="http://geoinfo.nmt.edu/about/offices/Socorro_office.html">Main Office in Socorro:</a></strong></em>
-          <address>
-          New Mexico Bureau of Geology &amp; Mineral Resources<br>
-          New Mexico Institute of Mining &amp; Technology<br>
-          <a href="https://www.google.com/maps/place/New+Mexico+Bureau+of+Geology+%26+Mineral+Resources,+801+Leroy+Pl,+Socorro,+NM+87801/@34.0657732,-106.9078476"  class="no-icon">801 Leroy Place<br>
-          Socorro, NM 87801-4796</a><br>
-          <a href="tel:15758355420">575-835-5420</a> information<br>
-          575-835-6333 fax
-          </address>
-        </div>
-        <div id="abqaddress"> <em><strong><a href="/about/offices/ABQ_office.html">Albuquerque Office:</a></strong></em>
-          <address>
-          New Mexico Bureau of Geology &amp; Mineral Resources<br>
-          New Mexico Institute of Mining &amp; Technology<br>
-          <a href="https://www.google.com/maps/place/New+Mexico+Tech+-+Albuquerque+Office/@35.080547,-106.614187"  class="no-icon">2808 Central SE, Suite 127<br>
-          Albuquerque, NM  87106-2245</a><br>
-          <a href="tel:15053662530">505-366-2530</a> information<br>
-          505-366-2559 fax
-          </address>
-        </div>
-      </div>
+
       <div id="nmt-footer">
         <p>We are a research and service division of:</p>
         <a href="http://www.nmt.edu" title="New Mexico Institute of Mining &amp; Technology" class="no-icon"><img src={% static "images/nmtlogo-small.gif" %} width="150" height="53"/></a> </div>
-      <div id="comments" style="clear:both;">
-        <script type="text/javascript">
-	var address = 'webmaster';
-	var domain = '&#110;&#109;&#98;&#103;&#46;&#110;&#109;&#116;&#46;&#101;&#100;&#117;';
-document.write('<a h'+'ref="'+'ma'+'il'+'to:'+address+'&#64;'+domain+'"title="Send E-mail"><img src="{% static "images/icon-letter.png" %}" width="30" height="21" alt="Email us!"><br>We welcome your comments.<\/a>');
-	</script>
-        <noscript>
-        <div><a href="/need_javascript.html"><img src="{% static "images/icon-letter.png" %}" title="Email link requires javascript" alt="envelope" width="30" height="21"><br>
-          We welcome your comments:<br>
-          <img src="/images/webmaster-email.gif" alt="email us" width="161" height="14" title="Email link requires javascript"></a> </div>
-        </noscript>
-      </div>
+{#      <div id="comments" style="clear:both;">#}
+{#        <script type="text/javascript">#}
+{#	var address = 'webmaster';#}
+{#	var domain = '&#110;&#109;&#98;&#103;&#46;&#110;&#109;&#116;&#46;&#101;&#100;&#117;';#}
+{#document.write('<a h'+'ref="'+'ma'+'il'+'to:'+address+'&#64;'+domain+'"title="Send E-mail"><img src="{% static "images/icon-letter.png" %}" width="30" height="21" alt="Email us!"><br>We welcome your comments.<\/a>');#}
+{#	</script>#}
+{#        <noscript>#}
+{#        <div><a href="/need_javascript.html"><img src="{% static "images/icon-letter.png" %}" title="Email link requires javascript" alt="envelope" width="30" height="21"><br>#}
+{#          We welcome your comments:<br>#}
+{#          <img src="/images/webmaster-email.gif" alt="email us" width="161" height="14" title="Email link requires javascript"></a> </div>#}
+{#        </noscript>#}
+{#      </div>#}
       <div id="terms">
-        <div class="no-print" style="margin-bottom:0.25em;" ><small><a href="/about/termsofuse.html">Terms of Use</a> | <a href="/about/accessibility.html">Accessibility</a></small> </div>
+{#        <div class="no-print" style="margin-bottom:0.25em;" ><small><a href="/about/termsofuse.html">Terms of Use</a> | <a href="/about/accessibility.html">Accessibility</a></small> </div>#}
         <div style="font-size:0.625em;">Revised: <!-- #BeginDate format:Sw1 -->21 July, 2015<!-- #EndDate --></div>
         <div><small> <a href="/publications/about/copyright.html"> &copy;
           <script >var cur = '2007'; var year = new Date(); if(cur == year.getFullYear()) year = year.getFullYear(); else year = cur + '-' + year.getFullYear(); document.write(year);</script>

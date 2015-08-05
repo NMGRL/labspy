@@ -10,12 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
-try:
-    import pymysql
-
-    pymysql.install_as_MySQLdb()
-except ImportError, e:
-    print 'failed importing. {}'.format(e)
+import pymysql
+pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
@@ -27,12 +23,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '&n%^9-qj8!e2dvir1#4eii^!vy=h^v!0fel5d62+57c*=bjsr1'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['nmgrl.nmbgmr.nmt.edu','129.138.12.10']
+ALLOWED_HOSTS = ['nmgrl.nmbgmr.nmt.edu', '129.138.12.10']
 
 CRISPY_TEMPLATE_PACK = 'bootstrap'
 
@@ -91,14 +87,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'labspy.wsgi.application'
 
-from leaflet_conf import config
-
-LEAFLET_CONFIG = config()
-# TEMPLATE_LOADERS = (
-#     'django.template.loaders.filesystem.Loader',
-#     'django.template.loaders.app_directories.Loader',
-# )
-
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
@@ -122,14 +110,13 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
-
+# USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
@@ -140,3 +127,8 @@ STATICFILES_DIRS = (
 )
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # AUTH_USER_MODEL = 'django.contrib.auth.User'
+
+# Leaflet
+# http://leafletjs.com/
+from leaflet_conf import config
+LEAFLET_CONFIG = config()

@@ -22,7 +22,7 @@ from fabric.state import env
 
 env.hosts = ['jross@129.138.12.10']
 env.project_root = '/home/jross/web/labspy'
-env.python = '/home/jross/anaconda/envs/labspy/bin/python'
+env.bin = '/home/jross/anaconda/envs/labspy/bin/python'
 
 def prepare_deploymoent(branch_name):
     # local('python manage.py test labspy')
@@ -32,8 +32,9 @@ def prepare_deploymoent(branch_name):
 def deploy():
     with cd(env.project_root):
         run('git pull origin master')
-        run('{} manage.py migrate labspy'.format(env.python))
-        run('{} manage.py collectstatic -v0 --noinput'.format(env.python))
+        run('{}/pip install -r requirements.txt'.format(env.bin))
+        run('{}/python manage.py migrate labspy'.format(env.bin))
+        run('{}/python manage.py collectstatic -v0 --noinput'.format(env.bin))
         # run('/anaconda/envs/labspy/bin/gunicorn labspy.wsgi --bind=129.138.12.158:8000')
 
         # local('python manage.py test labspy')
