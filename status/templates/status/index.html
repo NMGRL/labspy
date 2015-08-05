@@ -29,8 +29,9 @@
             {% endfor %}
             </tr>
         </table>
+    </div>
 
-    <div class="add-border">
+    <div class="add-border" style="background-color: #bbffb9">
         <h4>Current</h4>
         <table class="paleblue">
             <thead><td>Name</td><td>Value</td><td>Units</td><td>Timestamp</td></thead>
@@ -39,120 +40,130 @@
             {% endfor %}
         </table>
     </div>
-    <div class="add-border">
-        <h4>Connection Status</h4>
-        <table class="paleblue">
-            <thead>
-                <td>Application</td>
-                <td>Device</td>
-                <td>Communicator</td>
-                <td>Address</td>
-                <td>Status</td>
-            </thead>
-            {% for conn in connections %}
-                {% if conn.status %}
-                    <tr class="status_true">
-                {% else %}
-                    <tr class="status_false">
-                {% endif %}
-                <td>{{ conn.appname }}</td>
-                <td>{{ conn.devname }}</td>
-                <td>{{ conn.com }}</td>
-                <td>{{ conn.address }}</td>
-                {% if conn.status %}
-                    <td>OK</td>
-                {% else %}
-                    <td>FAIL</td>
-                {% endif %}
 
-{#                <td>{{ conn.status }}</td>#}
+    <div id="maincontainer">
+        <div id="connectioncontainer">
+            <h4>Connection Status</h4>
+                <table>
+                    <tr>
+                        {% for name, connections in connections_list %}
+                            <td>
+                                <h5>{{ name }}</h5>
+                                <table class="paleblue" style="background-color: #eaeaea;">
+                                    <thead>
+{#                                        <td>Application</td>#}
+                                        <td>Device</td>
+                                        <td>Communicator</td>
+                                        <td>Address</td>
+                                        <td>Status</td>
+                                    </thead>
+                                    {% for conn in connections %}
+                                        {% if conn.status %}
+                                            <tr class="status_true">
+                                        {% else %}
+                                            <tr class="status_false">
+                                        {% endif %}
+{#                                        <td>{{ conn.appname }}</td>#}
+                                        <td>{{ conn.devname }}</td>
+                                        <td>{{ conn.com }}</td>
+                                        <td>{{ conn.address }}</td>
+                                        {% if conn.status %}
+                                            <td>OK</td>
+                                        {% else %}
+                                            <td>FAIL</td>
+                                        {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </td>
+                        {% endfor %}
+                    </tr>
+                </table>
+
+        </div>
+        <div id="graphcontainer">
+            <form action={% url "status_index" %} method="post">
+                {% csrf_token %}
+                {{ date_selector_form }}
+                <input type="submit" value="Refresh" />
+            </form>
+            <table>
+                <tr>
+                    <td>
+                        <table class="graph">
+                            <tr><td></td><td><div class='graphtitle'>Lab Temperature</div></td></tr>
+                            <tr>
+                                <td id="ylabel"><div>Temp (F)</div></td>
+                                <td><div id="temp_graph" style="width:500px;height:300px;"></div></td>
+                            </tr>
+                            <tr><td></td><td><div id="xlabel">Time</div></td></tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="graph">
+                            <tr><td></td><td><div class='graphtitle'>Lab Humidity</div></td></tr>
+                            <tr>
+                                <td id="ylabel"><div>Humidity (%)</div></td>
+                                <td><div id="hum_graph" style="width:500px;height:300px;"></div></td>
+                            </tr>
+                            <tr><td></td><td><div id="xlabel">Time</div></td></tr>
+                        </table>
+                    </td>
                 </tr>
-            {% endfor %}
-        </table>
+                </table>
 
+                <table>
+                <tr>
+                    <td>
+                        <table class="graph">
+                            <tr><td></td><td><div class='graphtitle'>Coolant Temperature</div></td></tr>
+                            <tr>
+                                <td id="ylabel"><div>Temp ({{ coolant_units }})</div></td>
+                                <td><div id="coolant_graph" style="width:500px;height:300px;"></div></td>
+                            </tr>
+                            <tr><td></td><td><div id="xlabel">Time</div></td></tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="graph">
+                            <tr><td></td><td><div class='graphtitle'>ColdFinger Temperature</div></td></tr>
+                            <tr>
+                                <td id="ylabel"><div>Temp ({{ coldfinger_units }})</div></td>
+                                <td><div id="cf_graph" style="width:500px;height:300px;"></div></td>
+                            </tr>
+                            <tr><td></td><td><div id="xlabel">Time</div></td></tr>
+                        </table>
+                    </td>
+                </tr>
+                </table>
+
+                <table>
+                <tr>
+                    <td>
+                        <table class="graph">
+                            <tr><td></td><td><div class='graphtitle'>Air Pressure</div></td></tr>
+                            <tr>
+                                <td id="ylabel"><div>Pressure ({{ pneumatic_units }})</div></td>
+                                <td><div id="pneumatic_graph" style="width:500px;height:300px;"></div></td>
+                            </tr>
+                            <tr><td></td><td><div id="xlabel">Time</div></td></tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="graph">
+                            <tr><td></td><td><div class='graphtitle'></div></td></tr>
+                            <tr>
+                                <td><div id="ylabel"></div></td>
+                                <td><div id="cf_graph" style="width:500px;height:300px;"></div></td>
+                            </tr>
+                            <tr><td></td><td><div id="xlabel">Time</div></td></tr>
+                        </table>
+                    </td>
+                </tr>
+                </table>
+
+        </div>
     </div>
-
-</div>
-    <form action={% url "status_index" %} method="post">
-        {% csrf_token %}
-        {{ date_selector_form }}
-        <input type="submit" value="Refresh" />
-    </form>
-
-    <table>
-    <tr>
-        <td>
-            <table class="paleblue">
-                <tr><td></td><td><div class='graphtitle'>Lab Temperature</div></td></tr>
-                <tr>
-                    <td id="ylabel"><div>Temp (F)</div></td>
-                    <td><div id="temp_graph" style="width:500px;height:300px;"></div></td>
-                </tr>
-                <tr><td></td><td><div id="xlabel">Time</div></td></tr>
-            </table>
-        </td>
-        <td>
-            <table class="paleblue">
-                <tr><td></td><td><div class='graphtitle'>Lab Humidity</div></td></tr>
-                <tr>
-                    <td id="ylabel"><div>Humidity (%)</div></td>
-                    <td><div id="hum_graph" style="width:500px;height:300px;"></div></td>
-                </tr>
-                <tr><td></td><td><div id="xlabel">Time</div></td></tr>
-            </table>
-        </td>
-    </tr>
-    </table>
-
-    <table>
-    <tr>
-        <td>
-            <table class="paleblue">
-                <tr><td></td><td><div class='graphtitle'>Coolant Temperature</div></td></tr>
-                <tr>
-                    <td id="ylabel"><div>Temp ({{ coolant_units }})</div></td>
-                    <td><div id="coolant_graph" style="width:500px;height:300px;"></div></td>
-                </tr>
-                <tr><td></td><td><div id="xlabel">Time</div></td></tr>
-            </table>
-        </td>
-        <td>
-            <table class="paleblue">
-                <tr><td></td><td><div class='graphtitle'>ColdFinger Temperature</div></td></tr>
-                <tr>
-                    <td id="ylabel"><div>Temp ({{ coldfinger_units }})</div></td>
-                    <td><div id="cf_graph" style="width:500px;height:300px;"></div></td>
-                </tr>
-                <tr><td></td><td><div id="xlabel">Time</div></td></tr>
-            </table>
-        </td>
-    </tr>
-    </table>
-
-    <table>
-    <tr>
-        <td>
-            <table class="paleblue">
-                <tr><td></td><td><div class='graphtitle'>Air Pressure</div></td></tr>
-                <tr>
-                    <td id="ylabel"><div>Pressure ({{ pneumatic_units }})</div></td>
-                    <td><div id="pneumatic_graph" style="width:500px;height:300px;"></div></td>
-                </tr>
-                <tr><td></td><td><div id="xlabel">Time</div></td></tr>
-            </table>
-        </td>
-        <td>
-            <table class="paleblue">
-                <tr><td></td><td><div class='graphtitle'></div></td></tr>
-                <tr>
-                    <td><div id="ylabel"></div></td>
-{#                    <td><div id="cf_graph" style="width:500px;height:300px;"></div></td>#}
-                </tr>
-                <tr><td></td><td><div id="xlabel">Time</div></td></tr>
-            </table>
-        </td>
-    </tr>
-    </table>
 
     <script type='text/javascript'>
 

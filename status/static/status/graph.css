@@ -21,3 +21,36 @@
     /*width: 30px;*/
     /*background-color: lightblue;*/
 }
+
+#maincontainer{
+    /*background-color: lightblue;*/
+    /*position: relative;*/
+}
+#connectioncontainer{
+    background-color: #bbffb9;
+    /*position: relative;*/
+    /*position: absolute;*/
+    /*z-index: 2;*/
+    /*left: 0;*/
+}
+#graphcontainer {
+    background-color: #bbffb9;
+    /*z-index: 1;*/
+    /*position: absolute;*/
+    /*left: 0;*/
+}
+
+table.graph {
+    border: solid;
+    border-color: green;
+    background-color: #eaeaea;
+    font: normal 11px/14px 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif;
+}
+table.graph thead td {
+    /*background: #FCFCFC url(../img/header-bg.png) left bottom repeat-x;*/
+    border-bottom: 1px solid #DDD;
+    padding: 2px 5px;
+    font-size: 11px;
+    vertical-align: middle;
+    color: #666;
+}

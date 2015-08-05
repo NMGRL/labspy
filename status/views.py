@@ -22,8 +22,9 @@ def make_current(ti, di, ui):
     return ti, obj.value, ui, obj.pub_date
 
 
-def make_connections():
-    return Connections.objects.values().order_by('appname')
+def make_connections(name):
+    print 'appname', name
+    return Connections.objects.filter(appname=name).values()
 
 
 def index(request):
@@ -94,7 +95,8 @@ def index(request):
                'coldfinger_units': coldfinger_units,
                'pneumatic_units': pneumatic_units,
 
-               'connections': make_connections(),
+               'connections_list': (('PyValve',make_connections('pyValve - root')),
+                                    ('PyCO2', make_connections('pyCO2'))),
                'current': current,
                'date_selector_form': form}
     return render(request, 'status/index.html', context)
