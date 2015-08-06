@@ -47,7 +47,7 @@
                     <table class="paleblue">
                         <thead><td>Name</td><td>Value</td><td>Units</td><td>Timestamp</td></thead>
                         {% for ti,ci,ui, tsi in current %}
-                            <tr><td>{{ ti }}</td><td>{{ ci }}</td><td>{{ ui }}</td><td>{{ tsi|date:"m/d/Y h:i:s A" }}</td></tr>
+                            <tr><td>{{ ti }}</td><td>{{ ci|floatformat:2 }}</td><td>{{ ui }}</td><td>{{ tsi|date:"m/d/Y h:i:s A" }}</td></tr>
                         {% endfor %}
                     </table>
                 </td>

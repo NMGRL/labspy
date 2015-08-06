@@ -125,7 +125,9 @@ def make_graph(data, fmt=None):
     # print xs,ys
     series1 = flot.Series(x=xklass(points=xs),
                           y=yklass(points=ys),
-                          options=flot.SeriesOptions(color='red'))
+                          options=flot.SeriesOptions(color='blue'))
     graph = flot.Graph(series1=series1,
-                       options=flot.GraphOptions(xaxis={'mode': 'time', 'timeformat': fmt}))
+                       options=flot.GraphOptions(xaxis={'mode': 'time',
+                                                        'timezone':'browser',
+                                                        'timeformat': fmt}))
     return graph
