@@ -27,5 +27,6 @@ urlpatterns = [
     url(r'^software/pychron$', SoftwarePychron.as_view(), name='software_pychron'),
     url(r'^status/', include('status.urls')),
     url(r'^samples/', include('samples.urls')),
+    url(r'^importer/', include('importer.urls')),
 
 ]

@@ -49,7 +49,8 @@ INSTALLED_APPS = (
 
     # local
     'samples',
-    'status'
+    'status',
+    'importer'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -84,6 +85,12 @@ TEMPLATES = [
         },
     },
 ]
+TEMPLATE_LOADERS = (
+    ('django.template.loaders.cached.Loader', (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )),
+)
 
 WSGI_APPLICATION = 'labspy.wsgi.application'
 

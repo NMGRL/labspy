@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+{% block staticfiles %}
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}" type="text/css" />
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-responsive.css' %}" type="text/css" />
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}" type="text/javascript"></script>
+
+{#    <link rel="stylesheet" type="text/css" href="{% static 'importer/style.css' %}" />#}
+{% endblock %}
+{% block body %}
+    <h1>Importer</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% crispy request_form %}
+{#        <input type="submit" value="Submit" />#}
+    </form>
+
+{% endblock %}
