@@ -56,5 +56,11 @@ def index(request):
     else:
         form = ImportRequestForm()
 
-    ctx = {'request_form': form}
+    imported = ImportRequest.objects.exclude(imported_date__isnull=True)
+    to_import = ImportRequest.objects.exclude(imported_date__isnull=False)
+
+    ctx = {'request_form': form,
+           'imported_requests': imported,
+           'to_import_requests': to_import,
+           'alist':[1,2,3]}
     return render(request, 'importer/index.html', ctx)

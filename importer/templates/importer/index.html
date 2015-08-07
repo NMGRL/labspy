@@ -3,18 +3,92 @@
 {% load staticfiles %}
 
 {% block staticfiles %}
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}" type="text/css" />
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-responsive.css' %}" type="text/css" />
-    <script src="{% static 'bootstrap/js/bootstrap.js' %}" type="text/javascript"></script>
+{#    <meta name="viewport" content="width=device-width, initial-scale=1">#}
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-responsive.min.css">
+{#    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>#}
 
-{#    <link rel="stylesheet" type="text/css" href="{% static 'importer/style.css' %}" />#}
+{#    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}"/>#}
+{#    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-responsive.min.css' %}"/>#}
+    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}" type="text/javascript"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'importer/style.css' %}" />
 {% endblock %}
+
 {% block body %}
-    <h1>Importer</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% crispy request_form %}
-{#        <input type="submit" value="Submit" />#}
-    </form>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="col-md-8">
+                <div id="formcontainer">
+                    <div>
+                        <h1>Import Request</h1>
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {% crispy request_form %}
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div id="formcontainer">
+                    <h4>Analysis List</h4>
+                <table class="table table-striped">
+                {% for a in alist %}
+                    <tr>
+                        <td>
+                            {{ a }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div>
+            <div id="requestscontainer">
+                <h2>Imported Requests</h2>
+                <table class="paleblue">
+                    <thead>
+                    <td>Experiment Identifier</td>
+                    <td>Requestor</td>
+                    <td>Requested Date</td>
+                    <td>Imported Date</td>
+                    </thead>
+                    {% for req in imported_requests %}
+                    <tr>
+                        <td>{{ req.experiment_identifier }}</td>
+                        <td>{{ req.requestor_name }}</td>
+                        <td>{{ req.request_date|date:"m-d-Y" }}</td>
+                        <td>{{ req.imported_date|date:"m-d-Y" }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div>
+            <div id="requestscontainer">
+                <h2>Requests In Waiting</h2>
+                <table class="paleblue">
+                    <thead>
+                    <td>Experiment Identifier</td>
+                    <td>Requestor</td>
+                    <td>Requested Date</td>
+                    </thead>
+                    {% for req in to_import_requests %}
+                    <tr>
+                        <td>{{ req.experiment_identifier }}</td>
+                        <td>{{ req.requestor_name }}</td>
+                        <td>{{ req.request_date|date:"m-d-Y" }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

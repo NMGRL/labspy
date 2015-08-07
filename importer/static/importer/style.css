@@ -2,3 +2,22 @@
     color: #ff2115;
     /*display: none;*/
 }
+
+#requestscontainer {
+    /*background-color: lightblue;*/
+    border: 0.1em solid;
+    border-radius: 0.25em;
+    margin-bottom: 0.5em;
+    padding-left: 0.5em;
+    padding-bottom: 0.5em;
+    /*margin-left: 1em;*/
+}
+#formcontainer {
+    /*background-color: lightblue;*/
+    border: 0.1em solid;
+    border-radius: 0.25em;
+    margin-bottom: 0.5em;
+    padding-left: 2.5em;
+    padding-bottom: 0.5em;
+    /*margin-left: 1em;*/
+}
