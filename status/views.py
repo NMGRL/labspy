@@ -3,6 +3,7 @@ from django import forms
 from django.forms import Form
 from django.shortcuts import render
 import flot
+import time
 # Create your views here.
 from status.models import Measurement, ProcessInfo, Analysis, Experiment, Connections
 
@@ -109,7 +110,16 @@ def index(request):
     return render(request, 'status/index.html', context)
 
 
-def make_graph(data, fmt=None):
+def make_graph(data, fmt=None, options=None):
+    if options == 'scatter':
+        options = dict(points=dict(radius=1,
+                                   show=True,
+                                   fill=True,
+                                   fillColor="#058DC7"),
+                       color="#058DC7")
+    else:
+        options = dict(color='#238B45')
+
     # print data
     if not fmt:
         fmt = '%H:%M:%S'
@@ -123,11 +133,14 @@ def make_graph(data, fmt=None):
         xklass = flot.XVariable
 
     # print xs,ys
-    series1 = flot.Series(x=xklass(points=xs),
+    xx = xklass(points=xs)
+    series1 = flot.Series(x=xx,
                           y=yklass(points=ys),
-                          options=flot.SeriesOptions(color='blue'))
+                          options=flot.SeriesOptions(**options))
     graph = flot.Graph(series1=series1,
                        options=flot.GraphOptions(xaxis={'mode': 'time',
-                                                        'timezone':'browser',
+                                                        'max': time.time() * 1000,
+                                                        'min': xx.points[0],
+                                                        'timezone': 'browser',
                                                         'timeformat': fmt}))
     return graph
