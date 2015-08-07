@@ -3,13 +3,12 @@
 {% block staticfiles %}
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'status/graph.css' %}" />
-{#    <link rel="stylesheet" type="text/css" href="{% static 'status/style.css' %}" />#}
     <link rel="stylesheet" type="text/css" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
 
-    <script type="text/javascript" src='http://www.flotcharts.org/flot/jquery.flot.js'></script>
-    <script type="text/javascript" src='http://www.flotcharts.org/flot/jquery.flot.time.js'></script>
-{#    <script type="text/javascript" src="{% static 'js/jquery.flot.js' %}"></script>#}
-{#    <script type="text/javascript" src="{% static 'js/jquery.flot.time.js' %}"></script>#}
+{#    <script type="text/javascript" src='http://www.flotcharts.org/flot/jquery.flot.js'></script>#}
+{#    <script type="text/javascript" src='http://www.flotcharts.org/flot/jquery.flot.time.js'></script>#}
+    <script type="text/javascript" src="{% static 'jquery.flot.js' %}"></script>
+    <script type="text/javascript" src="{% static 'jquery.flot.time.js' %}"></script>
 {% endblock %}
 
 
