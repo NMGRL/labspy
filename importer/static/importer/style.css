@@ -19,5 +19,11 @@
     margin-bottom: 0.5em;
     padding-left: 2.5em;
     padding-bottom: 0.5em;
-    /*margin-left: 1em;*/
+    height: 45%;
+}
+
+.flow_container{
+    overflow: auto;
+    height: 80%;
+
 }

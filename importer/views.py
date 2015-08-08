@@ -1,3 +1,4 @@
+import re
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
@@ -28,7 +29,8 @@ class ImportRequestForm(forms.Form):
         # self.helper.form_class = 'blueForms'
         # self.helper.form_method = 'post'
         # self.helper.form_action = 'submit_survey'
-        helper.add_input(Submit('submit', 'Submit Request'))
+        helper.add_input(Submit('check_runlist', 'Check Run List'))
+        helper.add_input(Submit('submit_request', 'Submit Request'))
         self.helper = helper
 
 
@@ -41,18 +43,46 @@ def file_to_blob(rf):
     return txt
 
 
+regex = re.compile(r'^(?P<runid>(\d+-\d{2}\w{0,2}$)|(\w{1,2}-(\d|\w){2}-\w*-\d*)$)')
+
+
+def validate_runlist(request):
+    rfile = request.FILES['runlist_blob']
+    blob = file_to_blob(rfile)
+
+    error = None
+    runlist = []
+    elist = []
+    for i, line in enumerate(blob.split('\n')):
+        m = regex.match(line)
+        if m:
+            runlist.append(m.group('runid'))
+        else:
+            if line.strip():
+                elist.append((i, line))
+
+    return '\n'.join(runlist), runlist, elist, error
+
+
 def index(request):
+    runlist_error = None
+    runlist = None
+    elist = None
     if request.method == 'POST':
         form = ImportRequestForm(request.POST, request.FILES)
-        if form.is_valid():
-            p = request.POST
-            rfile = request.FILES['runlist_blob']
-            blob = file_to_blob(rfile)
+        # print request.POST
+        # print 'ff', form.data
+        if 'check_runlist' in form.data:
+            blob, runlist, elist, runlist_error = validate_runlist(request)
 
-            ImportRequest.objects.create(experiment_identifier=p.get('experiment_identifier'),
-                                         runlist_blob=blob,
-                                         request_date=timezone.now(),
-                                         requestor_name=p.get('requestor_name'))
+        elif form.is_valid():
+            p = request.POST
+            blob, runlist, elist, runlist_error = validate_runlist(request)
+            if blob:
+                ImportRequest.objects.create(experiment_identifier=p.get('experiment_identifier'),
+                                             runlist_blob=blob,
+                                             request_date=timezone.now(),
+                                             requestor_name=p.get('requestor_name'))
     else:
         form = ImportRequestForm()
 
@@ -62,5 +92,6 @@ def index(request):
     ctx = {'request_form': form,
            'imported_requests': imported,
            'to_import_requests': to_import,
-           'alist':[1,2,3]}
+           'runlist_error': runlist_error,
+           'alist': runlist, 'elist': elist}
     return render(request, 'importer/index.html', ctx)

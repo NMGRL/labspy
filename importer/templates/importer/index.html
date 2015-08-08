@@ -19,7 +19,7 @@
 {% block body %}
     <div class="container-fluid">
         <div class="row-fluid">
-            <div class="col-md-8">
+            <div class="col-md-5">
                 <div id="formcontainer">
                     <div>
                         <h1>Import Request</h1>
@@ -30,19 +30,41 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div id="formcontainer">
                     <h4>Analysis List</h4>
-                <table class="table table-striped">
-                {% for a in alist %}
-                    <tr>
-                        <td>
-                            {{ a }}
-                        </td>
-                    </tr>
-                {% endfor %}
-                </table>
-
+                    <div class="flow_container">
+                        <table class="paleblue">
+                        {% for a in alist %}
+                            <tr>
+                                <td>
+                                    {{ a }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div id="formcontainer">
+                    <h4>Invalid Run IDs</h4>
+                    <div class="flow_container">
+                        <table class="paleblue">
+                        <thead>
+                        <td>Line Num.</td>
+                        <td>Run ID</td>
+                        </thead>
+                        {% for line, a in elist %}
+                            <tr>
+                                <td>{{ line }}</td>
+                                <td>
+                                    {{ a }}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
