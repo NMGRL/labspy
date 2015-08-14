@@ -46,21 +46,17 @@ table.paleblue {
     /*position: relative;*/
 }
 #currentcontainer, #connectioncontainer, #graphcontainer, #experimentscontainer {
-    background-color: lightblue;
+    /*background-color: lightblue;*/
+    /*border: 0.1em solid;*/
+    /*border-radius: 0.25em;*/
+    /*margin-bottom: 0.5em;*/
+    /*padding-left: 0.25em;*/
+}
+
+.collapse {
     border: 0.1em solid;
     border-radius: 0.25em;
-    margin-bottom: 0.5em;
-    padding-left: 0.25em;
 }
-#experimentcontainer {
-    width: 20em;
-}
-#experimentcontainer h3 {
-    background-color: red;
-}
-
-
-
 #connectioncontainer td {
     vertical-align: top;
     /*border: solid;*/
@@ -69,24 +65,8 @@ p.connection {
     font-size: 10pt;
 }
 
-#graphcontainer {
-    border: solid;
-    border-width: 0.1em;
-}
+/*#graphcontainer {*/
+    /*border: solid;*/
+    /*border-width: 0.1em;*/
+/*}*/
 
-table.graph {
-    border: 0.2em solid green;
-    -webkit-border-radius: 0.25em;
-    -moz-border-radius: 0.25em;
-    border-radius: .5em;
-    background-color: #eaeaea;
-    font: normal 11px/14px 'Lucida Grande', Verdana, Helvetica, Arial, sans-serif;
-}
-table.graph thead td {
-    /*background: #FCFCFC url(../img/header-bg.png) left bottom repeat-x;*/
-    border-bottom: 1px solid #DDD;
-    padding: 2px 5px;
-    font-size: 11px;
-    vertical-align: middle;
-    color: #666;
-}

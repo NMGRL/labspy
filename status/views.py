@@ -18,6 +18,10 @@ class DateSelectorForm(Form):
                                                            (3, 'Last Month')))
 
 
+class SaveFigureForm(Form):
+    pass
+
+
 def make_current(ti, di, ui):
     obj = di.order_by('-pub_date').first()
     return ti, obj.value, ui, obj.pub_date
@@ -42,6 +46,10 @@ def index(request):
 
     temp_data = None
     hum_data = None
+    cf_data = None
+    cool_data = None
+    pneumatic_data = None
+
     fmt = '%H:%M:%S'
     pis = ProcessInfo.objects
     temp_units = pis.get(name='Lab Temp.').units
@@ -66,7 +74,12 @@ def index(request):
     cur_ob_an = Analysis.objects.filter(experiment=cur_ob_exp).order_by('-start_time').first()
 
     if request.method == 'POST':
+
+        fig_form = SaveFigureForm(request.POST)
+        print request.POST.keys()
+
         form = DateSelectorForm(request.POST)
+
         if form.is_valid():
             d = int(form.cleaned_data['date_range_name'])
             now = datetime.now()
@@ -79,6 +92,7 @@ def index(request):
 
             fmt = FMTS[d]
     else:
+        fig_form = SaveFigureForm()
         form = DateSelectorForm()
         hum_data = hums.all()
         temp_data = temps.all()
@@ -86,27 +100,43 @@ def index(request):
         cool_data = coolant.all()
         pneumatic_data = pneumatic.all()
 
-    context = {'temp': make_graph(temp_data, fmt),
-               'hum': make_graph(hum_data, fmt),
-               'cfinger': make_graph(cf_data, fmt),
-               'coolant': make_graph(cool_data, fmt),
-               'pneumatic': make_graph(pneumatic_data, fmt),
-               'experiments': [(jan_tag, cur_jan_exp,
-                                cur_jan_an),
-                               (ob_tag, cur_ob_exp,
-                                cur_ob_an)],
-               'temp_units': temp_units,
-               'humidity_units': humidity_units,
-               'coolant_units': coolant_units,
-               'coldfinger_units': coldfinger_units,
-               'pneumatic_units': pneumatic_units,
+    temp = make_graph(temp_data, fmt)
+    hum = make_graph(hum_data, fmt)
+    cfinger = make_graph(cf_data, fmt)
+    coolant = make_graph(cool_data, fmt)
+    pneumatic = make_graph(pneumatic_data, fmt)
 
-               'connections_list': (('PyValve', connection_timestamp('pyValve'),
-                                     make_connections('pyValve')),
-                                    ('PyCO2', connection_timestamp('pyCO2'),
-                                     make_connections('pyCO2'))),
-               'current': current,
-               'date_selector_form': form}
+    row1 = (('Temperature', 'Temp ({})'.format(temp_units), 'temp_graph', temp),
+            ('Humidity', 'Humidity ({})'.format(humidity_units), 'hum_graph', hum))
+    row2 = (('ColdFinger', 'Temp ({})'.format(coldfinger_units), 'cf_graph', cfinger),
+            ('Pneumatics', 'Pressure ({})'.format(pneumatic_units), 'pn_graph', pneumatic))
+    row3 = (('Coolant', 'Temp ({})'.format(coolant_units), 'coolant_graph', coolant),)
+    connections_list = (('PyValve', connection_timestamp('pyValve'),
+                         make_connections('pyValve')),
+                        ('PyCO2', connection_timestamp('pyCO2'),
+                         make_connections('pyCO2')))
+    context = {
+        # 'temp': make_graph(temp_data, fmt),
+        # 'hum': make_graph(hum_data, fmt),
+        # 'cfinger': make_graph(cf_data, fmt),
+        # 'coolant': make_graph(cool_data, fmt),
+        # 'pneumatic': make_graph(pneumatic_data, fmt),
+        'graphrows': (row1, row2, row3),
+        'experiments': [(jan_tag, cur_jan_exp,
+                         cur_jan_an),
+                        (ob_tag, cur_ob_exp,
+                         cur_ob_an)],
+        'temp_units': temp_units,
+        'humidity_units': humidity_units,
+        'coolant_units': coolant_units,
+        'coldfinger_units': coldfinger_units,
+        'pneumatic_units': pneumatic_units,
+
+        'connections_list': connections_list,
+        'nconnections': 12/len(connections_list),
+        'current': current,
+        'save_figure_form': fig_form,
+        'date_selector_form': form}
     return render(request, 'status/index.html', context)
 
 
@@ -129,7 +159,7 @@ def make_graph(data, fmt=None, options=None):
         xs, ys = zip(*[(m.pub_date, m.value) for m in data])
         xklass = flot.TimeXVariable
     else:
-        xs, ys = [], []
+        xs, ys = [0], [0]
         xklass = flot.XVariable
 
     # print xs,ys
