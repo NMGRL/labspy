@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'django_tables2',
     'crispy_forms',
     'leaflet',
+    'djangobower'
 
     # local
     'samples',
@@ -134,9 +135,17 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "labspy/static"),
 )
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_FINDERS = ('django.contrib.staticfiles.finders.FileSystemFinder',
+                       'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+                       'djangobower.finders.BowerFinder',)
 # AUTH_USER_MODEL = 'django.contrib.auth.User'
 
 # Leaflet
 # http://leafletjs.com/
 from leaflet_conf import config
 LEAFLET_CONFIG = config()
+
+BOWER_INSTALLED_APPS = (
+    'jquery',
+    'underscore',
+    'flot')

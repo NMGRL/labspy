@@ -1,12 +1,11 @@
 {% load staticfiles %}
 
-{#<script type="text/javascript" src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js'></script>#}
-<script type="text/javascript" src="{% static 'jquery.js' %}"></script>
-{#<link rel="stylesheet" type="text/css" href="{% static 'status/style.css' %}" />#}
-{#<link rel="stylesheet" type="text/css" href="{% static 'status/template.css' %}" />#}
-{#<link rel="stylesheet" type="text/css" href="{% static 'bureau_style.css' %}" />#}
-<link rel="stylesheet" type="text/css" href="{% static 'nmgrl.css' %}" />
+<script type="text/javascript" src="{% static 'jquery/dist/jquery.js' %}"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
+<link rel="stylesheet" type="text/css" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="{% static 'nmgrl.css' %}" />
 
 <!-- note that there's also blue.uni-form.css and dark.uni-form.css available if you want to try changing defaults up -->
 {#<link rel="stylesheet" href="{{ STATIC_URL }}uni_form/uni-form.css" type="text/css" />#}

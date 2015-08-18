@@ -34,6 +34,7 @@ def deploy():
         run('git pull origin master')
         run('{}/pip install -r requirements.txt'.format(env.bin))
         run('{}/python manage.py migrate'.format(env.bin))
+        run('{}/python manage.py bower install'.format(env.bin))
         run('{}/python manage.py collectstatic -v0 --noinput'.format(env.bin))
         # run('/anaconda/envs/labspy/bin/gunicorn labspy.wsgi --bind=129.138.12.158:8000')
 
