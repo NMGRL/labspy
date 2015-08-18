@@ -46,7 +46,7 @@ INSTALLED_APPS = (
     'django_tables2',
     'crispy_forms',
     'leaflet',
-    'djangobower'
+    'djangobower',
 
     # local
     'samples',
