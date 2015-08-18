@@ -175,6 +175,9 @@ def make_graph(data, fmt=None, options=None):
     yklass = flot.YVariable
     if data:
         xs, ys = zip(*[(m.pub_date, m.value) for m in data])
+        if len(xs) > 5000:
+            xs = xs[::5]
+            ys = ys[::5]
         xklass = flot.TimeXVariable
     else:
         xs, ys = [0], [0]
