@@ -6,9 +6,8 @@ from django.shortcuts import render
 # from django.utils import timezone
 import flot
 import time
+
 # Create your views here.
-# import pytz
-import pytz
 from status.models import Measurement, ProcessInfo, Analysis, Experiment, Connections
 
 DS = [{"hours": 1}, {'hours': 24}, {'weeks': 1}, {'weeks': 4}]
