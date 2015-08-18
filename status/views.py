@@ -3,9 +3,12 @@ from django import forms
 from django.forms import Form
 from django.http import Http404
 from django.shortcuts import render
+# from django.utils import timezone
 import flot
 import time
 # Create your views here.
+# import pytz
+import pytz
 from status.models import Measurement, ProcessInfo, Analysis, Experiment, Connections
 
 DS = [{"hours": 1}, {'hours': 24}, {'weeks': 1}, {'weeks': 4}]
@@ -46,13 +49,6 @@ def index(request):
     coolant = Measurement.objects.filter(process_info__name='Coolant Temp.')
     pneumatic = Measurement.objects.filter(process_info__name='Pressure')
 
-    temp_data = None
-    hum_data = None
-    cf_data = None
-    cool_data = None
-    pneumatic_data = None
-
-    fmt = '%H:%M:%S'
     pis = ProcessInfo.objects
     temp_units = pis.get(name='Lab Temp.').units
     humidity_units = pis.get(name='Lab Hum.').units
@@ -76,54 +72,11 @@ def index(request):
     cur_jan_an = Analysis.objects.filter(experiment=cur_jan_exp).order_by('-start_time').first()
     cur_ob_an = Analysis.objects.filter(experiment=cur_ob_exp).order_by('-start_time').first()
 
-    if request.method == 'POST':
-
-        fig_form = SaveFigureForm(request.POST)
-
-        form = DateSelectorForm(request.POST)
-
-        if form.is_valid():
-            d = int(form.cleaned_data['date_range_name'])
-            now = datetime.now()
-            post = now - timedelta(**DS[d])
-            temp_data = temps.filter(pub_date__gte=post).all()
-            hum_data = hums.filter(pub_date__gte=post).all()
-            cf_data = cfinger.filter(pub_date__gte=post).all()
-            cool_data = coolant.filter(pub_date__gte=post).all()
-            pneumatic_data = pneumatic.filter(pub_date__gte=post).all()
-
-            fmt = FMTS[d]
-    else:
-        fig_form = SaveFigureForm()
-        form = DateSelectorForm()
-        hum_data = hums.all()
-        temp_data = temps.all()
-        cf_data = cfinger.all()
-        cool_data = coolant.all()
-        pneumatic_data = pneumatic.all()
-
-    temp = make_graph(temp_data, fmt)
-    hum = make_graph(hum_data, fmt)
-    cfinger = make_graph(cf_data, fmt)
-    coolant = make_graph(cool_data, fmt)
-    pneumatic = make_graph(pneumatic_data, fmt)
-
-    row1 = (('Temperature', 'Temp ({})'.format(temp_units), 'temp_graph', temp),
-            ('Humidity', 'Humidity ({})'.format(humidity_units), 'hum_graph', hum))
-    row2 = (('ColdFinger', 'Temp ({})'.format(coldfinger_units), 'cf_graph', cfinger),
-            ('Pneumatics', 'Pressure ({})'.format(pneumatic_units), 'pn_graph', pneumatic))
-    row3 = (('Coolant', 'Temp ({})'.format(coolant_units), 'coolant_graph', coolant),)
     connections_list = (('PyValve', connection_timestamp('pyValve'),
                          make_connections('pyValve')),
                         ('PyCO2', connection_timestamp('pyCO2'),
                          make_connections('pyCO2')))
     context = {
-        # 'temp': make_graph(temp_data, fmt),
-        # 'hum': make_graph(hum_data, fmt),
-        # 'cfinger': make_graph(cf_data, fmt),
-        # 'coolant': make_graph(cool_data, fmt),
-        # 'pneumatic': make_graph(pneumatic_data, fmt),
-        'graphrows': (row1, row2, row3),
         'experiments': [(jan_tag, cur_jan_exp,
                          cur_jan_an),
                         (ob_tag, cur_ob_exp,
@@ -136,9 +89,7 @@ def index(request):
 
         'connections_list': connections_list,
         'nconnections': 12 / len(connections_list),
-        'current': current,
-        'save_figure_form': fig_form,
-        'date_selector_form': form}
+        'current': current}
     return render(request, 'status/index.html', context)
 
 
@@ -161,8 +112,6 @@ def graph(request):
     if request.method == 'POST':
 
         fig_form = SaveFigureForm(request.POST)
-        print request.POST.keys()
-
         form = DateSelectorForm(request.POST)
 
         if form.is_valid():
@@ -178,7 +127,7 @@ def graph(request):
         dt = timedelta(**DS[1])
 
     now = datetime.now()
-    post = now - dt
+    post = (now - dt)
 
     temp_data = temps.filter(pub_date__gte=post).all()
     hum_data = hums.filter(pub_date__gte=post).all()
@@ -221,13 +170,12 @@ def make_graph(data, fmt=None, options=None):
     else:
         options = dict(color='#238B45')
 
-    # print data
     if not fmt:
         fmt = '%H:%M:%S'
 
     yklass = flot.YVariable
     if data:
-        xs, ys = zip(*[(m.pub_date + timedelta(seconds=3600), m.value) for m in data])
+        xs, ys = zip(*[(m.pub_date, m.value) for m in data])
         xklass = flot.TimeXVariable
     else:
         xs, ys = [0], [0]
