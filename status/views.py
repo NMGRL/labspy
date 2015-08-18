@@ -13,10 +13,11 @@ FMTS = ['%M:%S', '%H:%M', '%m/%d', '%m/%d']
 
 
 class DateSelectorForm(Form):
-    date_range_name = forms.ChoiceField(label='', choices=((0, 'Last Hour'),
-                                                           (1, 'Last Day'),
-                                                           (2, 'Last Week'),
-                                                           (3, 'Last Month')))
+    date_range_name = forms.ChoiceField(label='', choices=(('0', 'Last Hour'),
+                                                           ('1', 'Last Day'),
+                                                           ('2', 'Last Week'),
+                                                           ('3', 'Last Month')),
+                                        initial='1')
 
 
 class SaveFigureForm(Form):
@@ -78,7 +79,6 @@ def index(request):
     if request.method == 'POST':
 
         fig_form = SaveFigureForm(request.POST)
-        print request.POST.keys()
 
         form = DateSelectorForm(request.POST)
 
@@ -149,12 +149,6 @@ def graph(request):
     coolant = Measurement.objects.filter(process_info__name='Coolant Temp.')
     pneumatic = Measurement.objects.filter(process_info__name='Pressure')
 
-    temp_data = None
-    hum_data = None
-    cf_data = None
-    cool_data = None
-    pneumatic_data = None
-
     fmt = '%H:%M:%S'
     pis = ProcessInfo.objects
     temp_units = pis.get(name='Lab Temp.').units
@@ -179,18 +173,13 @@ def graph(request):
     else:
         fig_form = SaveFigureForm()
         form = DateSelectorForm()
-        # hum_data = hums.all()
-        # temp_data = temps.all()
-        # cf_data = cfinger.all()
-        # cool_data = coolant.all()
-        # pneumatic_data = pneumatic.all()
 
     if not dt:
         dt = timedelta(**DS[1])
-        now = datetime.now()
-        post = now - dt
 
-    print now, dt, post
+    now = datetime.now()
+    post = now - dt
+
     temp_data = temps.filter(pub_date__gte=post).all()
     hum_data = hums.filter(pub_date__gte=post).all()
     cf_data = cfinger.filter(pub_date__gte=post).all()
