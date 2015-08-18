@@ -21,70 +21,39 @@
 
 
 {% block body %}
-    <div id="experimentscontainer">
-        <table>
-            <tr>
-            {% for spec, exp, ai in experiments %}
-                <td>
-                    <div id="experimentcontainer">
-                        <h4 style="font-variant: small-caps; font-weight: bold">{{ spec }}</h4>
-                        <table class="paleblue">
-                            <thead>
-                            <td></td><td>Name</td><td>Timestamp</td>
-                            </thead>
-                            <tr><td>Experiment</td><td>{{ exp.name }}</td><td>{{ exp.start_time|date:"m/d/y h:i:s A" }}</td></tr>
-                            <tr><td>Analysis</td><td>{{ ai.name }}</td><td>{{ ai.start_time|date:"m/d/y h:i:s A" }}</td></tr>
-                        </table>
-                    </div>
-                </td>
-            {% endfor %}
-            </tr>
-        </table>
-    </div>
+    <div class="container">
+        <form action={% url "status_graph_index" %} method="post">
+            {% csrf_token %}
+            {{ date_selector_form }}
+            <input type="submit" value="Refresh" />
+        </form>
 
-    <div id="currentcontainer" >
-        <table class="paleblue">
-            <thead><td>Name</td><td>Value</td><td>Units</td><td>Timestamp</td></thead>
-            {% for ti,ci,ui, tsi in current %}
-                <tr><td>{{ ti }}</td><td>{{ ci|floatformat:2 }}</td><td>{{ ui }}</td><td>{{ tsi|date:"m/d/Y h:i:s A" }}</td></tr>
-            {% endfor %}
-        </table>
-    </div>
+        <form action={% url "status_index" %} method="post">
+            {% csrf_token %}
+            {{ save_figure_form }}
+            <input type="submit" value="Save Figure" />
+        </form>
 
-    <div id="connectioncontainer">
-        <div class="row">
-            {% for name, ts, connections in connections_list %}
-                <div class="col-md-{{ nconnections }}">
-                    <p class="connection"><strong>{{ name }}</strong> {{ ts|date:"m/d/y h:i:s A"}}</p>
-                    <table class="paleblue">
-                        <thead>
-                            <td>Application</td>
-                            <td>Device</td>
-                            <td>Communicator</td>
-                            <td>Address</td>
-                            <td>Status</td>
-                        </thead>
-                        {% for conn in connections %}
-                            {% if conn.status %}
-                                <tr class="status_true">
-                            {% else %}
-                                <tr class="status_false">
-                            {% endif %}
-                                <td>{{ conn.appname }}</td>
-                            <td>{{ conn.devname }}</td>
-                            <td>{{ conn.com }}</td>
-                            <td>{{ conn.address }}</td>
-                            {% if conn.status %}
-                                <td>OK</td>
-                            {% else %}
-                                <td>FAIL</td>
-                            {% endif %}
-                            </tr>
-                        {% endfor %}
+        {% for rows in graphrows %}
+            <div class="row">
+                {% for title, label, id, graph in rows %}
+                <div class="col-md-6">
+
+                    <table class="graph">
+                        <tr><td></td><td><div class='graphtitle'>{{ title }}</div></td></tr>
+                        <tr>
+                            <td id="ylabel"><div>{{ label }}</div></td>
+                            <td><div id="{{ id }}" style="width:500px;height:300px;"></div></td>
+                        </tr>
+                        <tr><td></td><td><div id="xlabel">Time</div></td></tr>
                     </table>
-                </div>
-            {% endfor %}
-        </div>
+                    <script type='text/javascript'>
+                    $.plot($("#{{ id }}"), {{ graph.json_data|safe}}, {{ graph.options|safe }});
+                    </script>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
     </div>
 
 

@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from django import forms
 from django.forms import Form
+from django.http import Http404
 from django.shortcuts import render
 import flot
 import time
@@ -59,6 +60,7 @@ def index(request):
     pneumatic_units = pis.get(name='Pressure').units
 
     cs = (('Temperature', temps, temp_units),
+          ('ColdFinger', cfinger, coldfinger_units),
           ('Humidity', hums, humidity_units),
           ('Air Pressure', pneumatic, pneumatic_units),
           ('Coolant', coolant, coolant_units))
@@ -133,11 +135,91 @@ def index(request):
         'pneumatic_units': pneumatic_units,
 
         'connections_list': connections_list,
-        'nconnections': 12/len(connections_list),
+        'nconnections': 12 / len(connections_list),
         'current': current,
         'save_figure_form': fig_form,
         'date_selector_form': form}
     return render(request, 'status/index.html', context)
+
+
+def graph(request):
+    temps = Measurement.objects.filter(process_info__name='Lab Temp.')
+    hums = Measurement.objects.filter(process_info__name='Lab Hum.')
+    cfinger = Measurement.objects.filter(process_info__name='ColdFinger Temp.')
+    coolant = Measurement.objects.filter(process_info__name='Coolant Temp.')
+    pneumatic = Measurement.objects.filter(process_info__name='Pressure')
+
+    temp_data = None
+    hum_data = None
+    cf_data = None
+    cool_data = None
+    pneumatic_data = None
+
+    fmt = '%H:%M:%S'
+    pis = ProcessInfo.objects
+    temp_units = pis.get(name='Lab Temp.').units
+    humidity_units = pis.get(name='Lab Hum.').units
+    coolant_units = pis.get(name='Coolant Temp.').units
+    coldfinger_units = pis.get(name='ColdFinger Temp.').units
+    pneumatic_units = pis.get(name='Pressure').units
+
+    dt = None
+    if request.method == 'POST':
+
+        fig_form = SaveFigureForm(request.POST)
+        print request.POST.keys()
+
+        form = DateSelectorForm(request.POST)
+
+        if form.is_valid():
+            d = int(form.cleaned_data['date_range_name'])
+            dt = timedelta(**DS[d])
+            fmt = FMTS[d]
+
+    else:
+        fig_form = SaveFigureForm()
+        form = DateSelectorForm()
+        # hum_data = hums.all()
+        # temp_data = temps.all()
+        # cf_data = cfinger.all()
+        # cool_data = coolant.all()
+        # pneumatic_data = pneumatic.all()
+
+    if not dt:
+        dt = timedelta(**DS[1])
+        now = datetime.now()
+        post = now - dt
+
+    print now, dt, post
+    temp_data = temps.filter(pub_date__gte=post).all()
+    hum_data = hums.filter(pub_date__gte=post).all()
+    cf_data = cfinger.filter(pub_date__gte=post).all()
+    cool_data = coolant.filter(pub_date__gte=post).all()
+    pneumatic_data = pneumatic.filter(pub_date__gte=post).all()
+
+    temp = make_graph(temp_data, fmt)
+    hum = make_graph(hum_data, fmt)
+    cfinger = make_graph(cf_data, fmt)
+    coolant = make_graph(cool_data, fmt)
+    pneumatic = make_graph(pneumatic_data, fmt)
+
+    row1 = (('Temperature', 'Temp ({})'.format(temp_units), 'temp_graph', temp),
+            ('Humidity', 'Humidity ({})'.format(humidity_units), 'hum_graph', hum))
+    row2 = (('ColdFinger', 'Temp ({})'.format(coldfinger_units), 'cf_graph', cfinger),
+            ('Pneumatics', 'Pressure ({})'.format(pneumatic_units), 'pn_graph', pneumatic))
+    row3 = (('Coolant', 'Temp ({})'.format(coolant_units), 'coolant_graph', coolant),)
+
+    context = {
+        'graphrows': (row1, row2, row3),
+        'temp_units': temp_units,
+        'humidity_units': humidity_units,
+        'coolant_units': coolant_units,
+        'coldfinger_units': coldfinger_units,
+        'pneumatic_units': pneumatic_units,
+
+        'save_figure_form': fig_form,
+        'date_selector_form': form}
+    return render(request, 'status/graph.html', context)
 
 
 def make_graph(data, fmt=None, options=None):
@@ -156,7 +238,7 @@ def make_graph(data, fmt=None, options=None):
 
     yklass = flot.YVariable
     if data:
-        xs, ys = zip(*[(m.pub_date, m.value) for m in data])
+        xs, ys = zip(*[(m.pub_date + timedelta(seconds=3600), m.value) for m in data])
         xklass = flot.TimeXVariable
     else:
         xs, ys = [0], [0]
