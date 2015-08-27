@@ -15,15 +15,8 @@
         <form action={% url "status_graph_index" %} method="post">
             {% csrf_token %}
             {{ date_selector_form }}
-            <input type="submit" value="Refresh" />
+            <input class="btn-primary" type="submit" value="Refresh" />
         </form>
-
-        <form action={% url "status_index" %} method="post">
-            {% csrf_token %}
-            {{ save_figure_form }}
-            <input type="submit" value="Save Figure" />
-        </form>
-
         {% for rows in graphrows %}
             <div class="row">
                 {% for title, label, id, graph in rows %}
@@ -55,109 +48,3 @@
     </script>
 
 {% endblock %}
-
-{#    <script type='text/javascript'>#}
-{#        $.plot($("#pneumatic_graph"), {{ pneumatic.json_data|safe}}, {{ pneumatic.options|safe }});#}
-{#    </script>#}
-{#    <script type='text/javascript'>#}
-{#        $.plot($("#temp_graph"), {{ temp.json_data|safe}}, {{ temp.options|safe }});#}
-{#    </script>#}
-{#    <script type='text/javascript'>#}
-{#        $.plot($("#hum_graph"), {{ hum.json_data|safe}}, {{ hum.options|safe }});#}
-{#    </script>#}
-{#    <script type='text/javascript'>#}
-{#        $.plot($("#coolant_graph"), {{ coolant.json_data|safe}}, {{ coolant.options|safe }});#}
-{#    </script>#}
-{#    <script type='text/javascript'>#}
-{#        $.plot($("#cf_graph"), {{ cfinger.json_data|safe}}, {{ cfinger.options|safe }});#}
-{#    </script>#}
-
-{#        <div id="graphcontainer" class="collapse in">#}
-{#            <form action={% url "status_index" %} method="post">#}
-{#                {% csrf_token %}#}
-{#                {{ date_selector_form }}#}
-{#                <input type="submit" value="Refresh" />#}
-{#            </form>#}
-{##}
-{#            <form action={% url "status_index" %} method="post">#}
-{#                {% csrf_token %}#}
-{#                {{ save_figure_form }}#}
-{#                <input type="submit" value="Save Figure" />#}
-{#            </form>#}
-{##}
-{#            <table>#}
-{#                <tr>#}
-{#                    <td>#}
-{#                        <table class="graph">#}
-{#                            <tr><td></td><td><div class='graphtitle'>Lab Temperature</div></td></tr>#}
-{#                            <tr>#}
-{#                                <td id="ylabel"><div>Temp (F)</div></td>#}
-{#                                <td><div id="temp_graph" style="width:500px;height:300px;"></div></td>#}
-{#                            </tr>#}
-{#                            <tr><td></td><td><div id="xlabel">Time</div></td></tr>#}
-{#                        </table>#}
-{#                    </td>#}
-{#                    <td>#}
-{#                        <table class="graph">#}
-{#                            <tr><td></td><td><div class='graphtitle'>Lab Humidity</div></td></tr>#}
-{#                            <tr>#}
-{#                                <td id="ylabel"><div>Humidity (%)</div></td>#}
-{#                                <td><div id="hum_graph" style="width:500px;height:300px;"></div></td>#}
-{#                            </tr>#}
-{#                            <tr><td></td><td><div id="xlabel">Time</div></td></tr>#}
-{#                        </table>#}
-{#                    </td>#}
-{#                </tr>#}
-{#                </table>#}
-{##}
-{#                <table>#}
-{#                <tr>#}
-{#                    <td>#}
-{#                        <table class="graph">#}
-{#                            <tr><td></td><td><div class='graphtitle'>Coolant Temperature</div></td></tr>#}
-{#                            <tr>#}
-{#                                <td id="ylabel"><div>Temp ({{ coolant_units }})</div></td>#}
-{#                                <td><div id="coolant_graph" style="width:500px;height:300px;"></div></td>#}
-{#                            </tr>#}
-{#                            <tr><td></td><td><div id="xlabel">Time</div></td></tr>#}
-{#                        </table>#}
-{#                    </td>#}
-{#                    <td>#}
-{#                        <table class="graph">#}
-{#                            <tr><td></td><td><div class='graphtitle'>ColdFinger Temperature</div></td></tr>#}
-{#                            <tr>#}
-{#                                <td id="ylabel"><div>Temp ({{ coldfinger_units }})</div></td>#}
-{#                                <td><div id="cf_graph" style="width:500px;height:300px;"></div></td>#}
-{#                            </tr>#}
-{#                            <tr><td></td><td><div id="xlabel">Time</div></td></tr>#}
-{#                        </table>#}
-{#                    </td>#}
-{#                </tr>#}
-{#                </table>#}
-{##}
-{#                <table>#}
-{#                <tr>#}
-{#                    <td>#}
-{#                        <table class="graph">#}
-{#                            <tr><td></td><td><div class='graphtitle'>Air Pressure</div></td></tr>#}
-{#                            <tr>#}
-{#                                <td id="ylabel"><div>Pressure ({{ pneumatic_units }})</div></td>#}
-{#                                <td><div id="pneumatic_graph" style="width:500px;height:300px;"></div></td>#}
-{#                            </tr>#}
-{#                            <tr><td></td><td><div id="xlabel">Time</div></td></tr>#}
-{#                        </table>#}
-{#                    </td>#}
-{#                    <td>#}
-{#                        <table class="graph">#}
-{#                            <tr><td></td><td><div class='graphtitle'></div></td></tr>#}
-{#                            <tr>#}
-{#                                <td><div id="ylabel"></div></td>#}
-{#                                <td><div id="cf_graph" style="width:500px;height:300px;"></div></td>#}
-{#                            </tr>#}
-{#                            <tr><td></td><td><div id="xlabel">Time</div></td></tr>#}
-{#                        </table>#}
-{#                    </td>#}
-{#                </tr>#}
-{#                </table>#}
-{##}
-{#        </div>#}
