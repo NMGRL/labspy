@@ -50,6 +50,10 @@ class Experiment(models.Model):
 
 class Analysis(models.Model):
     experiment = models.ForeignKey(Experiment)
-    runid = models.CharField(max_length=80)
     start_time = models.DateTimeField(default=datetime.now)
     analysis_type = models.CharField(max_length=80)
+    identifier = models.IntegerField(default=0)
+    aliquot = models.IntegerField(default=0)
+    increment = models.IntegerField(default=0)
+    age = models.FloatField(default=0)
+    age_error = models.FloatField(default=0)

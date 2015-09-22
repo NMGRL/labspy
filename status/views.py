@@ -92,6 +92,105 @@ def index(request):
     return render(request, 'status/index.html', context)
 
 
+def arar_graph(request):
+    latest_analysis = Analysis.objects.order_by('-start_time').first()
+    identifier = latest_analysis.identifier
+    ans = Analysis.objects.filter(identifier=identifier)
+    cp, an = make_ideogram(ans)
+    context = {'cumulative_prob': cp,
+               'analysis_number': an,
+               'analyses': ans}
+    return render(request, 'status/arar_graph.html', context)
+
+
+def calculate_ideogram(ages, errors, n=500):
+    from numpy import array, linspace, zeros, ones
+    from numpy.core.umath import exp
+    from math import pi
+
+    ages, errors = array(ages), array(errors)
+    lages = ages - errors * 2
+    uages = ages + errors * 2
+
+    xmax, xmin = uages.max(), lages.min()
+
+    spread = xmax - xmin
+    xmax += spread * 0.1
+    xmin -= spread * 0.1
+
+    bins = linspace(xmin, xmax, n)
+    probs = zeros(n)
+
+    for ai, ei in zip(ages, errors):
+        if abs(ai) < 1e-10 or abs(ei) < 1e-10:
+            continue
+
+        # calculate probability curve for ai+/-ei
+        # p=1/(2*pi*sigma2) *exp (-(x-u)**2)/(2*sigma2)
+        # see http://en.wikipedia.org/wiki/Normal_distribution
+        ds = (ones(n) * ai - bins) ** 2
+        es = ones(n) * ei
+        es2 = 2 * es * es
+        gs = (es2 * pi) ** -0.5 * exp(-ds / es2)
+
+        # cumulate probabilities
+        # numpy element_wise addition
+        probs += gs
+
+    return tuple(bins), tuple(probs), xmin, xmax
+
+
+def make_ideogram(ans):
+    ages = [ai.age for ai in ans]
+    age_errors = [ai.age_error for ai in ans]
+
+    cumulative_prob= make_cumulative_prob(ages, age_errors)
+    analysis_number = make_analysis_number(ages, age_errors)
+
+    return cumulative_prob, analysis_number
+
+
+def make_analysis_number(ages, age_errors):
+
+    options = dict(points=dict(radius=2,
+                               show=True,
+                               fill=True,
+                               fillColor='blue',
+                               errorbars='x',
+                               xerr={'show': True}),
+                   color='blue')
+
+    # print xs,ys
+    data = zip(ages, age_errors)
+    data = sorted(data, key=lambda x: x[0])
+    ages, age_errors = zip(*data)
+
+    ymax = len(ages)+1
+    ys = xrange(1, ymax)
+    xx = flot.XVariable(points=ages)
+    yy = flot.YVariable(points=ys)
+    series = flot.Series(x=xx, y=yy, options=flot.SeriesOptions(**options))
+    series['data'] = zip(ages, ys, age_errors)
+
+    analysis_number = flot.Graph(series1=series)
+    return analysis_number
+
+
+def make_cumulative_prob(ages, age_errors):
+    xs, ys, xmin, xmax = calculate_ideogram(ages, age_errors)
+    xx = flot.XVariable(points=xs)
+    yy = flot.YVariable(points=ys)
+
+    series = flot.Series(x=xx, y=yy,
+                         options=flot.SeriesOptions(color='blue'))
+
+    cumulative_prob = flot.Graph(series1=series,
+                                 options=flot.GraphOptions(xaxis={'max': xmax,
+                                                                  'min': xmin},
+                                                           yaxis={'show': False}))
+    return cumulative_prob
+
+
 def graph(request):
     temps = Measurement.objects.filter(process_info__name='Lab Temp.')
     hums = Measurement.objects.filter(process_info__name='Lab Hum.')
