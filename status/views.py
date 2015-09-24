@@ -47,6 +47,7 @@ def index(request):
     cfinger = Measurement.objects.filter(process_info__name='ColdFinger Temp.')
     coolant = Measurement.objects.filter(process_info__name='Coolant Temp.')
     pneumatic = Measurement.objects.filter(process_info__name='Pressure')
+    pneumatic2 = Measurement.objects.filter(process_info__name='Pressure2')
 
     pis = ProcessInfo.objects
     temp_units = pis.get(name='Lab Temp.').units
@@ -54,11 +55,13 @@ def index(request):
     coolant_units = pis.get(name='Coolant Temp.').units
     coldfinger_units = pis.get(name='ColdFinger Temp.').units
     pneumatic_units = pis.get(name='Pressure').units
+    pneumatic2_units = pis.get(name='Pressure').units
 
     cs = (('Temperature', temps, temp_units),
           ('ColdFinger', cfinger, coldfinger_units),
           ('Humidity', hums, humidity_units),
-          ('Air Pressure', pneumatic, pneumatic_units),
+          ('Air Pressure (Building)', pneumatic, pneumatic_units),
+          ('Air Pressure (Lab)', pneumatic2, pneumatic2_units),
           ('Coolant', coolant, coolant_units))
     # current = [(ti, ci.order_by('-pub_date').first().value, cu, ) for ti, ci, cu in cs]
     current = [make_current(*a) for a in cs]
