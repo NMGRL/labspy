@@ -200,6 +200,7 @@ def graph(request):
     cfinger = Measurement.objects.filter(process_info__name='ColdFinger Temp.')
     coolant = Measurement.objects.filter(process_info__name='Coolant Temp.')
     pneumatic = Measurement.objects.filter(process_info__name='Pressure')
+    pneumatic2 = Measurement.objects.filter(process_info__name='Pressure2')
 
     fmt = '%H:%M:%S'
     pis = ProcessInfo.objects
@@ -208,6 +209,7 @@ def graph(request):
     coolant_units = pis.get(name='Coolant Temp.').units
     coldfinger_units = pis.get(name='ColdFinger Temp.').units
     pneumatic_units = pis.get(name='Pressure').units
+    pneumatic2_units = pis.get(name='Pressure2').units
 
     dt = None
     if request.method == 'POST':
@@ -235,18 +237,23 @@ def graph(request):
     cf_data = cfinger.filter(pub_date__gte=post).all()
     cool_data = coolant.filter(pub_date__gte=post).all()
     pneumatic_data = pneumatic.filter(pub_date__gte=post).all()
+    pneumatic2_data = pneumatic2.filter(pub_date__gte=post).all()
 
     temp = make_graph(temp_data, fmt)
     hum = make_graph(hum_data, fmt)
     cfinger = make_graph(cf_data, fmt)
     coolant = make_graph(cool_data, fmt)
     pneumatic = make_graph(pneumatic_data, fmt)
+    pneumatic2= make_graph(pneumatic2_data, fmt)
 
     row1 = (('Temperature', 'Temp ({})'.format(temp_units), 'temp_graph', temp),
             ('Humidity', 'Humidity ({})'.format(humidity_units), 'hum_graph', hum))
     row2 = (('ColdFinger', 'Temp ({})'.format(coldfinger_units), 'cf_graph', cfinger),
-            ('Pneumatics', 'Pressure ({})'.format(pneumatic_units), 'pn_graph', pneumatic))
-    row3 = (('Coolant', 'Temp ({})'.format(coolant_units), 'coolant_graph', coolant),)
+            ('Coolant', 'Temp ({})'.format(coolant_units), 'coolant_graph', coolant))
+    row3 = (('Pneumatics (Building)', 'Pressure ({})'.format(pneumatic_units), 'pn_graph', pneumatic),
+            ('Pneumatics (Lab)', 'Pressure ({})'.format(pneumatic2_units), 'pn2_graph', pneumatic2),
+            )
+
 
     context = {
         'graphrows': (row1, row2, row3),
