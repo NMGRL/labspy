@@ -244,14 +244,14 @@ def graph(request):
     cfinger = make_graph(cf_data, fmt)
     coolant = make_graph(cool_data, fmt)
     pneumatic = make_graph(pneumatic_data, fmt)
-    pneumatic2= make_graph(pneumatic2_data, fmt)
+    pneumatic2 = make_graph(pneumatic2_data, fmt)
 
     row1 = (('Temperature', 'Temp ({})'.format(temp_units), 'temp_graph', temp),
             ('Humidity', 'Humidity ({})'.format(humidity_units), 'hum_graph', hum))
     row2 = (('ColdFinger', 'Temp ({})'.format(coldfinger_units), 'cf_graph', cfinger),
             ('Coolant', 'Temp ({})'.format(coolant_units), 'coolant_graph', coolant))
-    row3 = (('Pneumatics (Building)', 'Pressure ({})'.format(pneumatic_units), 'pn_graph', pneumatic),
-            ('Pneumatics (Lab)', 'Pressure ({})'.format(pneumatic2_units), 'pn2_graph', pneumatic2),
+    row3 = (('Pneumatics (Lab)', 'Pressure ({})'.format(pneumatic_units), 'pn_graph', pneumatic),
+            ('Pneumatics (Building)', 'Pressure ({})'.format(pneumatic2_units), 'pn2_graph', pneumatic2),
             )
 
 
