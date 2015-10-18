@@ -60,8 +60,8 @@ def index(request):
     cs = (('Temperature', temps, temp_units),
           ('ColdFinger', cfinger, coldfinger_units),
           ('Humidity', hums, humidity_units),
-          ('Air Pressure (Building)', pneumatic, pneumatic_units),
-          ('Air Pressure (Lab)', pneumatic2, pneumatic2_units),
+          ('Air Pressure (Lab)', pneumatic, pneumatic_units),
+          ('Air Pressure (Building)', pneumatic2, pneumatic2_units),
           ('Coolant', coolant, coolant_units))
     # current = [(ti, ci.order_by('-pub_date').first().value, cu, ) for ti, ci, cu in cs]
     current = [make_current(*a) for a in cs]
