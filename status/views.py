@@ -60,8 +60,8 @@ def index(request):
     cs = (('Temperature', temps, temp_units),
           ('ColdFinger', cfinger, coldfinger_units),
           ('Humidity', hums, humidity_units),
-          ('Air Pressure (Lab)', pneumatic, pneumatic_units),
-          ('Air Pressure (Building)', pneumatic2, pneumatic2_units),
+          ('Air Pressure (Building)', pneumatic, pneumatic_units),
+          ('Air Pressure (Lab)', pneumatic2, pneumatic2_units),
           ('Coolant', coolant, coolant_units))
     # current = [(ti, ci.order_by('-pub_date').first().value, cu, ) for ti, ci, cu in cs]
     current = [make_current(*a) for a in cs]
@@ -250,8 +250,8 @@ def graph(request):
             ('Humidity', 'Humidity ({})'.format(humidity_units), 'hum_graph', hum))
     row2 = (('ColdFinger', 'Temp ({})'.format(coldfinger_units), 'cf_graph', cfinger),
             ('Coolant', 'Temp ({})'.format(coolant_units), 'coolant_graph', coolant))
-    row3 = (('Pneumatics (Lab)', 'Pressure ({})'.format(pneumatic_units), 'pn_graph', pneumatic),
-            ('Pneumatics (Building)', 'Pressure ({})'.format(pneumatic2_units), 'pn2_graph', pneumatic2),
+    row3 = (('Pneumatics (Building)', 'Pressure ({})'.format(pneumatic_units), 'pn_graph', pneumatic),
+            ('Pneumatics (Lab)', 'Pressure ({})'.format(pneumatic2_units), 'pn2_graph', pneumatic2),
             )
 
 
