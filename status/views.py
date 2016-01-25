@@ -1,14 +1,13 @@
 from datetime import datetime, timedelta
 from django import forms
 from django.forms import Form
-from django.http import Http404
 from django.shortcuts import render
-# from django.utils import timezone
-import flot
-import time
+
 
 # Create your views here.
-from status.models import Measurement, ProcessInfo, Analysis, Experiment, Connections
+from status.models import Measurement, ProcessInfo, Analysis, Experiment
+from status.view_helpers import make_current, connection_timestamp, make_connections, make_ideogram, \
+    make_bokeh_graph
 
 DS = [{"hours": 1}, {'hours': 24}, {'weeks': 1}, {'weeks': 4}]
 FMTS = ['%M:%S', '%H:%M', '%m/%d', '%m/%d']
@@ -22,25 +21,7 @@ class DateSelectorForm(Form):
                                         initial='1')
 
 
-class SaveFigureForm(Form):
-    pass
-
-
-def make_current(ti, di, ui):
-    obj = di.order_by('-pub_date').first()
-    return ti, obj.value, ui, obj.pub_date
-
-
-def make_connections(name):
-    return Connections.objects.filter(appname=name).values()
-
-
-def connection_timestamp(name):
-    f = Connections.objects.filter(appname=name).first()
-    if f:
-        return f.timestamp
-
-
+# views
 def index(request):
     temps = Measurement.objects.filter(process_info__name='Lab Temp.')
     hums = Measurement.objects.filter(process_info__name='Lab Hum.')
@@ -106,94 +87,6 @@ def arar_graph(request):
     return render(request, 'status/arar_graph.html', context)
 
 
-def calculate_ideogram(ages, errors, n=500):
-    from numpy import array, linspace, zeros, ones
-    from numpy.core.umath import exp
-    from math import pi
-
-    ages, errors = array(ages), array(errors)
-    lages = ages - errors * 2
-    uages = ages + errors * 2
-
-    xmax, xmin = uages.max(), lages.min()
-
-    spread = xmax - xmin
-    xmax += spread * 0.1
-    xmin -= spread * 0.1
-
-    bins = linspace(xmin, xmax, n)
-    probs = zeros(n)
-
-    for ai, ei in zip(ages, errors):
-        if abs(ai) < 1e-10 or abs(ei) < 1e-10:
-            continue
-
-        # calculate probability curve for ai+/-ei
-        # p=1/(2*pi*sigma2) *exp (-(x-u)**2)/(2*sigma2)
-        # see http://en.wikipedia.org/wiki/Normal_distribution
-        ds = (ones(n) * ai - bins) ** 2
-        es = ones(n) * ei
-        es2 = 2 * es * es
-        gs = (es2 * pi) ** -0.5 * exp(-ds / es2)
-
-        # cumulate probabilities
-        # numpy element_wise addition
-        probs += gs
-
-    return tuple(bins), tuple(probs), xmin, xmax
-
-
-def make_ideogram(ans):
-    ages = [ai.age for ai in ans]
-    age_errors = [ai.age_error for ai in ans]
-
-    cumulative_prob= make_cumulative_prob(ages, age_errors)
-    analysis_number = make_analysis_number(ages, age_errors)
-
-    return cumulative_prob, analysis_number
-
-
-def make_analysis_number(ages, age_errors):
-
-    options = dict(points=dict(radius=2,
-                               show=True,
-                               fill=True,
-                               fillColor='blue',
-                               errorbars='x',
-                               xerr={'show': True}),
-                   color='blue')
-
-    # print xs,ys
-    data = zip(ages, age_errors)
-    data = sorted(data, key=lambda x: x[0])
-    ages, age_errors = zip(*data)
-
-    ymax = len(ages)+1
-    ys = xrange(1, ymax)
-    xx = flot.XVariable(points=ages)
-    yy = flot.YVariable(points=ys)
-    series = flot.Series(x=xx, y=yy, options=flot.SeriesOptions(**options))
-    series['data'] = zip(ages, ys, age_errors)
-
-    analysis_number = flot.Graph(series1=series)
-    return analysis_number
-
-
-def make_cumulative_prob(ages, age_errors):
-    xs, ys, xmin, xmax = calculate_ideogram(ages, age_errors)
-    xx = flot.XVariable(points=xs)
-    yy = flot.YVariable(points=ys)
-
-    series = flot.Series(x=xx, y=yy,
-                         options=flot.SeriesOptions(color='blue'))
-
-    cumulative_prob = flot.Graph(series1=series,
-                                 options=flot.GraphOptions(xaxis={'max': xmax,
-                                                                  'min': xmin},
-                                                           yaxis={'show': False}))
-    return cumulative_prob
-
-
 def graph(request):
     temps = Measurement.objects.filter(process_info__name='Lab Temp.')
     hums = Measurement.objects.filter(process_info__name='Lab Hum.')
@@ -202,7 +95,6 @@ def graph(request):
     pneumatic = Measurement.objects.filter(process_info__name='Pressure')
     pneumatic2 = Measurement.objects.filter(process_info__name='Pressure2')
 
-    fmt = '%H:%M:%S'
     pis = ProcessInfo.objects
     temp_units = pis.get(name='Lab Temp.').units
     humidity_units = pis.get(name='Lab Hum.').units
@@ -213,17 +105,11 @@ def graph(request):
 
     dt = None
     if request.method == 'POST':
-
-        fig_form = SaveFigureForm(request.POST)
         form = DateSelectorForm(request.POST)
-
         if form.is_valid():
             d = int(form.cleaned_data['date_range_name'])
             dt = timedelta(**DS[d])
-            fmt = FMTS[d]
-
     else:
-        fig_form = SaveFigureForm()
         form = DateSelectorForm()
 
     if not dt:
@@ -239,68 +125,16 @@ def graph(request):
     pneumatic_data = pneumatic.filter(pub_date__gte=post).all()
     pneumatic2_data = pneumatic2.filter(pub_date__gte=post).all()
 
-    temp = make_graph(temp_data, fmt)
-    hum = make_graph(hum_data, fmt)
-    cfinger = make_graph(cf_data, fmt)
-    coolant = make_graph(cool_data, fmt)
-    pneumatic = make_graph(pneumatic_data, fmt)
-    pneumatic2 = make_graph(pneumatic2_data, fmt)
-
-    row1 = (('Temperature', 'Temp ({})'.format(temp_units), 'temp_graph', temp),
-            ('Humidity', 'Humidity ({})'.format(humidity_units), 'hum_graph', hum))
-    row2 = (('ColdFinger', 'Temp ({})'.format(coldfinger_units), 'cf_graph', cfinger),
-            ('Coolant', 'Temp ({})'.format(coolant_units), 'coolant_graph', coolant))
-    row3 = (('Pneumatics (Building)', 'Pressure ({})'.format(pneumatic_units), 'pn_graph', pneumatic),
-            ('Pneumatics (Lab)', 'Pressure ({})'.format(pneumatic2_units), 'pn2_graph', pneumatic2),
-            )
-
-
     context = {
-        'graphrows': (row1, row2, row3),
-        'temp_units': temp_units,
-        'humidity_units': humidity_units,
-        'coolant_units': coolant_units,
-        'coldfinger_units': coldfinger_units,
-        'pneumatic_units': pneumatic_units,
+        'date_selector_form': form,
 
-        'save_figure_form': fig_form,
-        'date_selector_form': form}
+        'tempgraph': make_bokeh_graph(temp_data, 'Temperature', 'Temp ({})'.format(temp_units)),
+        'humgraph': make_bokeh_graph(hum_data, 'Humidity', 'Humidity ({})'.format(humidity_units)),
+        'pneugraph': make_bokeh_graph(pneumatic_data, 'Pneumatics (Building)',
+                                      'Pressure ({})'.format(pneumatic_units)),
+        'pneugraph2': make_bokeh_graph(pneumatic2_data, 'Pneumatics (Lab)',
+                                       'Pressure ({})'.format(pneumatic2_units)),
+        'coolgraph': make_bokeh_graph(cool_data, 'Coolant', 'Temp ({})'.format(coolant_units)),
+        'cfgraph': make_bokeh_graph(cf_data, 'ColdFinger', 'Temp ({})'.format(coldfinger_units))}
     return render(request, 'status/graph.html', context)
 
-
-def make_graph(data, fmt=None, options=None):
-    if options == 'scatter':
-        options = dict(points=dict(radius=1,
-                                   show=True,
-                                   fill=True,
-                                   fillColor="#058DC7"),
-                       color="#058DC7")
-    else:
-        options = dict(color='#238B45')
-
-    if not fmt:
-        fmt = '%H:%M:%S'
-
-    yklass = flot.YVariable
-    if data:
-        xs, ys = zip(*[(m.pub_date, m.value) for m in data])
-        if len(xs) > 5000:
-            xs = xs[::5]
-            ys = ys[::5]
-        xklass = flot.TimeXVariable
-    else:
-        xs, ys = [0], [0]
-        xklass = flot.XVariable
-
-    # print xs,ys
-    xx = xklass(points=xs)
-    series1 = flot.Series(x=xx,
-                          y=yklass(points=ys),
-                          options=flot.SeriesOptions(**options))
-    graph = flot.Graph(series1=series1,
-                       options=flot.GraphOptions(xaxis={'mode': 'time',
-                                                        'max': time.time() * 1000,
-                                                        'min': xx.points[0],
-                                                        'timezone': 'browser',
-                                                        'timeformat': fmt}))
-    return graph

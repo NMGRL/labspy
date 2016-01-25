@@ -7,6 +7,15 @@
 
     <script type="text/javascript" src="{% static 'flot/jquery.flot.js' %}"></script>
     <script type="text/javascript" src="{% static 'flot/jquery.flot.time.js' %}"></script>
+
+    <link href="http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.css" rel="stylesheet" type="text/css">
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.js"></script>
+    {{ tempgraph.js|safe }}
+    {{ humgraph.js|safe }}
+    {{ pneugraph.js|safe }}
+    {{ pneugraph2.js|safe }}
+    {{ coolgraph.js|safe }}
+    {{ cfgraph.js|safe }}
 {% endblock %}
 
 
@@ -17,27 +26,41 @@
             {{ date_selector_form }}
             <input class="btn-primary" type="submit" value="Refresh" />
         </form>
-        {% for rows in graphrows %}
-            <div class="row">
-                {% for title, label, id, graph in rows %}
-                <div class="col-md-6">
-
-                    <table class="graph">
-                        <tr><td></td><td><div class='graphtitle'>{{ title }}</div></td></tr>
-                        <tr>
-                            <td id="ylabel"><div>{{ label }}</div></td>
-                            <td><div id="{{ id }}" style="width:500px;height:300px;"></div></td>
-                        </tr>
-                        <tr><td></td><td><div id="xlabel">Time</div></td></tr>
-                    </table>
-                    <script type='text/javascript'>
-                    $.plot($("#{{ id }}"), {{ graph.json_data|safe}}, {{ graph.options|safe }});
-                    </script>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endfor %}
+{#        {% for rows in graphrows %}#}
+{#            <div class="row">#}
+{#                {% for title, label, id, graph in rows %}#}
+{#                <div class="col-md-6">#}
+{##}
+{#                    <table class="graph">#}
+{#                        <tr><td></td><td><div class='graphtitle'>{{ title }}</div></td></tr>#}
+{#                        <tr>#}
+{#                            <td id="ylabel"><div>{{ label }}</div></td>#}
+{#                            <td><div id="{{ id }}" style="width:500px;height:300px;"></div></td>#}
+{#                        </tr>#}
+{#                        <tr><td></td><td><div id="xlabel">Time</div></td></tr>#}
+{#                    </table>#}
+{#                    <script type='text/javascript'>#}
+{#                    $.plot($("#{{ id }}"), {{ graph.json_data|safe}}, {{ graph.options|safe }});#}
+{#                    </script>#}
+{#                    </div>#}
+{#                {% endfor %}#}
+{#            </div>#}
+{#        {% endfor %}#}
     </div>
+    <table>
+    <tr>
+        <td><div class="bokeh">{{ tempgraph.div|safe }}</div></td>
+        <td><div class="bokeh">{{ humgraph.div|safe }}</div></td>
+    </tr>
+    <tr>
+        <td><div class="bokeh">{{ pneugraph.div|safe }}</div></td>
+        <td><div class="bokeh">{{ pneugraph2.div|safe }}</div></td>
+    </tr>
+    <tr>
+        <td><div class="bokeh">{{ coolgraph.div|safe }}</div></td>
+        <td><div class="bokeh">{{ cfgraph.div|safe }}</div></td>
+    </tr>
+    </table>
 
 
 {#    auto reload script#}

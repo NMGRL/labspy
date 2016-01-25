@@ -32,6 +32,7 @@ def prepare_deploymoent(branch_name):
 def deploy():
     with cd(env.project_root):
         run('git pull origin master')
+        run('{}/conda install bokeh=0.10')
         run('{}/pip install -r requirements.txt'.format(env.bin))
         run('{}/python manage.py migrate'.format(env.bin))
         run('{}/python manage.py bower install'.format(env.bin))
