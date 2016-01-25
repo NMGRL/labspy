@@ -130,9 +130,9 @@ def graph(request):
 
         'tempgraph': make_bokeh_graph(temp_data, 'Temperature', 'Temp ({})'.format(temp_units)),
         'humgraph': make_bokeh_graph(hum_data, 'Humidity', 'Humidity ({})'.format(humidity_units)),
-        'pneugraph': make_bokeh_graph(pneumatic_data, 'Pneumatics (Building)',
+        'pneugraph': make_bokeh_graph(pneumatic_data, 'Pneumatics (Lab)',
                                       'Pressure ({})'.format(pneumatic_units)),
-        'pneugraph2': make_bokeh_graph(pneumatic2_data, 'Pneumatics (Lab)',
+        'pneugraph2': make_bokeh_graph(pneumatic2_data, 'Pneumatics (Building)',
                                        'Pressure ({})'.format(pneumatic2_units)),
         'coolgraph': make_bokeh_graph(cool_data, 'Coolant', 'Temp ({})'.format(coolant_units)),
         'cfgraph': make_bokeh_graph(cf_data, 'ColdFinger', 'Temp ({})'.format(coldfinger_units))}
