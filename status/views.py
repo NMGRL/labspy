@@ -3,11 +3,10 @@ from django import forms
 from django.forms import Form
 from django.shortcuts import render
 
-
 # Create your views here.
 from status.models import Measurement, ProcessInfo, Analysis, Experiment
 from status.view_helpers import make_current, connection_timestamp, make_connections, make_ideogram, \
-    make_bokeh_graph
+    make_bokeh_graph, make_spectrometer_dict
 
 DS = [{"hours": 1}, {'hours': 24}, {'weeks': 1}, {'weeks': 4}]
 FMTS = ['%M:%S', '%H:%M', '%m/%d', '%m/%d']
@@ -125,6 +124,9 @@ def graph(request):
     pneumatic_data = pneumatic.filter(pub_date__gte=post).all()
     pneumatic2_data = pneumatic2.filter(pub_date__gte=post).all()
 
+    spectrometer_values = [make_spectrometer_dict('Jan'),
+                           make_spectrometer_dict('Obama+')]
+
     context = {
         'date_selector_form': form,
 
@@ -135,6 +137,7 @@ def graph(request):
         'pneugraph2': make_bokeh_graph(pneumatic2_data, 'Pneumatics (Building)',
                                        'Pressure ({})'.format(pneumatic2_units)),
         'coolgraph': make_bokeh_graph(cool_data, 'Coolant', 'Temp ({})'.format(coolant_units)),
-        'cfgraph': make_bokeh_graph(cf_data, 'ColdFinger', 'Temp ({})'.format(coldfinger_units))}
-    return render(request, 'status/graph.html', context)
+        'cfgraph': make_bokeh_graph(cf_data, 'ColdFinger', 'Temp ({})'.format(coldfinger_units)),
 
+        'spectrometer_values': spectrometer_values}
+    return render(request, 'status/graph.html', context)

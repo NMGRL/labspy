@@ -23,14 +23,14 @@ from bokeh.resources import CDN
 from bokeh.embed import components
 
 # ============= local library imports  ==========================
-from status.models import Connections
+from status.models import Connections, Measurement
 
 
 # bokeh graph
 def make_bokeh_graph(data, title, ytitle):
     p = figure(title=title, x_axis_type='datetime',
-               plot_width=500,
-               plot_height=300,
+               plot_width=450,
+               plot_height=250,
                tools='pan,box_zoom,reset,save')
     if data:
         xs, ys = zip(*[(m.pub_date, m.value) for m in data])
@@ -41,6 +41,28 @@ def make_bokeh_graph(data, title, ytitle):
     p.yaxis.axis_label = ytitle
     j, d = components(p, CDN)
     return {'js': j, 'div': d}
+
+
+# spectrometer
+def make_spectrometer_dict(name):
+    trap = Measurement.objects.filter(process_info__name='{}Trap'.format(name))
+    emission = Measurement.objects.filter(process_info__name='{}Emission'.format(name))
+
+    trap_current = trap.order_by('pub_date').first()
+    trap_emission = emission.order_by('pub_date').first()
+
+    if trap_current:
+        trap_value = trap_current.value
+        date = trap_current.pub_date
+    else:
+        trap_value = '---'
+        date = ''
+
+    if trap_emission:
+        emission_value = emission.value
+    else:
+        emission_value = '---'
+    return {'name': name, 'date': date, 'trap_current': trap_value, 'emission': emission_value}
 
 
 # status
