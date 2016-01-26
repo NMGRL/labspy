@@ -28,7 +28,9 @@ from status.models import Connections
 
 # bokeh graph
 def make_bokeh_graph(data, title, ytitle):
-    p = figure(title=title, x_axis_type='datetime', plot_height=300,
+    p = figure(title=title, x_axis_type='datetime',
+               plot_width=500,
+               plot_height=300,
                tools='pan,box_zoom,reset')
     if data:
         xs, ys = zip(*[(m.pub_date, m.value) for m in data])
@@ -37,8 +39,8 @@ def make_bokeh_graph(data, title, ytitle):
     p.line(xs, ys)
     p.xaxis.axis_label = 'Time'
     p.yaxis.axis_label = ytitle
-    j,d = components(p, CDN)
-    return {'js':j, 'div':d}
+    j, d = components(p, CDN)
+    return {'js': j, 'div': d}
 
 
 # status
