@@ -31,7 +31,7 @@ def make_bokeh_graph(data, title, ytitle):
     p = figure(title=title, x_axis_type='datetime',
                plot_width=500,
                plot_height=300,
-               tools='pan,box_zoom,reset')
+               tools='pan,box_zoom,reset,save')
     if data:
         xs, ys = zip(*[(m.pub_date, m.value) for m in data])
     else:
