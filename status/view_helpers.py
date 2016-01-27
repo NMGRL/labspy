@@ -16,8 +16,10 @@
 
 # ============= enthought library imports =======================
 # ============= standard library imports ========================
+import string
 import time
 import flot
+from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.plotting import figure
 from bokeh.resources import CDN
 from bokeh.embed import components
@@ -39,6 +41,10 @@ def make_bokeh_graph(data, title, ytitle):
     p.line(xs, ys)
     p.xaxis.axis_label = 'Time'
     p.yaxis.axis_label = ytitle
+    return _make_bokeh_components(p)
+
+
+def _make_bokeh_components(p):
     j, d = components(p, CDN)
     return {'js': j, 'div': d}
 
@@ -47,9 +53,11 @@ def make_bokeh_graph(data, title, ytitle):
 def make_spectrometer_dict(name):
     trap = Measurement.objects.filter(process_info__name='{}Trap'.format(name))
     emission = Measurement.objects.filter(process_info__name='{}Emission'.format(name))
+    decabin = Measurement.objects.filter(process_info__device__name='{}DecabinTemp'.format(name))
 
     trap_current = trap.order_by('pub_date').first()
     trap_emission = emission.order_by('pub_date').first()
+    decabin_temp = decabin.order_by('pub_date').first()
 
     if trap_current:
         trap_value = trap_current.value
@@ -62,7 +70,16 @@ def make_spectrometer_dict(name):
         emission_value = emission.value
     else:
         emission_value = '---'
-    return {'name': name, 'date': date, 'trap_current': trap_value, 'emission': emission_value}
+
+    if decabin_temp:
+        decabin_temp_value = decabin_temp.value
+    else:
+        decabin_temp_value = '---'
+
+    return {'name': name, 'date': date,
+            'trap_current': trap_value,
+            'emission': emission_value,
+            'decabin_temp': decabin_temp_value}
 
 
 # status
@@ -163,53 +180,108 @@ def calculate_ideogram(ages, errors, n=500):
     return tuple(bins), tuple(probs), xmin, xmax
 
 
+seeds = string.ascii_uppercase
+ALPHAS = [a for a in seeds] + ['{}{}'.format(a, b)
+                               for a in seeds
+                               for b in seeds]
+
+
+def make_runid(a):
+    identifier = a.identifier
+    aliquot = a.aliquot
+    increment = a.increment
+    rid = '{}-{}'.format(identifier, aliquot)
+    if increment is not None:
+        step = ALPHAS[increment]
+        rid = '{}{}'.format(rid, step)
+
+    return rid
+
+
 def make_ideogram(ans):
+    ans = sorted(ans, key=lambda x: x.age)
     ages = [ai.age for ai in ans]
     age_errors = [ai.age_error for ai in ans]
+    runids = [make_runid(ai) for ai in ans]
 
     cumulative_prob = make_cumulative_prob(ages, age_errors)
-    analysis_number = make_analysis_number(ages, age_errors)
+    analysis_number = make_analysis_number(ages, age_errors, runids)
 
     return cumulative_prob, analysis_number
 
 
 def make_cumulative_prob(ages, age_errors):
     xs, ys, xmin, xmax = calculate_ideogram(ages, age_errors)
-    xx = flot.XVariable(points=xs)
-    yy = flot.YVariable(points=ys)
-
-    series = flot.Series(x=xx, y=yy,
-                         options=flot.SeriesOptions(color='blue'))
-
-    cumulative_prob = flot.Graph(series1=series,
-                                 options=flot.GraphOptions(xaxis={'max': xmax,
-                                                                  'min': xmin},
-                                                           yaxis={'show': False}))
-    return cumulative_prob
+    fig = figure(tools='')
+    fig.line(xs, ys)
+    fig.yaxis.visible = None
+    fig.logo = None
+    fig.toolbar_location = None
+    return _make_bokeh_components(fig)
 
 
-def make_analysis_number(ages, age_errors):
-    options = dict(points=dict(radius=2,
-                               show=True,
-                               fill=True,
-                               fillColor='blue',
-                               errorbars='x',
-                               xerr={'show': True}),
-                   color='blue')
+def make_analysis_number(ages, age_errors, runids):
+    hover = HoverTool()
+    hover.tooltips = [('RunID', '@runids'),('Age', '@ages')]
 
-    # print xs,ys
-    data = zip(ages, age_errors)
-    data = sorted(data, key=lambda x: x[0])
-    ages, age_errors = zip(*data)
+    ys = range(len(ages))
+    source = ColumnDataSource(
+            data={'ages': ages, 'ys': ys, 'runids': runids})
 
-    ymax = len(ages) + 1
-    ys = xrange(1, ymax)
-    xx = flot.XVariable(points=ages)
-    yy = flot.YVariable(points=ys)
-    series = flot.Series(x=xx, y=yy, options=flot.SeriesOptions(**options))
-    series['data'] = zip(ages, ys, age_errors)
+    fig = figure(plot_height=200, tools=[hover, ])
+    fig.circle('ages', 'ys',
+               source=source,
+               size=5, color="navy", alpha=0.5)
+    fig.xaxis.visible = None
 
-    analysis_number = flot.Graph(series1=series)
-    return analysis_number
+    err_xs = []
+    err_ys = []
+    for x, xerr, y in zip(ages, age_errors, ys):
+        err_xs.append((x - xerr, x + xerr))
+        err_ys.append((y, y))
+
+    fig.multi_line(err_xs, err_ys)
+    fig.logo = None
+    fig.toolbar_location = None
+    return _make_bokeh_components(fig)
+
+# def make_cumulative_prob(ages, age_errors):
+#     xs, ys, xmin, xmax = calculate_ideogram(ages, age_errors)
+#     xx = flot.XVariable(points=xs)
+#     yy = flot.YVariable(points=ys)
+#
+#     series = flot.Series(x=xx, y=yy,
+#                          options=flot.SeriesOptions(color='blue'))
+#
+#     cumulative_prob = flot.Graph(series1=series,
+#                                  options=flot.GraphOptions(xaxis={'max': xmax,
+#                                                                   'min': xmin},
+#                                                            yaxis={'show': False}))
+#     return cumulative_prob
+#
+#
+# def make_analysis_number(ages, age_errors):
+#     options = dict(points=dict(radius=2,
+#                                show=True,
+#                                fill=True,
+#                                fillColor='blue',
+#                                errorbars='x',
+#                                xerr={'show': True}),
+#                    color='blue')
+#
+#     # print xs,ys
+#     data = zip(ages, age_errors)
+#     data = sorted(data, key=lambda x: x[0])
+#     ages, age_errors = zip(*data)
+#
+#     ymax = len(ages) + 1
+#     ys = xrange(1, ymax)
+#     xx = flot.XVariable(points=ages)
+#     yy = flot.YVariable(points=ys)
+#     series = flot.Series(x=xx, y=yy, options=flot.SeriesOptions(**options))
+#     series['data'] = zip(ages, ys, age_errors)
+#
+#     analysis_number = flot.Graph(series1=series)
+#     return analysis_number
 
 # ============= EOF =============================================

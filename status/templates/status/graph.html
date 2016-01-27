@@ -34,6 +34,7 @@
             <th>Date</th>
             <th>Trap Current</th>
             <th>Emission</th>
+            <th>Decabin Temp. (C)</th>
         </tr>
         {% for spec in spectrometer_values %}
             <tr>
@@ -41,6 +42,7 @@
             <td>{{ spec.date }}</td>
             <td>{{ spec.trap_current }}</td>
             <td>{{ spec.emission }}</td>
+            <td>{{ spec.decabin_temp }}</td>
             </tr>
         {% endfor %}
     </table>

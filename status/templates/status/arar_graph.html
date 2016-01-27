@@ -5,8 +5,12 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'status/graph.css' %}" />
 
-    <script type="text/javascript" src="{% static 'flot/jquery.flot.js' %}"></script>
-    <script type="text/javascript" src="{% static 'flot/jquery.flot.errorbars.js' %}"></script>
+{#    <script type="text/javascript" src="{% static 'flot/jquery.flot.js' %}"></script>#}
+{#    <script type="text/javascript" src="{% static 'flot/jquery.flot.errorbars.js' %}"></script>#}
+    <link href="http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.css" rel="stylesheet" type="text/css">
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.js"></script>
+    {{ ideogram.js|safe }}
+    {{ analysis_number.js|safe }}
 {% endblock %}
 
 
@@ -14,8 +18,14 @@
 {#    <div class="container">#}
 
         <table>
-            <tr><td>Analysis#</td><td><div id="analysis_number" style="width:500px;height:100px;"></div></td></tr>
-            <tr><td>Rel. Prob</td><td><div id="ideogram" style="width:500px;height:300px;"></div></td></tr>
+{#            <tr><td>Analysis#</td><td><div id="analysis_number" style="width:500px;height:100px;"></div></td></tr>#}
+{#            <tr><td>Rel. Prob</td><td><div id="ideogram" style="width:500px;height:300px;"></div></td></tr>#}
+            <tr>
+                <td>{{ analysis_number.div|safe }}</td>
+            </tr>
+            <tr>
+                <td>{{ ideogram.div|safe }}</td>
+            </tr>
         </table>
 
         <table class="paleblue">

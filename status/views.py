@@ -80,9 +80,11 @@ def arar_graph(request):
     identifier = latest_analysis.identifier
     ans = Analysis.objects.filter(identifier=identifier)
     cp, an = make_ideogram(ans)
-    context = {'cumulative_prob': cp,
+
+    context = {'ideogram': cp,
                'analysis_number': an,
-               'analyses': ans}
+               'analyses': ans,
+               }
     return render(request, 'status/arar_graph.html', context)
 
 
