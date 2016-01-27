@@ -55,9 +55,9 @@ def make_spectrometer_dict(name):
     emission = Measurement.objects.filter(process_info__name='{}Emission'.format(name))
     decabin = Measurement.objects.filter(process_info__name='{}DecabinTemp'.format(name))
 
-    trap_current = trap.order_by('pub_date').first()
-    trap_emission = emission.order_by('pub_date').first()
-    decabin_temp = decabin.order_by('pub_date').first()
+    trap_current = trap.order_by('pub_date').last()
+    trap_emission = emission.order_by('pub_date').last()
+    decabin_temp = decabin.order_by('pub_date').last()
 
     if trap_current:
         trap_value = '{:0.2f}'.format(trap_current.value)
