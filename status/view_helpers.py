@@ -51,28 +51,28 @@ def _make_bokeh_components(p):
 
 # spectrometer
 def make_spectrometer_dict(name):
-    trap = Measurement.objects.filter(process_info__name='{}Trap'.format(name))
+    trap = Measurement.objects.filter(process_info__name='{}TrapCurrent'.format(name))
     emission = Measurement.objects.filter(process_info__name='{}Emission'.format(name))
-    decabin = Measurement.objects.filter(process_info__device__name='{}DecabinTemp'.format(name))
+    decabin = Measurement.objects.filter(process_info__name='{}DecabinTemp'.format(name))
 
     trap_current = trap.order_by('pub_date').first()
     trap_emission = emission.order_by('pub_date').first()
     decabin_temp = decabin.order_by('pub_date').first()
 
     if trap_current:
-        trap_value = trap_current.value
+        trap_value = '{:0.2f}'.format(trap_current.value)
         date = trap_current.pub_date
     else:
         trap_value = '---'
         date = ''
 
     if trap_emission:
-        emission_value = emission.value
+        emission_value = '{:0.2f}'.format(trap_emission.value)
     else:
         emission_value = '---'
 
     if decabin_temp:
-        decabin_temp_value = decabin_temp.value
+        decabin_temp_value = '{:0.2f}'.format(decabin_temp.value)
     else:
         decabin_temp_value = '---'
 
