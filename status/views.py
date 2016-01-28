@@ -121,7 +121,7 @@ def render_spectrometer_status(request, name, oname):
     context = {'date_selector_form': form,
 
                'tempgraph': make_lab_temp_graph(post),
-               'decabintempgraph': make_bokeh_graph(decabin_temp_data, 'Decabin Temp', 'Temp ({})'.format(
+               'decabintempgraph': make_bokeh_graph(decabin_temp_data, 'DecaBin Temperature', 'Temp ({})'.format(
                        decabin_temp_units)),
                'trapgraph': make_bokeh_graph(trap_data, 'Trap', 'uA'),
                'emissiongraph': make_bokeh_graph(emission_data, 'Emission', 'uA'),
