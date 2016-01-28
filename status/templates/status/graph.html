@@ -40,7 +40,7 @@
         {% for spec in spectrometer_values %}
             <tr>
             <td>{{ spec.name }}</td>
-            <td>{{ spec.date }}</td>
+            <td><div id="date">{{ spec.date }}</div></td>
             <td><div id={% if spec.trap_current_flag %} "flagged" {% endif %}>{{ spec.trap_current }}</div></td>
             <td><div id={% if spec.emission_flag %} "flagged" {% endif %}>{{ spec.emission }}</div></td>
             <td><div id={% if spec.emission_ratio_flag %} "flagged" {% endif %}>{{ spec.emission_ratio }}</div></td>

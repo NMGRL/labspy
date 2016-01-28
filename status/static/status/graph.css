@@ -36,7 +36,9 @@ h4 {
     font-weight: bold;
     color: red;
 }
-
+#date{
+    font-size: 12px;
+}
 #flagged
 {
     /*background-color: lightcoral;*/
