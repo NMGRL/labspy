@@ -5,9 +5,6 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'status/graph.css' %}" />
 
-    <script type="text/javascript" src="{% static 'flot/jquery.flot.js' %}"></script>
-    <script type="text/javascript" src="{% static 'flot/jquery.flot.time.js' %}"></script>
-
     <link href="http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.css" rel="stylesheet" type="text/css">
     <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.js"></script>
     {{ tempgraph.js|safe }}
@@ -27,42 +24,20 @@
             <input class="btn-primary" type="submit" value="Refresh" />
         </form>
     </div>
-
-    <table border="1" class="table">
-        <tr>
-            <th>Spectrometer</th>
-            <th>Date</th>
-            <th>Trap Current</th>
-            <th>Emission</th>
-            <th>Emission/Trap</th>
-            <th>Decabin Temp. (C)</th>
-        </tr>
-        {% for spec in spectrometer_values %}
-            <tr>
-            <td>{{ spec.name }}</td>
-            <td><div id="date">{{ spec.date }}</div></td>
-            <td><div id={% if spec.trap_current_flag %} "flagged" {% endif %}>{{ spec.trap_current }}</div></td>
-            <td><div id={% if spec.emission_flag %} "flagged" {% endif %}>{{ spec.emission }}</div></td>
-            <td><div id={% if spec.emission_ratio_flag %} "flagged" {% endif %}>{{ spec.emission_ratio }}</div></td>
-            <td><div id={% if spec.decabin_flag %} "flagged" {% endif %}>{{ spec.decabin_temp }}</div></td>
-            </tr>
-        {% endfor %}
-    </table>
     <table>
-    <tr>
-        <td><div class="bokeh">{{ tempgraph.div|safe }}</div></td>
-        <td><div class="bokeh">{{ humgraph.div|safe }}</div></td>
-    </tr>
-    <tr>
-        <td><div class="bokeh">{{ pneugraph.div|safe }}</div></td>
-        <td><div class="bokeh">{{ pneugraph2.div|safe }}</div></td>
-    </tr>
-    <tr>
-        <td><div class="bokeh">{{ coolgraph.div|safe }}</div></td>
-        <td><div class="bokeh">{{ cfgraph.div|safe }}</div></td>
-    </tr>
+        <tr>
+            <td><div class="bokeh">{{ tempgraph.div|safe }}</div></td>
+            <td><div class="bokeh">{{ humgraph.div|safe }}</div></td>
+        </tr>
+        <tr>
+            <td><div class="bokeh">{{ pneugraph.div|safe }}</div></td>
+            <td><div class="bokeh">{{ pneugraph2.div|safe }}</div></td>
+        </tr>
+        <tr>
+            <td><div class="bokeh">{{ coolgraph.div|safe }}</div></td>
+            <td><div class="bokeh">{{ cfgraph.div|safe }}</div></td>
+        </tr>
     </table>
-
 
 {#    auto reload script#}
     <script type='text/javascript'>

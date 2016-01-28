@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from django import forms
 from django.forms import Form
+from django.http import HttpResponseNotFound
 from django.shortcuts import render
 
 # Create your views here.
@@ -88,22 +89,46 @@ def arar_graph(request):
     return render(request, 'status/arar_graph.html', context)
 
 
-def graph(request):
-    temps = Measurement.objects.filter(process_info__name='Lab Temp.')
-    hums = Measurement.objects.filter(process_info__name='Lab Hum.')
-    cfinger = Measurement.objects.filter(process_info__name='ColdFinger Temp.')
-    coolant = Measurement.objects.filter(process_info__name='Coolant Temp.')
-    pneumatic = Measurement.objects.filter(process_info__name='Pressure')
-    pneumatic2 = Measurement.objects.filter(process_info__name='Pressure2')
+def obama_status(request):
+    return render_spectrometer_status(request, 'obama')
+
+
+def jan_status(request):
+    return render_spectrometer_status(request, 'jan')
+
+
+def render_spectrometer_status(request, name):
+    template_name = name
+    cname = name.capitalize()
+
+    decabin_temp = Measurement.objects.filter(process_info__name='{}DecabinTemp'.format(cname))
+    trap = Measurement.objects.filter(process_info__name='{}TrapCurrent'.format(cname))
+    emission = Measurement.objects.filter(process_info__name='{}Emission'.format(cname))
+
+    post, form = get_post(request)
+
+    decabin_temp_data = decabin_temp.filter(pub_date__gte=post).all()
+    trap_data = trap.filter(pub_date__gte=post).all()
+    emission_data = emission.filter(pub_date__gte=post).all()
 
     pis = ProcessInfo.objects
-    temp_units = pis.get(name='Lab Temp.').units
-    humidity_units = pis.get(name='Lab Hum.').units
-    coolant_units = pis.get(name='Coolant Temp.').units
-    coldfinger_units = pis.get(name='ColdFinger Temp.').units
-    pneumatic_units = pis.get(name='Pressure').units
-    pneumatic2_units = pis.get(name='Pressure2').units
+    decabin_temp_units = pis.get(name='{}DecabinTemp'.format(cname)).units
 
+    spectrometer_values = [make_spectrometer_dict(cname)]
+
+    context = {'date_selector_form': form,
+
+               'tempgraph': make_lab_temp_graph(post),
+               'decabintempgraph': make_bokeh_graph(decabin_temp_data, 'Decabin Temp', 'Temp ({})'.format(
+                       decabin_temp_units)),
+               'trapgraph': make_bokeh_graph(trap_data, 'Trap', 'uA'),
+               'emissiongraph': make_bokeh_graph(emission_data, 'Emission', 'uA'),
+               'spectrometer_values': spectrometer_values}
+
+    return render(request, 'status/{}.html'.format(template_name), context)
+
+
+def get_post(request):
     dt = None
     if request.method == 'POST':
         form = DateSelectorForm(request.POST)
@@ -118,21 +143,43 @@ def graph(request):
 
     now = datetime.now()
     post = (now - dt)
+    return post, form
 
+
+def make_lab_temp_graph(post):
+    pis = ProcessInfo.objects
+    temps = Measurement.objects.filter(process_info__name='Lab Temp.')
+    temp_units = pis.get(name='Lab Temp.').units
     temp_data = temps.filter(pub_date__gte=post).all()
+    return make_bokeh_graph(temp_data, 'Temperature', 'Temp ({})'.format(temp_units))
+
+
+def graph(request):
+    hums = Measurement.objects.filter(process_info__name='Lab Hum.')
+    cfinger = Measurement.objects.filter(process_info__name='ColdFinger Temp.')
+    coolant = Measurement.objects.filter(process_info__name='Coolant Temp.')
+    pneumatic = Measurement.objects.filter(process_info__name='Pressure')
+    pneumatic2 = Measurement.objects.filter(process_info__name='Pressure2')
+
+    pis = ProcessInfo.objects
+    humidity_units = pis.get(name='Lab Hum.').units
+    coolant_units = pis.get(name='Coolant Temp.').units
+    coldfinger_units = pis.get(name='ColdFinger Temp.').units
+    pneumatic_units = pis.get(name='Pressure').units
+    pneumatic2_units = pis.get(name='Pressure2').units
+
+    post, form = get_post(request)
+
     hum_data = hums.filter(pub_date__gte=post).all()
     cf_data = cfinger.filter(pub_date__gte=post).all()
     cool_data = coolant.filter(pub_date__gte=post).all()
     pneumatic_data = pneumatic.filter(pub_date__gte=post).all()
     pneumatic2_data = pneumatic2.filter(pub_date__gte=post).all()
 
-    spectrometer_values = [make_spectrometer_dict('Jan'),
-                           make_spectrometer_dict('Obama+')]
-
     context = {
         'date_selector_form': form,
 
-        'tempgraph': make_bokeh_graph(temp_data, 'Temperature', 'Temp ({})'.format(temp_units)),
+        'tempgraph': make_lab_temp_graph(post),
         'humgraph': make_bokeh_graph(hum_data, 'Humidity', 'Humidity ({})'.format(humidity_units)),
         'pneugraph': make_bokeh_graph(pneumatic_data, 'Pneumatics (Lab)',
                                       'Pressure ({})'.format(pneumatic_units)),
@@ -141,5 +188,5 @@ def graph(request):
         'coolgraph': make_bokeh_graph(cool_data, 'Coolant', 'Temp ({})'.format(coolant_units)),
         'cfgraph': make_bokeh_graph(cf_data, 'ColdFinger', 'Temp ({})'.format(coldfinger_units)),
 
-        'spectrometer_values': spectrometer_values}
+    }
     return render(request, 'status/graph.html', context)

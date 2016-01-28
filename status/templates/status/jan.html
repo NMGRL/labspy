@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block staticfiles %}
+    {% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'status/graph.css' %}" />
+    <link href="http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.css" rel="stylesheet" type="text/css">
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.js"></script>
+    {{ decabintempgraph.js|safe }}
+    {{ tempgraph.js|safe }}
+    {{ trapgraph.js|safe }}
+    {{ emissiongraph.js|safe }}
+{% endblock %}
+
+
+{% block body %}
+    <div class="container">
+        <form action={% url "jan_status_index" %} method="post">
+            {% csrf_token %}
+            {{ date_selector_form }}
+            <input class="btn-primary" type="submit" value="Refresh" />
+        </form>
+    </div>
+
+    <table class="table">
+        <tr>
+            <th>Date</th>
+            <th>Trap Current</th>
+            <th>Emission</th>
+            <th>Emission/Trap</th>
+            <th>Decabin Temp. (C)</th>
+        </tr>
+        {% for spec in spectrometer_values %}
+            <tr>
+            <td><div id="date">{{ spec.date }}</div></td>
+            <td><div id={% if spec.trap_current_flag %} "flagged" {% endif %}>{{ spec.trap_current }}</div></td>
+            <td><div id={% if spec.emission_flag %} "flagged" {% endif %}>{{ spec.emission }}</div></td>
+            <td><div id={% if spec.emission_ratio_flag %} "flagged" {% endif %}>{{ spec.emission_ratio }}</div></td>
+            <td><div id={% if spec.decabin_flag %} "flagged" {% endif %}>{{ spec.decabin_temp }}</div></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <table>
+        <tr>
+            <td><div class="bokeh">{{ trapgraph.div|safe }}</div></td>
+            <td><div class="bokeh">{{ emissiongraph.div|safe }}</div></td>
+        </tr>
+        <tr>
+            <td><div class="bokeh">{{ decabintempgraph.div|safe }}</div></td>
+            <td><div class="bokeh">{{ tempgraph.div|safe }}</div></td>
+        </tr>
+    </table>
+
+{#    auto reload script#}
+    <script type='text/javascript'>
+        setTimeout(function(){
+   window.location.reload(0);
+        }, 60000);
+    </script>
+
+{% endblock %}
