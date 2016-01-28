@@ -24,6 +24,7 @@
 
     <table class="table">
         <tr>
+            <th>Spectrometer</th>
             <th>Date</th>
             <th>Trap Current</th>
             <th>Emission</th>
@@ -32,6 +33,7 @@
         </tr>
         {% for spec in spectrometer_values %}
             <tr>
+            <td>{{ spec.name }}</td>
             <td><div id="date">{{ spec.date }}</div></td>
             <td><div id={% if spec.trap_current_flag %} "flagged" {% endif %}>{{ spec.trap_current }}</div></td>
             <td><div id={% if spec.emission_flag %} "flagged" {% endif %}>{{ spec.emission }}</div></td>

@@ -62,7 +62,7 @@ def make_spectrometer_dict(name):
 
     trap_current_flag = False
     if trap_current:
-        date = trap_current.pub_date.strftime('%M/%d %H:%M')
+        date = trap_current.pub_date.strftime('%m/%d %H:%M')
         vs = get_vs(trap)
         trap_value, trap_current_flag = make_value(vs, trap_current.value)
     else:

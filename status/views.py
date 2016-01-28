@@ -90,16 +90,17 @@ def arar_graph(request):
 
 
 def obama_status(request):
-    return render_spectrometer_status(request, 'obama')
+    return render_spectrometer_status(request, 'obama', 'jan')
 
 
 def jan_status(request):
-    return render_spectrometer_status(request, 'jan')
+    return render_spectrometer_status(request, 'jan', 'obama')
 
 
-def render_spectrometer_status(request, name):
+def render_spectrometer_status(request, name, oname):
     template_name = name
     cname = name.capitalize()
+    oname = oname.capitalize()
 
     decabin_temp = Measurement.objects.filter(process_info__name='{}DecabinTemp'.format(cname))
     trap = Measurement.objects.filter(process_info__name='{}TrapCurrent'.format(cname))
@@ -114,7 +115,8 @@ def render_spectrometer_status(request, name):
     pis = ProcessInfo.objects
     decabin_temp_units = pis.get(name='{}DecabinTemp'.format(cname)).units
 
-    spectrometer_values = [make_spectrometer_dict(cname)]
+    spectrometer_values = [make_spectrometer_dict(cname),
+                           make_spectrometer_dict(oname)]
 
     context = {'date_selector_form': form,
 
