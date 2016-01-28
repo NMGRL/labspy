@@ -115,14 +115,15 @@ def make_value(vs, vi):
 
 
 def get_vs(tbl, n=150):
-    return [round(v.value, 3) for v in tbl.order_by('-pub_date')[1:n]]
+    return [v.value for v in tbl.order_by('-pub_date')[1:n]]
 
 
 def get_flagged(vs, vi):
-    ys, xs = histogram(vs, bins=5)
-    idx = argmax(ys)
-    l, h = round(xs[idx], 2), round(xs[idx + 1], 2)
-    vi = round(vi, 2)
+    vs = array(vs)
+    avg = vs.mean()
+    std = vs.std()
+    l, h = avg - 2 * std, avg + 2 * std
+
     return not (l <= vi <= h), l, h
 
 
