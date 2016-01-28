@@ -124,7 +124,7 @@ def get_flagged(vs, vi):
     avg = vs.mean()
     std = vs.std()
     l, h = avg - 2 * std, avg + 2 * std
-
+    l,h,vi = map(lambda x: round(x, 3), (l,h,vi))
     return not (l <= vi <= h), l, h
 
 
