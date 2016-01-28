@@ -108,9 +108,10 @@ def make_spectrometer_dict(name):
 
 def make_value(vs, vi):
     flag, l, h = get_flagged(vs, vi)
-    s = '{:0.2f}'.format(vi)
     if flag:
-        s = '{} ({:0.2f}-{:0.2f})'.format(s, l, h)
+        s = '{:0.3f} ({:0.3f}-{:0.3f})'.format(vi, l, h)
+    else:
+        s = '{:0.2f}'.format(vi)
     return s, flag
 
 
