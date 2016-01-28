@@ -37,6 +37,14 @@ h4 {
     color: red;
 }
 
+#flagged
+{
+    /*background-color: lightcoral;*/
+    font-weight: bold;
+    color: red;
+    font-size: 12px;
+}
+
 table.paleblue {
     background-color: #eaeaea;
 }

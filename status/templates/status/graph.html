@@ -34,15 +34,17 @@
             <th>Date</th>
             <th>Trap Current</th>
             <th>Emission</th>
+            <th>Emission/Trap</th>
             <th>Decabin Temp. (C)</th>
         </tr>
         {% for spec in spectrometer_values %}
             <tr>
             <td>{{ spec.name }}</td>
             <td>{{ spec.date }}</td>
-            <td>{{ spec.trap_current }}</td>
-            <td>{{ spec.emission }}</td>
-            <td>{{ spec.decabin_temp }}</td>
+            <td><div id={% if spec.trap_current_flag %} "flagged" {% endif %}>{{ spec.trap_current }}</div></td>
+            <td><div id={% if spec.emission_flag %} "flagged" {% endif %}>{{ spec.emission }}</div></td>
+            <td><div id={% if spec.emission_ratio_flag %} "flagged" {% endif %}>{{ spec.emission_ratio }}</div></td>
+            <td><div id={% if spec.decabin_flag %} "flagged" {% endif %}>{{ spec.decabin_temp }}</div></td>
             </tr>
         {% endfor %}
     </table>

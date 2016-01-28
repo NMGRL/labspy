@@ -19,6 +19,7 @@
 import string
 import time
 import flot
+from numpy import array, histogram, argmax
 from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.plotting import figure
 from bokeh.resources import CDN
@@ -56,30 +57,72 @@ def make_spectrometer_dict(name):
     decabin = Measurement.objects.filter(process_info__name='{}DecabinTemp'.format(name))
 
     trap_current = trap.order_by('pub_date').last()
-    trap_emission = emission.order_by('pub_date').last()
+    source_emission = emission.order_by('pub_date').last()
     decabin_temp = decabin.order_by('pub_date').last()
 
+    trap_current_flag = False
     if trap_current:
-        trap_value = '{:0.2f}'.format(trap_current.value)
         date = trap_current.pub_date
+        vs = get_vs(trap)
+        trap_value, trap_current_flag = make_value(vs, trap_current.value)
     else:
         trap_value = '---'
         date = ''
 
-    if trap_emission:
-        emission_value = '{:0.2f}'.format(trap_emission.value)
+    emission_flag = False
+    if source_emission:
+        vs = get_vs(emission)
+        emission_value, emission_flag = make_value(vs, source_emission.value)
     else:
         emission_value = '---'
 
+    decabin_flag = False
     if decabin_temp:
-        decabin_temp_value = '{:0.2f}'.format(decabin_temp.value)
+        vs = get_vs(decabin)
+        decabin_temp_value, decabin_flag = make_value(vs, decabin_temp.value)
+
     else:
         decabin_temp_value = '---'
+
+    trap_ratio = '---'
+    emission_ratio_flag = False
+    if emission_value != '---' and trap_value != '---':
+        er = source_emission.value / trap_current.value
+        # ts = trap.order_by('-pub_date')[1:50]
+        # es = emission.order_by('-pub_date')[1:50]
+        es, ts = get_vs(emission), get_vs(trap)
+        rs = [ei / ti for ei, ti in zip(es, ts)]
+
+        trap_ratio, emission_ratio_flag = make_value(rs, er)
 
     return {'name': name, 'date': date,
             'trap_current': trap_value,
             'emission': emission_value,
-            'decabin_temp': decabin_temp_value}
+            'decabin_temp': decabin_temp_value,
+            'emission_ratio': trap_ratio,
+            'emission_ratio_flag': emission_ratio_flag,
+            'emission_flag': emission_flag,
+            'trap_current_flag': trap_current_flag,
+            'decabin_flag': decabin_flag}
+
+
+def make_value(vs, vi):
+    flag, l, h = get_flagged(vs, vi)
+    s = '{:0.2f}'.format(vi)
+    if flag:
+        s = '{} ({:0.2f}-{:0.2f})'.format(s, l, h)
+    return s, flag
+
+
+def get_vs(tbl, n=150):
+    return [v.value for v in tbl.order_by('-pub_date')[1:n]]
+
+
+def get_flagged(vs, vi):
+    ys, xs = histogram(vs, bins=5)
+    idx = argmax(ys)
+    l, h = xs[idx], xs[idx+1]
+    return not (l <= vi <= h), l, h
 
 
 # status
@@ -222,7 +265,7 @@ def make_cumulative_prob(ages, age_errors):
 
 def make_analysis_number(ages, age_errors, runids):
     hover = HoverTool()
-    hover.tooltips = [('RunID', '@runids'),('Age', '@ages')]
+    hover.tooltips = [('RunID', '@runids'), ('Age', '@ages')]
 
     ys = range(len(ages))
     source = ColumnDataSource(
