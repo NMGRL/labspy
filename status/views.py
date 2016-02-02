@@ -1,3 +1,4 @@
+from collections import namedtuple
 from datetime import datetime, timedelta
 from django import forms
 from django.forms import Form
@@ -7,7 +8,7 @@ from django.shortcuts import render
 # Create your views here.
 from status.models import Measurement, ProcessInfo, Analysis, Experiment
 from status.view_helpers import make_current, connection_timestamp, make_connections, make_ideogram, \
-    make_bokeh_graph, make_spectrometer_dict
+    make_bokeh_graph, make_spectrometer_dict, get_data
 
 DS = [{"hours": 1}, {'hours': 24}, {'weeks': 1}, {'weeks': 4}]
 FMTS = ['%M:%S', '%H:%M', '%m/%d', '%m/%d']
@@ -108,9 +109,13 @@ def render_spectrometer_status(request, name, oname):
 
     post, form = get_post(request)
 
-    decabin_temp_data = decabin_temp.filter(pub_date__gte=post).all()
-    trap_data = trap.filter(pub_date__gte=post).all()
-    emission_data = emission.filter(pub_date__gte=post).all()
+    decabin_temp_data = get_data(decabin_temp, post)
+    trap_data = get_data(trap, post)
+    emission_data = get_data(emission, post)
+
+    # decabin_temp_data = decabin_temp.filter(pub_date__gte=post).all()
+    # trap_data = trap.filter(pub_date__gte=post).all()
+    # emission_data = emission.filter(pub_date__gte=post).all()
 
     pis = ProcessInfo.objects
     decabin_temp_units = pis.get(name='{}DecabinTemp'.format(cname)).units
@@ -122,7 +127,7 @@ def render_spectrometer_status(request, name, oname):
 
                'tempgraph': make_lab_temp_graph(post),
                'decabintempgraph': make_bokeh_graph(decabin_temp_data, 'DecaBin Temperature', 'Temp ({})'.format(
-                       decabin_temp_units)),
+                   decabin_temp_units)),
                'trapgraph': make_bokeh_graph(trap_data, 'Trap', 'uA'),
                'emissiongraph': make_bokeh_graph(emission_data, 'Emission', 'uA'),
                'spectrometer_values': spectrometer_values}
@@ -152,7 +157,7 @@ def make_lab_temp_graph(post):
     pis = ProcessInfo.objects
     temps = Measurement.objects.filter(process_info__name='Lab Temp.')
     temp_units = pis.get(name='Lab Temp.').units
-    temp_data = temps.filter(pub_date__gte=post).all()
+    temp_data = get_data(temps, post)
     return make_bokeh_graph(temp_data, 'Temperature', 'Temp ({})'.format(temp_units))
 
 
@@ -172,23 +177,15 @@ def graph(request):
 
     post, form = get_post(request)
 
-    hum_data = hums.filter(pub_date__gte=post).all()
-    cf_data = cfinger.filter(pub_date__gte=post).all()
-    cool_data = coolant.filter(pub_date__gte=post).all()
-    pneumatic_data = pneumatic.filter(pub_date__gte=post).all()
-    pneumatic2_data = pneumatic2.filter(pub_date__gte=post).all()
+    context = {'date_selector_form': form,
+               'tempgraph': make_lab_temp_graph(post)}
 
-    context = {
-        'date_selector_form': form,
+    s = (('humgraph', hums, 'Humidity', 'Humidity ({})'.format(humidity_units)),
+         ('pneugraph', pneumatic, 'Pneumatics (Lab)', 'Pressure ({})'.format(pneumatic_units)),
+         ('pneugraph2', pneumatic2, 'Pneumatics (Building)', 'Pressure ({})'.format(pneumatic2_units)),
+         ('coolgraph', coolant, 'Coolant', 'Temp ({})'.format(coolant_units)),
+         ('cfgraph', cfinger, 'ColdFinger', 'Temp ({})'.format(coldfinger_units)))
+    for key, table, title, ytitle in s:
+        context[key] = make_bokeh_graph(get_data(table, post), title, ytitle)
 
-        'tempgraph': make_lab_temp_graph(post),
-        'humgraph': make_bokeh_graph(hum_data, 'Humidity', 'Humidity ({})'.format(humidity_units)),
-        'pneugraph': make_bokeh_graph(pneumatic_data, 'Pneumatics (Lab)',
-                                      'Pressure ({})'.format(pneumatic_units)),
-        'pneugraph2': make_bokeh_graph(pneumatic2_data, 'Pneumatics (Building)',
-                                       'Pressure ({})'.format(pneumatic2_units)),
-        'coolgraph': make_bokeh_graph(cool_data, 'Coolant', 'Temp ({})'.format(coolant_units)),
-        'cfgraph': make_bokeh_graph(cf_data, 'ColdFinger', 'Temp ({})'.format(coldfinger_units)),
-
-    }
     return render(request, 'status/graph.html', context)

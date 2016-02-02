@@ -18,7 +18,10 @@
 # ============= standard library imports ========================
 import string
 import time
+from collections import namedtuple
+
 import flot
+from datetime import datetime
 from numpy import array, histogram, argmax
 from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.plotting import figure
@@ -28,8 +31,19 @@ from bokeh.embed import components
 # ============= local library imports  ==========================
 from status.models import Connections, Measurement
 
-
 # bokeh graph
+DataPoint = namedtuple('DataPoint', 'pub_date value')
+
+
+def get_data(table, post):
+    data = table.filter(pub_date__gte=post).all()
+    if not data or len(data)==1:
+        v = table.order_by('pub_date').last()
+        if v:
+            data = [v, DataPoint(datetime.now(), v.value)]
+    return data
+
+
 def make_bokeh_graph(data, title, ytitle):
     p = figure(title=title, x_axis_type='datetime',
                plot_width=450,
@@ -124,7 +138,7 @@ def get_flagged(vs, vi):
     avg = vs.mean()
     std = vs.std()
     l, h = avg - 2 * std, avg + 2 * std
-    l,h,vi = map(lambda x: round(x, 3), (l,h,vi))
+    l, h, vi = map(lambda x: round(x, 3), (l, h, vi))
     return not (l <= vi <= h), l, h
 
 
@@ -272,7 +286,7 @@ def make_analysis_number(ages, age_errors, runids):
 
     ys = range(len(ages))
     source = ColumnDataSource(
-            data={'ages': ages, 'ys': ys, 'runids': runids})
+        data={'ages': ages, 'ys': ys, 'runids': runids})
 
     fig = figure(plot_height=200, tools=[hover, ])
     fig.circle('ages', 'ys',
