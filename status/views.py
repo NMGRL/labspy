@@ -48,7 +48,7 @@ def index(request):
     # current = [(ti, ci.order_by('-pub_date').first().value, cu, ) for ti, ci, cu in cs]
     current = [make_current(*a) for a in cs]
     jan_tag = 'jan'
-    ob_tag = 'obama'
+    ob_tag = 'felix'
 
     cur_jan_exp = Experiment.objects.filter(system=jan_tag).order_by('-start_time').first()
     cur_ob_exp = Experiment.objects.filter(system=ob_tag).order_by('-start_time').first()
@@ -90,12 +90,12 @@ def arar_graph(request):
     return render(request, 'status/arar_graph.html', context)
 
 
-def obama_status(request):
-    return render_spectrometer_status(request, 'obama', 'jan')
+def felix_status(request):
+    return render_spectrometer_status(request, 'felix', 'jan')
 
 
 def jan_status(request):
-    return render_spectrometer_status(request, 'jan', 'obama')
+    return render_spectrometer_status(request, 'jan', 'felix')
 
 
 def render_spectrometer_status(request, name, oname):
