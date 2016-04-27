@@ -15,7 +15,7 @@
 
 {% block body %}
     <div class="container">
-        <form action={% url "obama_status_index" %} method="post">
+        <form action={% url "felix_status_index" %} method="post">
             {% csrf_token %}
             {{ date_selector_form }}
             <input class="btn-primary" type="submit" value="Refresh" />
