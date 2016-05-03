@@ -1,6 +1,6 @@
 """labman URL Configuration
 
-The `urlpatterns` list routes URLs to views. For more information please see:
+The `urlpatterns` list routes URLs to views. For more infsaormation please see:
     https://docs.djangoproject.com/en/1.8/topics/http/urls/
 Examples:
 Function views
@@ -27,8 +27,8 @@ urlpatterns = [
     url(r'^software$', Software.as_view(), name='software'),
     url(r'^software/massspec$', SoftwareMassSpec.as_view(), name='software_massspec'),
     url(r'^software/pychron$', SoftwarePychron.as_view(), name='software_pychron'),
-    url(r'^status/', include('status.urls')),
-    url(r'^samples/', include('samples.urls')),
+    url(r'^/labspy/status/', include('status.urls')),
+    url(r'^mples/', include('samples.urls')),
     url(r'^importer/', include('importer.urls')),
 
 ]
