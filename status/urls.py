@@ -17,21 +17,12 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from status import views
 
-root = 'labs/argon/labspy/'
 urlpatterns = [
-    # url(r'^$', views.index, name='status_index'),
-    # url(r'^graph/$', views.graph, name='status_graph_index'),
-    # url(r'^arar_graph/$', views.arar_graph, name='arar_graph_index'),
-    # url(r'^jan_status/$', views.jan_status, name='jan_status_index'),
-    # url(r'^felix_status/$', views.felix_status, name='felix_status_index'),
-
-
-    url(r'^{}$'.format(root), views.index, name='status_index'),
-    url(r'^{}graph/$'.format(root), views.graph, name='status_graph_index'),
-    url(r'^{}arar_graph/$'.format(root), views.arar_graph, name='arar_graph_index'),
-    url(r'^{}jan_status/$'.format(root), views.jan_status, name='jan_status_index'),
-    url(r'^{}felix_status/$'.format(root), views.felix_status, name='felix_status_index'),
-
+    url(r'^$', views.index, name='status_index'),
+    url(r'^graph/$', views.graph, name='status_graph_index'),
+    url(r'^arar_graph/$', views.arar_graph, name='arar_graph_index'),
+    url(r'^jan_status/$', views.jan_status, name='jan_status_index'),
+    url(r'^felix_status/$', views.felix_status, name='felix_status_index'),
     #url(r'^(?P<dr>.*)/$', views.graph_view, name='status_graph'),
     # url(r'^material/add/$', views.MaterialEntryView.as_view(), name='material_add'),
     # url(r'^material/(?P<pk>[0-9]+)/$', views.MaterialView.as_view(), name='material_detail'),
