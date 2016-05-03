@@ -18,7 +18,6 @@ from django.contrib import admin
 from status import views
 
 root = 'labs/argon/labspy/'
-root = ''
 urlpatterns = [
     # url(r'^$', views.index, name='status_index'),
     # url(r'^graph/$', views.graph, name='status_graph_index'),
