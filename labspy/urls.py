@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'^software$', Software.as_view(), name='software'),
     url(r'^software/massspec$', SoftwareMassSpec.as_view(), name='software_massspec'),
     url(r'^software/pychron$', SoftwarePychron.as_view(), name='software_pychron'),
-    url(r'^labspy/status/', include('status.urls')),
+    url(r'^../status/', include('status.urls')),
     url(r'^mples/', include('samples.urls')),
     url(r'^importer/', include('importer.urls')),
 
