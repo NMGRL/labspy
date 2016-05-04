@@ -20,7 +20,7 @@ from status import views
 
 urlpatterns = [
 
-    url(r'^labspy/'),
+    url(r'^labspy/',
     include(
     url(r'^admin/', include(admin.site.urls)),
     # url(r'^$', Home.as_view(), name='home'),
@@ -32,6 +32,6 @@ urlpatterns = [
     url(r'^software/pychron$', SoftwarePychron.as_view(), name='software_pychron'),
     url(r'^status/', include('status.urls'), prefix='labspy'),
     url(r'^samples/', include('samples.urls')),
-    url(r'^importer/', include('importer.urls'))),
+    url(r'^importer/', include('importer.urls')))),
 
 ]
