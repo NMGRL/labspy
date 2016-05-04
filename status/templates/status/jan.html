@@ -10,6 +10,8 @@
     {{ tempgraph.js|safe }}
     {{ trapgraph.js|safe }}
     {{ emissiongraph.js|safe }}
+    {{ peakcentergraph.js|safe }}
+
 {% endblock %}
 
 
@@ -44,6 +46,9 @@
     </table>
 
     <table>
+        <tr>
+            <td><div class="bokeh">{{ peakcentergraph.div|safe }}</div></td>
+        </tr>
         <tr>
             <td><div class="bokeh">{{ trapgraph.div|safe }}</div></td>
             <td><div class="bokeh">{{ emissiongraph.div|safe }}</div></td>

@@ -22,6 +22,15 @@ class DateSelectorForm(Form):
                                         initial='1')
 
 
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+
 # views
 def index(request):
     temps = Measurement.objects.filter(process_info__name='Lab Temp.')
@@ -73,7 +82,9 @@ def index(request):
 
         'connections_list': connections_list,
         'nconnections': 12 / len(connections_list),
-        'current': current}
+        'current': current,
+        'is_intranet': get_client_ip(request).startswith('129.138.12.')
+    }
     return render(request, 'status/index.html', context)
 
 
@@ -106,13 +117,14 @@ def render_spectrometer_status(request, name, oname):
     decabin_temp = Measurement.objects.filter(process_info__name='{}DecabinTemp'.format(cname))
     trap = Measurement.objects.filter(process_info__name='{}TrapCurrent'.format(cname))
     emission = Measurement.objects.filter(process_info__name='{}Emission'.format(cname))
+    peakcenter = Measurement.objects.filter(process_info__name='{}PeakCenter'.format(cname))
 
     post, form = get_post(request)
 
     decabin_temp_data = get_data(decabin_temp, post)
     trap_data = get_data(trap, post)
     emission_data = get_data(emission, post)
-
+    peakcenter_data = get_data(peakcenter, post)
     # decabin_temp_data = decabin_temp.filter(pub_date__gte=post).all()
     # trap_data = trap.filter(pub_date__gte=post).all()
     # emission_data = emission.filter(pub_date__gte=post).all()
@@ -130,6 +142,7 @@ def render_spectrometer_status(request, name, oname):
                    decabin_temp_units)),
                'trapgraph': make_bokeh_graph(trap_data, 'Trap', 'uA'),
                'emissiongraph': make_bokeh_graph(emission_data, 'Emission', 'uA'),
+               'peakcentergraph': make_bokeh_graph(peakcenter_data, 'PeakCenter', 'DAC (V)'),
                'spectrometer_values': spectrometer_values}
 
     return render(request, 'status/{}.html'.format(template_name), context)

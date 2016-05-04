@@ -51,7 +51,10 @@
                             <td>Application</td>
                             <td>Device</td>
                             <td>Communicator</td>
-                            <td>Address</td>
+                            {% if is_intranet %}
+                               <td>Address</td>
+                            {% endif %}
+
                             <td>Status</td>
                         </thead>
                         {% for conn in connections %}
@@ -63,7 +66,9 @@
                                 <td>{{ conn.appname }}</td>
                             <td>{{ conn.devname }}</td>
                             <td>{{ conn.com }}</td>
-                            <td>{{ conn.address }}</td>
+                            {% if is_intranet %}
+                                <td>{{ conn.address }}</td>
+                            {% endif %}
                             {% if conn.status %}
                                 <td>OK</td>
                             {% else %}
