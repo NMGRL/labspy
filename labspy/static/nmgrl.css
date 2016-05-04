@@ -160,6 +160,14 @@ figure.right img, figure.left img, figure.center img {
 	background: -ms-linear-gradient(top, #00a2d2 0%, #c9f3f1 100%); /* IE10+ */
 	background: linear-gradient(to bottom, #00a2d2 0%, #c9f3f1 100%); /* W3C */
 }
+
+#bureaulogo {
+	float: left;
+}
+#labspytitle {
+
+}
+
 #nmt-footer {
 	clear: both;
 	position: static;
