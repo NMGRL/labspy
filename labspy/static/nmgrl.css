@@ -177,7 +177,7 @@ figure.right img, figure.left img, figure.center img {
 	font-size: .875em;
 	font-style: italic;
 	text-align: center;
-	margin: auto;
+	/*margin: auto;*/
 	padding-top: 2em;
 }
 .return2top {
@@ -190,7 +190,7 @@ figure.right img, figure.left img, figure.center img {
 #terms {
 	position: static;
 	top: -10em;
-	text-align: center;
+	/*text-align: center;*/
 	line-height: 0.875em;
 	margin-bottom: 0;
 	margin-bottom: 1em;

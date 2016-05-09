@@ -19,7 +19,7 @@
 <header id="header">
     <div id="bureaulogo">
         <a href="http://geoinfo.nmt.edu" title="New Mexico Bureau of Geology And Mineral Resources" class="no-icon">
-            <img src={% static "images/bureau_logo-notext.gif" %} width="100" height="76"/>
+            <img src={% static "images/bureau_logo-notext.gif" %} width="100"/>
         </a>
     </div>
     <div id="labspytitle">
@@ -32,9 +32,9 @@
     <div>
     <nav id="sitenav">
         <ul>
-{#            <li><a href="{% url "home" %}">Home</a></li>#}
+            <li><a href="http://geoinfo.nmt.edu/labs/argon">Home</a></li>
             <li><a href={% url "status_index" %}>Status</a></li>
-            <li><a href={% url "status_graph_index" %}>Laboratory</a></li>
+            <li><a href={% url "status_graph_index" %}>Laboratory Graphs</a></li>
             <li><a href={% url "jan_status_index" %}>Jan</a></li>
             <li><a href={% url "felix_status_index" %}>Felix</a></li>
 {#            <li><a href={% url "arar_graph_index" %}>ArArGraphs</a></li>#}
@@ -61,12 +61,14 @@ function changeClass(e) {
     </div>
 </header>
 
-{% block body %}{% endblock %}
+{% block body %}
 
+{% endblock %}
 
-      <div id="nmt-footer">
-        <p>We are a research and service division of:</p>
-        <a href="http://www.nmt.edu" title="New Mexico Institute of Mining &amp; Technology" class="no-icon"><img src={% static "images/nmtlogo-small.gif" %} width="150" height="53"/></a> </div>
+{#      <div id="nmt-footer">#}
+{#        <p>We are a research and service division of:</p>#}
+{#        <a href="http://www.nmt.edu" title="New Mexico Institute of Mining &amp; Technology" class="no-icon"><img src={% static "images/nmtlogo-small.gif" %} width="150" height="53"/></a>#}
+{#      </div>#}
 {#      <div id="comments" style="clear:both;">#}
 {#        <script type="text/javascript">#}
 {#	var address = 'webmaster';#}
@@ -79,19 +81,19 @@ function changeClass(e) {
 {#          <img src="/images/webmaster-email.gif" alt="email us" width="161" height="14" title="Email link requires javascript"></a> </div>#}
 {#        </noscript>#}
 {#      </div>#}
-      <div id="terms">
+{#      <div id="terms">#}
 {#        <div class="no-print" style="margin-bottom:0.25em;" ><small><a href="/about/termsofuse.html">Terms of Use</a> | <a href="/about/accessibility.html">Accessibility</a></small> </div>#}
 {#        <div style="font-size:0.625em;">Revised: <!-- #BeginDate format:Sw1 -->21 July, 2015<!-- #EndDate --></div>#}
-        <div><small> <a href="/publications/about/copyright.html"> &copy;
-          <script >var cur = '2007'; var year = new Date(); if(cur == year.getFullYear()) year = year.getFullYear(); else year = cur + '-' + year.getFullYear(); document.write(year);</script>
-          <noscript>
-          2007
-          </noscript>
-          <abbr title="New Mexico Bureau of Geology &amp; Mineral Resources">NMBGMR</abbr> or as specified</a></small></div>
-      </div>
-      <div class="return2top">
-        <p><a href="#top">Return to Top of Page</a></p>
-      </div>
-    </footer>
+{#        <div><small> <a href="/publications/about/copyright.html"> &copy;#}
+{#          <script >var cur = '2007'; var year = new Date(); if(cur == year.getFullYear()) year = year.getFullYear(); else year = cur + '-' + year.getFullYear(); document.write(year);</script>#}
+{#          <noscript>#}
+{#          2007#}
+{#          </noscript>#}
+{#          <abbr title="New Mexico Bureau of Geology &amp; Mineral Resources">NMBGMR</abbr> or as specified</a></small></div>#}
+{#      </div>#}
+{#      <div class="return2top">#}
+{#        <p><a href="#top">Return to Top of Page</a></p>#}
+{#      </div>#}
+{#    </footer>#}
 
 
