@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block staticfiles %}
+    {% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'status/graph.css' %}" />
+
+    <link href="http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.css" rel="stylesheet" type="text/css">
+    <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.js"></script>
+    {{ tempgraph.js|safe }}
+    {{ humgraph.js|safe }}
+{% endblock %}
+
+
+{% block body %}
+    <div class="container">
+        <form action={% url "it_index" %} method="post">
+            {% csrf_token %}
+            {{ date_selector_form }}
+            <input class="btn-primary" type="submit" value="Refresh" />
+        </form>
+    </div>
+    <table>
+        <tr>
+            <td><div class="bokeh">{{ tempgraph.div|safe }}</div></td>
+            <td><div class="bokeh">{{ humgraph.div|safe }}</div></td>
+        </tr>
+    </table>
+
+{#    auto reload script#}
+    <script type='text/javascript'>
+        setTimeout(function(){
+   window.location.reload(0);
+        }, 60000);
+    </script>
+
+{% endblock %}

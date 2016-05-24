@@ -56,24 +56,19 @@ def index(request):
           ('Coolant', coolant, coolant_units))
     # current = [(ti, ci.order_by('-pub_date').first().value, cu, ) for ti, ci, cu in cs]
     current = [make_current(*a) for a in cs]
-    jan_tag = 'jan'
-    ob_tag = 'felix'
 
-    cur_jan_exp = Experiment.objects.filter(system=jan_tag).order_by('-start_time').first()
-    cur_ob_exp = Experiment.objects.filter(system=ob_tag).order_by('-start_time').first()
-
-    cur_jan_an = Analysis.objects.filter(experiment=cur_jan_exp).order_by('-start_time').first()
-    cur_ob_an = Analysis.objects.filter(experiment=cur_ob_exp).order_by('-start_time').first()
+    exps = []
+    for tag in ('jan', 'felix'):
+        exp = Experiment.objects.filter(system=tag).order_by('-start_time').first()
+        an = Analysis.objects.filter(experiment=exp).order_by('-start_time').first()
+        exps.append((tag, exp, an))
 
     connections_list = (('PyValve', connection_timestamp('pyValve'),
                          make_connections('pyValve')),
                         ('PyCO2', connection_timestamp('pyCO2'),
                          make_connections('pyCO2')))
     context = {
-        'experiments': [(jan_tag, cur_jan_exp,
-                         cur_jan_an),
-                        (ob_tag, cur_ob_exp,
-                         cur_ob_an)],
+        'experiments': exps,
         'temp_units': temp_units,
         'humidity_units': humidity_units,
         'coolant_units': coolant_units,
@@ -83,8 +78,8 @@ def index(request):
         'connections_list': connections_list,
         'nconnections': 12 / len(connections_list),
         'current': current,
-        'is_intranet': get_client_ip(request).startswith('129.138.12.')
-    }
+        'is_intranet': get_client_ip(request).startswith('129.138.12.')}
+
     return render(request, 'status/index.html', context)
 
 
@@ -96,8 +91,7 @@ def arar_graph(request):
 
     context = {'ideogram': cp,
                'analysis_number': an,
-               'analyses': ans,
-               }
+               'analyses': ans}
     return render(request, 'status/arar_graph.html', context)
 
 
@@ -107,6 +101,16 @@ def felix_status(request):
 
 def jan_status(request):
     return render_spectrometer_status(request, 'jan', 'felix')
+
+
+def it_status(request):
+    post, form = get_post(request)
+
+    context = {'date_selector_form': form,
+               'tempgraph': make_temp_graph(post, name='IT Temp.'),
+               'humgraph': make_hum_graph(post, name='IT Hum.')}
+
+    return render(request, 'status/it.html', context)
 
 
 def render_spectrometer_status(request, name, oname):
@@ -137,7 +141,7 @@ def render_spectrometer_status(request, name, oname):
 
     context = {'date_selector_form': form,
 
-               'tempgraph': make_lab_temp_graph(post),
+               'tempgraph': make_temp_graph(post),
                'decabintempgraph': make_bokeh_graph(decabin_temp_data, 'DecaBin Temperature', 'Temp ({})'.format(
                    decabin_temp_units)),
                'trapgraph': make_bokeh_graph(trap_data, 'Trap', 'uA'),
@@ -166,12 +170,20 @@ def get_post(request):
     return post, form
 
 
-def make_lab_temp_graph(post):
+def make_temp_graph(post, name='Lab Temp.'):
+    return make_timeseries_graph(post, name, 'Temperature', 'Temp ({})')
+
+
+def make_hum_graph(post, name='Lab Hum.'):
+    return make_timeseries_graph(post, name, 'Humidity', 'Humidity ({})')
+
+
+def make_timeseries_graph(post, name, label, unitlabel):
     pis = ProcessInfo.objects
-    temps = Measurement.objects.filter(process_info__name='Lab Temp.')
-    temp_units = pis.get(name='Lab Temp.').units
-    temp_data = get_data(temps, post)
-    return make_bokeh_graph(temp_data, 'Temperature', 'Temp ({})'.format(temp_units))
+    vs = Measurement.objects.filter(process_info__name=name)
+    units = pis.get(name=name).units
+    data = get_data(vs, post)
+    return make_bokeh_graph(data, label, unitlabel.format(units))
 
 
 def graph(request):
@@ -191,7 +203,7 @@ def graph(request):
     post, form = get_post(request)
 
     context = {'date_selector_form': form,
-               'tempgraph': make_lab_temp_graph(post)}
+               'tempgraph': make_temp_graph(post)}
 
     s = (('humgraph', hums, 'Humidity', 'Humidity ({})'.format(humidity_units)),
          ('pneugraph', pneumatic, 'Pneumatics (Lab)', 'Pressure ({})'.format(pneumatic_units)),
