@@ -12,6 +12,27 @@
 
 {% block body %}
     <div id="experimentscontainer">
+       <table border="1px" class="paleblue">
+        <tr>
+            <th>Repository</th>
+            <th>Date</th>
+            <th>Event</th>
+        </tr>
+        {% for event in events %}
+            <tr>
+                <td>{{ event.repo.name }}</td>
+                <td>{{ event.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
+                <td>{{ event.type }}</td>
+            </tr>
+            {% for c in event.payload.commits %}
+                <tr>
+                <td></td><td></td><td>{{ c.message }}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+        </table>
+
+
         <table>
             <tr>
             {% for spec, exp, ai in experiments %}

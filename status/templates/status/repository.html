@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block staticfiles %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'status/graph.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
+{% endblock %}
+
+{#[u'payload', u'created_at', u'actor', u'id', u'repo', u'org', u'type', u'public']#}
+{#[u'size', u'head', u'commits', u'distinct_size', u'push_id', u'ref', u'before']#}
+{% block body %}
+    <h1> Repository Events</h1>
+
+    <table border="1px" class="paleblue">
+    <tr>
+        <th>Repository</th>
+        <th>Date</th>
+        <th>Event</th>
+    </tr>
+    {% for event in events %}
+        <tr>
+            <td>{{ event.repo.name }}</td>
+            <td>{{ event.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
+            <td>{{ event.type }}</td>
+        </tr>
+        {% for c in event.payload.commits %}
+            <tr>
+            <td></td><td></td><td>{{ c.message }}</td>
+            </tr>
+        {% endfor %}
+    {% endfor %}
+    </table>
+
+
+{% endblock %}

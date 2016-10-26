@@ -52,3 +52,4 @@ labspy/settings_debug.py
 manage_debug.py
 *.pyc
 bower_components
+sandbox/

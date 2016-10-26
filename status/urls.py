@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^jan_status/$', views.jan_status, name='jan_status_index'),
     url(r'^felix_status/$', views.felix_status, name='felix_status_index'),
     url(r'^jan_analysis_summary', analysis_views.jan_analysis_summary, name='jan_analysis_summary')
+    url(r'^repository_status/$', views.repository_status, name='repository_status_index')
     #url(r'^(?P<dr>.*)/$', views.graph_view, name='status_graph'),
     # url(r'^material/add/$', views.MaterialEntryView.as_view(), name='material_add'),
     # url(r'^material/(?P<pk>[0-9]+)/$', views.MaterialView.as_view(), name='material_detail'),

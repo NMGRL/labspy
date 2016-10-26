@@ -1,6 +1,11 @@
 from collections import namedtuple
 from datetime import datetime, timedelta
+
+import dateutil
+import requests
+from dateutil import tz
 from django import forms
+from django.conf import settings
 from django.forms import Form
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
@@ -74,13 +79,39 @@ def index(request):
         'coolant_units': coolant_units,
         'coldfinger_units': coldfinger_units,
         'pneumatic_units': pneumatic_units,
-
+        'events': get_org_events(latest=True),
         'connections_list': connections_list,
         'nconnections': 12 / len(connections_list),
         'current': current,
         'is_intranet': get_client_ip(request).startswith('129.138.12.')}
 
     return render(request, 'status/index.html', context)
+
+
+def prepare_event(e):
+    dt = dateutil.parser.parse(e['created_at'])
+    dt = dt.astimezone(tz.tzlocal())
+    e['created_at'] = dt
+    return e
+
+
+def get_org_events(org=None, latest=False):
+    if org is None:
+        org = settings.GITHUB_DATA_ORGANIZATION
+    url = 'https://api.github.com/orgs/{}/events'.format(org)
+    resp = requests.get(url)
+    events = resp.json()
+    if latest:
+        events = events[:1]
+    events = [prepare_event(e) for e in events]
+
+    return events
+
+
+def repository_status(request):
+    organization_events = get_org_events()
+    context = {'events': organization_events}
+    return render(request, 'status/repository.html', context)
 
 
 def arar_graph(request):
