@@ -99,12 +99,16 @@ def get_org_events(org=None, latest=False):
     if org is None:
         org = settings.GITHUB_DATA_ORGANIZATION
     url = 'https://api.github.com/orgs/{}/events'.format(org)
-    auth = {'Authentication': settings.GITHUB_DATA_TOKEN}
+    auth = {'Authorization': 'token {}'.format(settings.GITHUB_DATA_TOKEN)}
     resp = requests.get(url, headers=auth)
     events = resp.json()
-    if latest:
-        events = events[:1]
-    events = [prepare_event(e) for e in events]
+    if events:
+        if latest:
+            events = events[:1]
+
+        events = [prepare_event(e) for e in events]
+    else:
+        events = []
 
     return events
 
