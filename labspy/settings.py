@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 DEBUG = False
 
 ALLOWED_HOSTS = ['nmgrl.nmbgmr.nmt.edu', '129.138.12.10']
-
+FORCE_SCRIPT_NAME = '/labs/argon/labspy'
 CRISPY_TEMPLATE_PACK = 'bootstrap'
 
 # Application definition
@@ -129,7 +129,7 @@ TIME_ZONE = 'America/Denver'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/labs/argon/labspy/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "labspy/static"),
 )
