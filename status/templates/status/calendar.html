@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block staticfiles %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'status/graph.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
+{% endblock %}
+
+{% block body %}
+<iframe src="https://calendar.google.com/calendar/embed?src=nmt.edu_i5ji47g5ktj3619f3kbrv6t0dg%40group.calendar.google.com&ctz=America/Denver"
+        style="border: 0" width="800" height="600" frameborder="0" scrolling="no">
+</iframe>
+{% endblock %}

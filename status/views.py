@@ -102,15 +102,23 @@ def get_org_events(org=None, latest=False):
     auth = {'Authorization': 'token {}'.format(settings.GITHUB_DATA_TOKEN)}
     resp = requests.get(url, headers=auth)
     events = resp.json()
-    if events:
-        if latest:
-            events = events[:1]
+    try:
+        if events:
+            if latest:
+                events = events[:1]
 
-        events = [prepare_event(e) for e in events]
-    else:
-        events = []
+            events = [prepare_event(e) for e in events]
+        else:
+            events = []
+    except TypeError:
+        events=[]
 
     return events
+
+
+def calender(request):
+    context = {}
+    return render(request, 'status/calendar.html', context)
 
 
 def repository_status(request):
