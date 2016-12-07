@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'crispy_forms',
     'leaflet',
     'djangobower',
+    'rest_framework'
 
     # local
     'samples',
