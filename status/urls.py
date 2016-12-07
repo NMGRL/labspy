@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-from status import views, analysis_views
+from rest_framework import routers
+
+from status import views, analysis_views, api_views
+
+router = routers.DefaultRouter()
+router.register('devices', api_views.DeviceViewSet)
+router.register('measurements', api_views.MeasurementViewSet)
+router.register('processinfos', api_views.ProcessInfoViewSet)
 
 urlpatterns = [
     url(r'^$', views.index, name='status_index'),
@@ -26,8 +33,13 @@ urlpatterns = [
     url(r'^felix_status/$', views.felix_status, name='felix_status_index'),
     # url(r'^jan_analysis_summary', analysis_views.jan_analysis_summary, name='jan_analysis_summary'),
     url(r'^repository_status/$', views.repository_status, name='repository_status_index'),
-    url(r'^calendar/$', views.calender, name='calendar_index')
+    url(r'^calendar/$', views.calender, name='calendar_index'),
 
+    url(r'^', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+
+    # url(r'^',include(router.urls)),
+    # url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
     #url(r'^(?P<dr>.*)/$', views.graph_view, name='status_graph'),
     # url(r'^material/add/$', views.MaterialEntryView.as_view(), name='material_add'),
     # url(r'^material/(?P<pk>[0-9]+)/$', views.MaterialView.as_view(), name='material_detail'),
