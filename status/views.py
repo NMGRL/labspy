@@ -111,7 +111,7 @@ def get_org_events(org=None, latest=False):
         else:
             events = []
     except TypeError:
-        events=[]
+        events = []
 
     return events
 
@@ -214,8 +214,8 @@ def get_post(request):
     return post, form
 
 
-def make_temp_graph(post, name='Lab Temp.'):
-    return make_timeseries_graph(post, name, 'Temperature', 'Temp ({})')
+def make_temp_graph(post, name='Lab Temp.', title='Temperature'):
+    return make_timeseries_graph(post, name, title, 'Temp ({})')
 
 
 def make_hum_graph(post, name='Lab Hum.'):
@@ -258,3 +258,28 @@ def graph(request):
         context[key] = make_bokeh_graph(get_data(table, post), title, ytitle)
 
     return render(request, 'status/graph.html', context)
+
+
+def all_temps(request):
+    post, form = get_post(request)
+
+    hums = Measurement.objects.filter(process_info__name='Lab Hum.')
+    humidity_units = ProcessInfo.objects.get(name='Lab Hum.').units
+
+    hums2 = Measurement.objects.filter(process_info__name='Lab Hum. 2')
+    humidity_units2 = ProcessInfo.objects.get(name='Lab Hum. 2').units
+
+    context = {'tempgraph': make_temp_graph(post),
+               'humgraph': make_bokeh_graph(get_data(hums, post), 'Humidity', 'Humidity ({})'.format(humidity_units)),
+               'sensehat_hum': make_bokeh_graph(get_data(hums2, post),
+                                                'Humidity 2', 'Humidity ({})'.format(humidity_units2)),
+               'date_selector_form': form}
+
+    for tag, name, title in (('sensehat_temp1', 'Lab Temp. 2', 'Sensehat Temp1'),
+                             ('tprobe_temp3', 'Lab Temp. 3', 'TProbe Temp3'),
+                             ('tprobe_temp4', 'Lab Temp. 4', 'TProbe Temp4'),
+                             ('tprobe_temp5', 'Lab Temp. 5', 'TProbe Temp5'),
+                             ('tprobe_temp6', 'Lab Temp. 6', 'TProbe Temp6')):
+        context[tag] = make_temp_graph(post, name=name, title=title)
+
+    return render(request, 'status/all_temps.html', context)

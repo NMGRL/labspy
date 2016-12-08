@@ -9,34 +9,40 @@
     <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.js"></script>
     {{ tempgraph.js|safe }}
     {{ humgraph.js|safe }}
-    {{ pneugraph.js|safe }}
-    {{ pneugraph2.js|safe }}
-    {{ coolgraph.js|safe }}
-    {{ cfgraph.js|safe }}
+    {{ sensehat_temp1.js|safe }}
+    {{ sensehat_hum.js|safe }}
+    {{ tprobe_temp3.js|safe }}
+    {{ tprobe_temp4.js|safe }}
+    {{ tprobe_temp5.js|safe }}
+    {{ tprobe_temp6.js|safe }}
+
 {% endblock %}
 
 
 {% block body %}
     <div class="container">
-        <form action={% url "status_graph_index" %} method="post">
+        <form action={% url "all_temps_index" %} method="post">
             {% csrf_token %}
             {{ date_selector_form }}
             <input class="btn-primary" type="submit" value="Refresh" />
         </form>
     </div>
-    <a href="/status/all_temps"> All Lab Temperatures</a>
     <table>
         <tr>
             <td><div class="bokeh">{{ tempgraph.div|safe }}</div></td>
             <td><div class="bokeh">{{ humgraph.div|safe }}</div></td>
         </tr>
         <tr>
-            <td><div class="bokeh">{{ pneugraph.div|safe }}</div></td>
-            <td><div class="bokeh">{{ pneugraph2.div|safe }}</div></td>
+            <td><div class="bokeh">{{ sensehat_temp1.div|safe }}</div></td>
+            <td><div class="bokeh">{{ sensehat_hum.div|safe }}</div></td>
         </tr>
         <tr>
-            <td><div class="bokeh">{{ coolgraph.div|safe }}</div></td>
-            <td><div class="bokeh">{{ cfgraph.div|safe }}</div></td>
+            <td><div class="bokeh">{{ tprobe_temp3.div|safe }}</div></td>
+            <td><div class="bokeh">{{ tprobe_temp4.div|safe }}</div></td>
+        </tr>
+        <tr>
+            <td><div class="bokeh">{{ tprobe_temp5.div|safe }}</div></td>
+            <td><div class="bokeh">{{ tprobe_temp6.div|safe }}</div></td>
         </tr>
     </table>
 
