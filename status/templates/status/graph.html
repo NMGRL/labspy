@@ -24,7 +24,7 @@
             <input class="btn-primary" type="submit" value="Refresh" />
         </form>
     </div>
-    <a href="/status/all_temps"> All Lab Temperatures</a>
+    <a href={% url "all_temps_index" %}> All Lab Temperatures</a>
     <table>
         <tr>
             <td><div class="bokeh">{{ tempgraph.div|safe }}</div></td>
