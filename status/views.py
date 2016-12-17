@@ -226,6 +226,10 @@ def make_timeseries_graph(post, name, label, unitlabel):
     pis = ProcessInfo.objects
     vs = Measurement.objects.filter(process_info__name=name)
     units = pis.get(name=name).units
+
+    if label is None:
+        label = pis.get(name=name).graph_title
+
     data = get_data(vs, post)
     return make_bokeh_graph(data, label, unitlabel.format(units))
 
@@ -264,22 +268,32 @@ def all_temps(request):
     post, form = get_post(request)
 
     hums = Measurement.objects.filter(process_info__name='Lab Hum.')
-    humidity_units = ProcessInfo.objects.get(name='Lab Hum.').units
+    pos = ProcessInfo.objects
+    hum = pos.get(name='Lab Hum.')
+    humidity_units = hum.units
 
     hums2 = Measurement.objects.filter(process_info__name='Lab Hum. 2')
-    humidity_units2 = ProcessInfo.objects.get(name='Lab Hum. 2').units
+    hum2 = ProcessInfo.objects.get(name='Lab Hum. 2')
 
-    context = {'tempgraph': make_temp_graph(post),
-               'humgraph': make_bokeh_graph(get_data(hums, post), 'Humidity', 'Humidity ({})'.format(humidity_units)),
+    context = {'tempgraph': make_temp_graph(post, title=None),
+               'humgraph': make_bokeh_graph(get_data(hums, post), hum.graph_title, 'Humidity ({})'.format(
+                   humidity_units)),
                'sensehat_hum': make_bokeh_graph(get_data(hums2, post),
-                                                'Humidity 2', 'Humidity ({})'.format(humidity_units2)),
+                                                hum2.graph_title, 'Humidity ({})'.format(hum2.units)),
                'date_selector_form': form}
 
-    for tag, name, title in (('sensehat_temp1', 'Lab Temp. 2', 'Sensehat Temp1'),
-                             ('tprobe_temp3', 'Lab Temp. 3', 'TProbe Temp3'),
-                             ('tprobe_temp4', 'Lab Temp. 4', 'TProbe Temp4'),
-                             ('tprobe_temp5', 'Lab Temp. 5', 'TProbe Temp5'),
-                             ('tprobe_temp6', 'Lab Temp. 6', 'TProbe Temp6')):
-        context[tag] = make_temp_graph(post, name=name, title=title)
+    # title3 = ProcessInfo.objects.get(name='Lab Temp. 3').graph_title
+    # title4 = ProcessInfo.objects.get(name='Lab Temp. 4').graph_title
+    # title5 = ProcessInfo.objects.get(name='Lab Temp. 5').graph_title
+    # title6 = ProcessInfo.objects.get(name='Lab Temp. 6').graph_title
+
+    for tag, name in (('sensehat_temp1', 'Lab Temp. 2'),
+                             ('tprobe_temp3', 'Lab Temp. 3'),
+                             ('tprobe_temp4', 'Lab Temp. 4'),
+                             ('tprobe_temp5', 'Lab Temp. 5'),
+                             ('tprobe_temp6', 'Lab Temp. 6')):
+
+        obj = pos.get(name=name)
+        context[tag] = make_temp_graph(post, name=name, title=obj.graph_title)
 
     return render(request, 'status/all_temps.html', context)
