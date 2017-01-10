@@ -1,10 +1,10 @@
 {% load staticfiles %}
 
 <script type="text/javascript" src="{% static 'jquery/dist/jquery.js' %}"></script>
-<script src="maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
-<link rel="stylesheet" href="maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="{% static 'nmgrl.css' %}" />
 
 <!-- note that there's also blue.uni-form.css and dark.uni-form.css available if you want to try changing defaults up -->
@@ -12,21 +12,20 @@
 {#<link rel="stylesheet" href="{{ STATIC_URL }}uni_form/default.uni-form.css" type="text/css" />#}
 <!-- uni-form JS library, optional -->
 {#<script src="{{ STATIC_URL }}uni_form/uni-form.jquery.js" type="text/javascript"></script>#}
-
-
+{% block scripts %}{% endblock %}
 {% block staticfiles %}{% endblock %}
 
 <header id="header">
     <div id="bureaulogo">
-        <a href="geoinfo.nmt.edu" title="New Mexico Bureau of Geology And Mineral Resources" class="no-icon">
+        <a href="//geoinfo.nmt.edu" title="New Mexico Bureau of Geology And Mineral Resources" class="no-icon">
             <img src={% static "images/bureau_logo-notext.gif" %} width="100"/>
         </a>
     </div>
     <div id="labspytitle">
         <h1>
-            <a href="geoinfo.nmt.edu/labs/argon">New Mexico Geochronology Research Laboratory</a>
+            <a href="//geoinfo.nmt.edu/labs/argon">New Mexico Geochronology Research Laboratory</a>
         </h1>
-        <h5 ><a href="geoinfo.nmt.edu">New Mexico Bureau of Geology and Mineral Resources</a> </h5>
+        <h5 ><a href="//geoinfo.nmt.edu">New Mexico Bureau of Geology and Mineral Resources</a> </h5>
     </div>
 
     <div>

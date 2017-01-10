@@ -1,11 +1,10 @@
-{% extends "base.html" %}
+{% extends "status/base_graph.html" %}
 
 {% block staticfiles %}
     {% load static %}
 
     <link rel="stylesheet" type="text/css" href="{% static 'status/graph.css' %}" />
-    <link href="cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.css" rel="stylesheet" type="text/css">
-    <script src="cdn.pydata.org/bokeh/release/bokeh-0.10.0.min.js"></script>
+
     {{ decabintempgraph.js|safe }}
     {{ tempgraph.js|safe }}
     {{ trapgraph.js|safe }}
