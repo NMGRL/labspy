@@ -293,7 +293,7 @@ def all_temps(request):
                              ('tprobe_temp5', 'Lab Temp. 5'),
                              ('tprobe_temp6', 'Lab Temp. 6'),
                              ('tprobe_temp7', 'Lab Temp. 7'),
-                             ('noaa_temp', 'Outside Temp.'),
+                             ('noaa_temp', 'Outside Temp'),
                             ):
 
         obj = pos.get(name=name)
