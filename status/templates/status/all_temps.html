@@ -14,6 +14,7 @@
     {{ tprobe_temp5.js|safe }}
     {{ tprobe_temp6.js|safe }}
     {{ tprobe_temp7.js|safe }}
+    {{ noaa_temp.js|safe }}
 
 {% endblock %}
 
@@ -45,6 +46,7 @@
         </tr>
         <tr>
             <td><div class="bokeh">{{ tprobe_temp7.div|safe }}</div></td>
+            <td><div class="bokeh">{{ noaa_temp.div|safe }}</div></td>
         </tr>
     </table>
 
