@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'status/graph.css' %}" />
 
     {{ temp.js|safe }}
-    {{ humg.js|safe }}
+    {{ hum.js|safe }}
     {{ pneu.js|safe }}
     {{ pneu2.js|safe }}
     {{ coolant.js|safe }}
@@ -26,7 +26,7 @@
     <table>
         <tr>
             <td><div class="bokeh">{{ temp.div|safe }}</div></td>
-            <td><div class="bokeh">{{ humdiv|safe }}</div></td>
+            <td><div class="bokeh">{{ hum.div|safe }}</div></td>
         </tr>
         <tr>
             <td><div class="bokeh">{{ pneu.div|safe }}</div></td>

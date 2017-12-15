@@ -258,7 +258,7 @@ def graph(request):
     post, form = get_post(request)
 
     context = {'date_selector_form': form,
-               'tempgraph': make_temp_graph(post)}
+               'temp': make_temp_graph(post)}
     for ctxkey, piname in (('hum', 'Lab Hum.'),
                            ('pneu', 'Pressure'),
                            ('pneu2', 'Pressure2'),
