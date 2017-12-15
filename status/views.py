@@ -324,8 +324,12 @@ def vacuum(request):
 
                           ('ascroll', 'AnalyticalScroll'),
                           ('rscroll', 'RoughingScroll'),
-                          ('jdb', 'JanDecabinPressure')
-                          ):
+                          ('jdb', 'JanDecabinPressure'),
+
+                          ('fig', 'FirstStageIonGauge'),
+                          ('fsd', 'FirstStageDiaphram'),
+                          ('fud', 'FurnaceDiaphram')):
+
         obj = Measurement.objects.filter(process_info__name=pikey)
         po = ProcessInfo.objects.get(name=pikey)
         data = get_data(obj, post)

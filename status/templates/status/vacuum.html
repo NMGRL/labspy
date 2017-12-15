@@ -14,6 +14,9 @@
     {{ ascroll.js|safe }}
     {{ rscroll.js|safe }}
     {{ jdb.js|safe }}
+    {{ fig.js|safe }}
+    {{ fsd.js|safe }}
+    {{ fud.js|safe }}
 
 {% endblock %}
 
@@ -53,6 +56,17 @@
             <td><div class="bokeh">{{ jdb.div|safe }}</div></td>
         </tr>
     </table>
+
+    <h1>Furnace</h1>
+    <table>
+        <tr>
+            <td><div class="bokeh">{{ fig.div|safe }}</div></td>
+            <td><div class="bokeh">{{ fsd.div|safe }}</div></td>
+            <td><div class="bokeh">{{ fud.div|safe }}</div></td>
+        </tr>
+    </table>
+
+
 
 
 {#    auto reload script#}
