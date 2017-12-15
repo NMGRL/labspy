@@ -265,7 +265,7 @@ def graph(request):
                            ('coolant', 'Coolant Temp.'),
                            ('coldfinger', 'ColdFinger Temp.')):
         data = Measurement.objects.filter(process_info__name=piname)
-        pi = ProcessInfo.get(name=piname)
+        pi = ProcessInfo.objects.get(name=piname)
         context[ctxkey] = make_bokeh_graph(data, pi.graph_title, pi.ytitle)
 
     #
