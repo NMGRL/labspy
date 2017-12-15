@@ -317,20 +317,18 @@ def vacuum(request):
     for ctxkey, pikey in (('big', 'BoneIonGauge'),
                           ('mbig', 'MicroBoneIonGauge'),
                           ('rig', 'RoughingIonGauge'),
+
                           ('btank', 'BoneTank'),
                           ('mbtank', 'MicroBoneTank'),
-                          ('rtank', 'RoughingTank')
+                          ('rtank', 'RoughingTank'),
+
+                          ('ascroll', 'AnalyticalScroll'),
+                          ('rscroll', 'RoughingScroll'),
+                          ('jdb', 'JanDecabinPressure')
                           ):
         obj = Measurement.objects.filter(process_info__name=pikey)
         po = ProcessInfo.objects.get(name=pikey)
         data = get_data(obj, post)
         context[ctxkey] = make_bokeh_graph(data, po.graph_title, ytitle)
-
-    # context = {'tempgraph': make_temp_graph(post, title=None),
-    #            'humgraph': make_bokeh_graph(get_data(hums, post), hum.graph_title, 'Humidity ({})'.format(
-    #                humidity_units)),
-    #            'sensehat_hum': make_bokeh_graph(get_data(hums2, post),
-    #                                             hum2.graph_title, 'Humidity ({})'.format(hum2.units)),
-    #            'date_selector_form': form}
 
     return render(request, 'status/vacuum.html', context)

@@ -11,6 +11,9 @@
     {{ btank.js|safe }}
     {{ mbtank.js|safe }}
     {{ rtank.js|safe }}
+    {{ ascroll.js|safe }}
+    {{ bscroll.js|safe }}
+    {{ jdb.js|safe }}
 
 {% endblock %}
 
@@ -33,12 +36,21 @@
         </tr>
     </table>
 
-    <h1>Buffer Tank</h1>
+    <h1>Buffer Tanks</h1>
     <table>
         <tr>
             <td><div class="bokeh">{{ btank.div|safe }}</div></td>
             <td><div class="bokeh">{{ mbtank.div|safe }}</div></td>
             <td><div class="bokeh">{{ rtank.div|safe }}</div></td>
+        </tr>
+    </table>
+
+    <h1>Misc.</h1>
+    <table>
+        <tr>
+            <td><div class="bokeh">{{ ascroll.div|safe }}</div></td>
+            <td><div class="bokeh">{{ rscroll.div|safe }}</div></td>
+            <td><div class="bokeh">{{ jdb.div|safe }}</div></td>
         </tr>
     </table>
 
