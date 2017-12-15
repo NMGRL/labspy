@@ -288,14 +288,13 @@ def all_temps(request):
     # title6 = ProcessInfo.objects.get(name='Lab Temp. 6').graph_title
 
     for tag, name in (('sensehat_temp1', 'Lab Temp. 2'),
-                             ('tprobe_temp3', 'Lab Temp. 3'),
-                             ('tprobe_temp4', 'Lab Temp. 4'),
-                             ('tprobe_temp5', 'Lab Temp. 5'),
-                             ('tprobe_temp6', 'Lab Temp. 6'),
-                             ('tprobe_temp7', 'Lab Temp. 7'),
-                             ('noaa_temp', 'Outside Temp'),
-                            ):
-
+                      ('tprobe_temp3', 'Lab Temp. 3'),
+                      ('tprobe_temp4', 'Lab Temp. 4'),
+                      ('tprobe_temp5', 'Lab Temp. 5'),
+                      ('tprobe_temp6', 'Lab Temp. 6'),
+                      ('tprobe_temp7', 'Lab Temp. 7'),
+                      ('noaa_temp', 'Outside Temp'),
+                      ):
         obj = pos.get(name=name)
         context[tag] = make_temp_graph(post, name=name, title=obj.graph_title)
 
@@ -316,8 +315,12 @@ def vacuum(request):
     context = {'date_selector_form': form}
     ytitle = 'Pressure (torr)'
     for ctxkey, pikey in (('big', 'BoneIonGauge'),
-                                  ('mbig', 'MicroBoneIonGauge'),
-                                  ('rig', 'RoughingIonGauge')):
+                          ('mbig', 'MicroBoneIonGauge'),
+                          ('rig', 'RoughingIonGauge'),
+                          ('btank', 'BoneTank'),
+                          ('mbtank', 'MicroBoneTank'),
+                          ('rtank', 'RoughingTank')
+                          ):
         obj = Measurement.objects.filter(process_info__name=pikey)
         po = ProcessInfo.objects.get(name=pikey)
         data = get_data(obj, post)
