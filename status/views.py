@@ -266,7 +266,7 @@ def graph(request):
                            ('coldfinger', 'ColdFinger Temp.')):
         data = Measurement.objects.filter(process_info__name=piname)
         pi = ProcessInfo.objects.get(name=piname)
-        context[ctxkey] = make_bokeh_graph(data, pi.graph_title, pi.ytitle)
+        context[ctxkey] = make_bokeh_graph(get_data(data, post), pi.graph_title, pi.ytitle)
 
     #
     # s = (('humgraph', hums, 'Humidity', 'Humidity ({})'.format(humidity_units)),
