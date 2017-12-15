@@ -17,6 +17,7 @@ class ProcessInfo(models.Model):
     units = models.CharField(max_length=80)
     device = models.ForeignKey(Device)
     graph_title = models.CharField(max_length=80, default='')
+    ytitle = models.CharField(max_length=80, default='')
 
     def __str__(self):
         return '{} {} ({})'.format(self.device.name, self.name, self.units)

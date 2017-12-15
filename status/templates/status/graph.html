@@ -5,12 +5,12 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'status/graph.css' %}" />
 
-    {{ tempgraph.js|safe }}
-    {{ humgraph.js|safe }}
-    {{ pneugraph.js|safe }}
-    {{ pneugraph2.js|safe }}
-    {{ coolgraph.js|safe }}
-    {{ cfgraph.js|safe }}
+    {{ temp.js|safe }}
+    {{ humg.js|safe }}
+    {{ pneu.js|safe }}
+    {{ pneu2.js|safe }}
+    {{ coolant.js|safe }}
+    {{ coldfinger.js|safe }}
 {% endblock %}
 
 
@@ -25,16 +25,16 @@
     <a href={% url "all_temps_index" %}> All Lab Temperatures</a>
     <table>
         <tr>
-            <td><div class="bokeh">{{ tempgraph.div|safe }}</div></td>
-            <td><div class="bokeh">{{ humgraph.div|safe }}</div></td>
+            <td><div class="bokeh">{{ temp.div|safe }}</div></td>
+            <td><div class="bokeh">{{ humdiv|safe }}</div></td>
         </tr>
         <tr>
-            <td><div class="bokeh">{{ pneugraph.div|safe }}</div></td>
-            <td><div class="bokeh">{{ pneugraph2.div|safe }}</div></td>
+            <td><div class="bokeh">{{ pneu.div|safe }}</div></td>
+            <td><div class="bokeh">{{ pneu2.div|safe }}</div></td>
         </tr>
         <tr>
-            <td><div class="bokeh">{{ coolgraph.div|safe }}</div></td>
-            <td><div class="bokeh">{{ cfgraph.div|safe }}</div></td>
+            <td><div class="bokeh">{{ coolant.div|safe }}</div></td>
+            <td><div class="bokeh">{{ coldfinger.div|safe }}</div></td>
         </tr>
     </table>
 

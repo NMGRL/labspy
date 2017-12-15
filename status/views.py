@@ -235,31 +235,47 @@ def make_timeseries_graph(post, name, label, unitlabel):
 
 
 def graph(request):
-    hums = Measurement.objects.filter(process_info__name='Lab Hum.')
-    cfinger = Measurement.objects.filter(process_info__name='ColdFinger Temp.')
-    coolant = Measurement.objects.filter(process_info__name='Coolant Temp.')
-    pneumatic = Measurement.objects.filter(process_info__name='Pressure')
-    pneumatic2 = Measurement.objects.filter(process_info__name='Pressure2')
-
-    pis = ProcessInfo.objects
-    humidity_units = pis.get(name='Lab Hum.').units
-    coolant_units = pis.get(name='Coolant Temp.').units
-    coldfinger_units = pis.get(name='ColdFinger Temp.').units
-    pneumatic_units = pis.get(name='Pressure').units
-    pneumatic2_units = pis.get(name='Pressure2').units
-
+    # hums = Measurement.objects.filter(process_info__name='Lab Hum.')
+    # cfinger = Measurement.objects.filter(process_info__name='ColdFinger Temp.')
+    # coolant = Measurement.objects.filter(process_info__name='Coolant Temp.')
+    # pneumatic = Measurement.objects.filter(process_info__name='Pressure')
+    # pneumatic2 = Measurement.objects.filter(process_info__name='Pressure2')
+    #
+    # pis = ProcessInfo.objects
+    # humidity_units = pis.get(name='Lab Hum.').units
+    # coolant_units = pis.get(name='Coolant Temp.').units
+    # coldfinger_units = pis.get(name='ColdFinger Temp.').units
+    #
+    # pi = pis.get(name='Pressure')
+    # pi2 = pis.get(name='Pressure2')
+    #
+    # pneumatic_units = pi.units
+    # pneumatic2_units = pi2.units
+    #
+    # ptitle = pi.graph_title
+    # p2title = pi2.graph_title
+    #
     post, form = get_post(request)
 
     context = {'date_selector_form': form,
                'tempgraph': make_temp_graph(post)}
+    for ctxkey, piname in (('hum', 'Lab Hum.'),
+                           ('pneu', 'Pressure'),
+                           ('pneu2', 'Pressure2'),
+                           ('coolant', 'Coolant Temp.'),
+                           ('coldfinger', 'ColdFinger Temp.')):
+        data = Measurement.objects.filter(process_info__name=piname)
+        pi = ProcessInfo.get(name=piname)
+        context[ctxkey] = make_bokeh_graph(data, pi.graph_title, pi.ytitle)
 
-    s = (('humgraph', hums, 'Humidity', 'Humidity ({})'.format(humidity_units)),
-         ('pneugraph', pneumatic, 'Pneumatics (Lab)', 'Pressure ({})'.format(pneumatic_units)),
-         ('pneugraph2', pneumatic2, 'Pneumatics (Building)', 'Pressure ({})'.format(pneumatic2_units)),
-         ('coolgraph', coolant, 'Coolant', 'Temp ({})'.format(coolant_units)),
-         ('cfgraph', cfinger, 'ColdFinger', 'Temp ({})'.format(coldfinger_units)))
-    for key, table, title, ytitle in s:
-        context[key] = make_bokeh_graph(get_data(table, post), title, ytitle)
+    #
+    # s = (('humgraph', hums, 'Humidity', 'Humidity ({})'.format(humidity_units)),
+    #      ('pneugraph', pneumatic, ptitle, 'Pressure ({})'.format(pneumatic_units)),
+    #      ('pneugraph2', pneumatic2, p2title, 'Pressure ({})'.format(pneumatic2_units)),
+    #      ('coolgraph', coolant, 'Coolant', 'Temp ({})'.format(coolant_units)),
+    #      ('cfgraph', cfinger, 'ColdFinger', 'Temp ({})'.format(coldfinger_units)))
+    # for key, table, title, ytitle in s:
+    #     context[key] = make_bokeh_graph(get_data(table, post), title, ytitle)
 
     return render(request, 'status/graph.html', context)
 
@@ -329,7 +345,6 @@ def vacuum(request):
                           ('fig', 'FirstStageIonGauge'),
                           ('fsd', 'FirstStageDiaphram'),
                           ('fud', 'FurnaceDiaphram')):
-
         obj = Measurement.objects.filter(process_info__name=pikey)
         po = ProcessInfo.objects.get(name=pikey)
         data = get_data(obj, post)
