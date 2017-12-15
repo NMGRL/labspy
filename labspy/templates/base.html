@@ -36,17 +36,10 @@
             <li><a href={% url "status_graph_index" %}>Laboratory Graphs</a></li>
             <li><a href={% url "jan_status_index" %}>Jan</a></li>
             <li><a href={% url "felix_status_index" %}>Felix</a></li>
-            <li><a href={% url "it_index" %}>IT</a></li>
+            <li><a href={% url "vacuum_pressure_index" %}>Vacuum</a></li>
             <li><a href={% url "repository_status_index" %}>Repositories</a>
             <li><a href={% url "calendar_index" %}>Calendar</a>
             </li>
-
-{#            <li><a href={% url "arar_graph_index" %}>ArArGraphs</a></li>#}
-{#            <li><a href={% url "importer_index" %}>Importer</a></li>#}
-{#            <li><a href={% url "sample_index" %}>Samples</a></li>#}
-{#            <li><a href={% url "people" %}>People</a></li>#}
-{#            <li><a href={% url "hardware" %}>Hardware</a></li>#}
-{#            <li><a href={% url "software" %}>Software</a></li>#}
         </ul>
     </nav>
             <script type="text/javascript">
@@ -55,9 +48,7 @@
 });
 
 function changeClass(e) {
-{#    e.stopPropagation();#}
-{#    e.preventBubble();#}
-{#    e.preventDefault();#}
+
     $('#sitenav li a').removeClass('current');
     $(this).addClass('current');
 }
@@ -69,35 +60,5 @@ function changeClass(e) {
 
 {% endblock %}
 
-{#      <div id="nmt-footer">#}
-{#        <p>We are a research and service division of:</p>#}
-{#        <a href="http://www.nmt.edu" title="New Mexico Institute of Mining &amp; Technology" class="no-icon"><img src={% static "images/nmtlogo-small.gif" %} width="150" height="53"/></a>#}
-{#      </div>#}
-{#      <div id="comments" style="clear:both;">#}
-{#        <script type="text/javascript">#}
-{#	var address = 'webmaster';#}
-{#	var domain = '&#110;&#109;&#98;&#103;&#46;&#110;&#109;&#116;&#46;&#101;&#100;&#117;';#}
-{#document.write('<a h'+'ref="'+'ma'+'il'+'to:'+address+'&#64;'+domain+'"title="Send E-mail"><img src="{% static "images/icon-letter.png" %}" width="30" height="21" alt="Email us!"><br>We welcome your comments.<\/a>');#}
-{#	</script>#}
-{#        <noscript>#}
-{#        <div><a href="/need_javascript.html"><img src="{% static "images/icon-letter.png" %}" title="Email link requires javascript" alt="envelope" width="30" height="21"><br>#}
-{#          We welcome your comments:<br>#}
-{#          <img src="/images/webmaster-email.gif" alt="email us" width="161" height="14" title="Email link requires javascript"></a> </div>#}
-{#        </noscript>#}
-{#      </div>#}
-{#      <div id="terms">#}
-{#        <div class="no-print" style="margin-bottom:0.25em;" ><small><a href="/about/termsofuse.html">Terms of Use</a> | <a href="/about/accessibility.html">Accessibility</a></small> </div>#}
-{#        <div style="font-size:0.625em;">Revised: <!-- #BeginDate format:Sw1 -->21 July, 2015<!-- #EndDate --></div>#}
-{#        <div><small> <a href="/publications/about/copyright.html"> &copy;#}
-{#          <script >var cur = '2007'; var year = new Date(); if(cur == year.getFullYear()) year = year.getFullYear(); else year = cur + '-' + year.getFullYear(); document.write(year);</script>#}
-{#          <noscript>#}
-{#          2007#}
-{#          </noscript>#}
-{#          <abbr title="New Mexico Bureau of Geology &amp; Mineral Resources">NMBGMR</abbr> or as specified</a></small></div>#}
-{#      </div>#}
-{#      <div class="return2top">#}
-{#        <p><a href="#top">Return to Top of Page</a></p>#}
-{#      </div>#}
-{#    </footer>#}
 
 

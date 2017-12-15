@@ -1,0 +1,54 @@
+{% extends "status/base_graph.html" %}
+
+{% block staticfiles %}
+    {% load static %}
+
+    <link rel="stylesheet" type="text/css" href="{% static 'status/graph.css' %}" />
+
+    {{ big.js|safe }}
+    {{ mbig.js|safe }}
+    {{ rig.js|safe }}
+
+{% endblock %}
+
+
+{% block body %}
+    <div class="container">
+        <form action={% url "vacuum_pressure_index" %} method="post">
+            {% csrf_token %}
+            {{ date_selector_form }}
+            <input class="btn-primary" type="submit" value="Refresh" />
+        </form>
+    </div>
+    <table>
+        <tr>
+            <td><div class="bokeh">{{ big.div|safe }}</div></td>
+            <td><div class="bokeh">{{ mbig.div|safe }}</div></td>
+            <td><div class="bokeh">{{ rig.div|safe }}</div></td>
+        </tr>
+{#        <tr>#}
+{#            <td><div class="bokeh">{{ sensehat_temp1.div|safe }}</div></td>#}
+{#            <td><div class="bokeh">{{ sensehat_hum.div|safe }}</div></td>#}
+{#        </tr>#}
+{#        <tr>#}
+{#            <td><div class="bokeh">{{ tprobe_temp3.div|safe }}</div></td>#}
+{#            <td><div class="bokeh">{{ tprobe_temp4.div|safe }}</div></td>#}
+{#        </tr>#}
+{#        <tr>#}
+{#            <td><div class="bokeh">{{ tprobe_temp5.div|safe }}</div></td>#}
+{#            <td><div class="bokeh">{{ tprobe_temp6.div|safe }}</div></td>#}
+{#        </tr>#}
+{#        <tr>#}
+{#            <td><div class="bokeh">{{ tprobe_temp7.div|safe }}</div></td>#}
+{#            <td><div class="bokeh">{{ noaa_temp.div|safe }}</div></td>#}
+{#        </tr>#}
+    </table>
+
+{#    auto reload script#}
+    <script type='text/javascript'>
+        setTimeout(function(){
+   window.location.reload(0);
+        }, 60000);
+    </script>
+
+{% endblock %}

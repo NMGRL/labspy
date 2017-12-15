@@ -300,3 +300,34 @@ def all_temps(request):
         context[tag] = make_temp_graph(post, name=name, title=obj.graph_title)
 
     return render(request, 'status/all_temps.html', context)
+
+
+def vacuum(request):
+    post, form = get_post(request)
+
+    # hums = Measurement.objects.filter(process_info__name='Lab Hum.')
+    # pos = ProcessInfo.objects
+    # hum = pos.get(name='Lab Hum.')
+    # humidity_units = hum.units
+    #
+    # hums2 = Measurement.objects.filter(process_info__name='Lab Hum. 2')
+    # hum2 = ProcessInfo.objects.get(name='Lab Hum. 2')
+
+    context = {'date_selector_form': form}
+    ytitle = 'Pressure (torr)'
+    for ctxkey, pikey in (('big', 'BoneIonGauge'),
+                                  ('mbig', 'MicroBoneIonGauge'),
+                                  ('rig', 'RoughingIonGauge')):
+        obj = Measurement.objects.filter(process_info__name=pikey)
+        po = ProcessInfo.objects.get(name=pikey)
+        data = get_data(obj, post)
+        context[ctxkey] = make_bokeh_graph(data, po.graph_title, ytitle)
+
+    # context = {'tempgraph': make_temp_graph(post, title=None),
+    #            'humgraph': make_bokeh_graph(get_data(hums, post), hum.graph_title, 'Humidity ({})'.format(
+    #                humidity_units)),
+    #            'sensehat_hum': make_bokeh_graph(get_data(hums2, post),
+    #                                             hum2.graph_title, 'Humidity ({})'.format(hum2.units)),
+    #            'date_selector_form': form}
+
+    return render(request, 'status/vacuum.html', context)
