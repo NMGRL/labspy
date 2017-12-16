@@ -181,7 +181,7 @@ def make_bokeh_graph(data, title, ytitle):
     if data:
         xs, ys = zip(*[(m.pub_date, m.value) for m in data])
         p.line(xs, ys, line_width=2)
-        p.line(xs, smooth(ys), line_color='yellow', line_dash='dashed')
+        p.line(xs, smooth(ys), line_color='green', line_dash='dashed')
 
     p.xaxis.axis_label = 'Time'
     p.yaxis.axis_label = ytitle
