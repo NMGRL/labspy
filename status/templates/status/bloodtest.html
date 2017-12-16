@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block staticfiles %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'status/graph.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
+{% endblock %}
+
+
+{% block body %}
+
+    <table border="1px" class="paleblue">
+    <tr>
+        <th>Name</th>
+        <th>Min</th>
+        <th>Max</th>
+        <th>Mean</th>
+        <th>StDev</th>
+        <th>Latest</th>
+        <th>Timestamp</th>
+    </tr>
+    {% for row in bloodtests %}
+        <tr>
+            <td>{{ row.name }}</td>
+            <td>{{ row.min|floatformat:2 }}</td>
+            <td>{{ row.max|floatformat:2 }}</td>
+            <td>{{ row.mean|floatformat:2 }}</td>
+            <td>{{ row.std|floatformat:2 }}</td>
+            <td>{{ row.latest|floatformat:2 }}</td>
+            <td>{{ row.timestamp }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+
+{% endblock %}

@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^$', views.index, name='status_index'),
     url(r'^graph/$', views.graph, name='status_graph_index'),
     url(r'^vacuum/$', views.vacuum, name='vacuum_pressure_index'),
+    url(r'^bloodtest/$', views.bloodtest, name='bloodtest_index'),
     url(r'^arar_graph/$', views.arar_graph, name='arar_graph_index'),
     url(r'^jan_status/$', views.jan_status, name='jan_status_index'),
     url(r'^felix_status/$', views.felix_status, name='felix_status_index'),

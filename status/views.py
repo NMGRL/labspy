@@ -4,36 +4,16 @@ from datetime import datetime, timedelta
 import dateutil
 import requests
 from dateutil import tz
-from django import forms
 from django.conf import settings
-from django.forms import Form
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
 
 # Create your views here.
+from numpy import array
+
 from status.models import Measurement, ProcessInfo, Analysis, Experiment
 from status.view_helpers import make_current, connection_timestamp, make_connections, make_ideogram, \
-    make_bokeh_graph, make_spectrometer_dict, get_data
-
-DS = [{"hours": 1}, {'hours': 24}, {'weeks': 1}, {'weeks': 4}]
-FMTS = ['%M:%S', '%H:%M', '%m/%d', '%m/%d']
-
-
-class DateSelectorForm(Form):
-    date_range_name = forms.ChoiceField(label='', choices=(('0', 'Last Hour'),
-                                                           ('1', 'Last Day'),
-                                                           ('2', 'Last Week'),
-                                                           ('3', 'Last Month')),
-                                        initial='1')
-
-
-def get_client_ip(request):
-    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(',')[0]
-    else:
-        ip = request.META.get('REMOTE_ADDR')
-    return ip
+    make_bokeh_graph, make_spectrometer_dict, get_data, get_post, get_client_ip
 
 
 # views
@@ -196,22 +176,52 @@ def render_spectrometer_status(request, name, oname):
     return render(request, 'status/{}.html'.format(template_name), context)
 
 
-def get_post(request):
-    dt = None
-    if request.method == 'POST':
-        form = DateSelectorForm(request.POST)
-        if form.is_valid():
-            d = int(form.cleaned_data['date_range_name'])
-            dt = timedelta(**DS[d])
-    else:
-        form = DateSelectorForm()
-
-    if not dt:
-        dt = timedelta(**DS[1])
-
+def bloodtest(request):
     now = datetime.now()
-    post = (now - dt)
-    return post, form
+    post = now - timedelta(weeks=400)
+    context = {}
+    bs = []
+    for name, piname in (('Lab Temp.', 'Lab Temp.'),
+                         ('Lab Hum.', 'Lab Hum.'),
+                         ('Lab Pressure', 'Pressure'),
+                         ('Building Pressure', 'Pressure2'),
+                         ('Coolant Temp.', 'Coolant Temp.'),
+                         ('ColdFinger Temp.', 'ColdFinger Temp.'),
+                         ('BoneIonGauge', 'BoneIonGauge'),
+                         ('MicroBoneIonGauge', 'MicroBoneIonGauge'),
+                         ('RoughingIonGauge', 'RoughingIonGauge'),):
+        table = Measurement.objects.filter(process_info__name=piname)
+        data = table.filter(pub_date__gte=post).all()
+
+        bt = calc_bloodtest(name, data)
+        bs.append(bt)
+
+    context['bloodtests'] = bs
+    return render(request, 'status/bloodtest.html', context)
+
+
+def calc_bloodtest(name, data):
+    mi, ma, mean, std, latest, timestamp = 0, 0, 0, 0, 0, ''
+    if data:
+        l = data.last()
+        latest = l.value
+        timestamp = l.pub_date
+
+        data = array([di.value for di in data])
+        mi = data.min()
+        ma = data.max()
+        mean = data.mean()
+        std = data.std()
+
+    bd = {'name': name,
+          'min': mi,
+          'max': ma,
+          'mean': mean,
+          'std': std,
+          'latest': latest,
+          'timestamp': timestamp}
+
+    return bd
 
 
 def make_temp_graph(post, name='Lab Temp.', title='Temperature'):
@@ -235,26 +245,6 @@ def make_timeseries_graph(post, name, label, unitlabel):
 
 
 def graph(request):
-    # hums = Measurement.objects.filter(process_info__name='Lab Hum.')
-    # cfinger = Measurement.objects.filter(process_info__name='ColdFinger Temp.')
-    # coolant = Measurement.objects.filter(process_info__name='Coolant Temp.')
-    # pneumatic = Measurement.objects.filter(process_info__name='Pressure')
-    # pneumatic2 = Measurement.objects.filter(process_info__name='Pressure2')
-    #
-    # pis = ProcessInfo.objects
-    # humidity_units = pis.get(name='Lab Hum.').units
-    # coolant_units = pis.get(name='Coolant Temp.').units
-    # coldfinger_units = pis.get(name='ColdFinger Temp.').units
-    #
-    # pi = pis.get(name='Pressure')
-    # pi2 = pis.get(name='Pressure2')
-    #
-    # pneumatic_units = pi.units
-    # pneumatic2_units = pi2.units
-    #
-    # ptitle = pi.graph_title
-    # p2title = pi2.graph_title
-    #
     post, form = get_post(request)
 
     context = {'date_selector_form': form,
@@ -267,15 +257,6 @@ def graph(request):
         data = Measurement.objects.filter(process_info__name=piname)
         pi = ProcessInfo.objects.get(name=piname)
         context[ctxkey] = make_bokeh_graph(get_data(data, post), pi.graph_title, pi.ytitle)
-
-    #
-    # s = (('humgraph', hums, 'Humidity', 'Humidity ({})'.format(humidity_units)),
-    #      ('pneugraph', pneumatic, ptitle, 'Pressure ({})'.format(pneumatic_units)),
-    #      ('pneugraph2', pneumatic2, p2title, 'Pressure ({})'.format(pneumatic2_units)),
-    #      ('coolgraph', coolant, 'Coolant', 'Temp ({})'.format(coolant_units)),
-    #      ('cfgraph', cfinger, 'ColdFinger', 'Temp ({})'.format(coldfinger_units)))
-    # for key, table, title, ytitle in s:
-    #     context[key] = make_bokeh_graph(get_data(table, post), title, ytitle)
 
     return render(request, 'status/graph.html', context)
 
@@ -298,11 +279,6 @@ def all_temps(request):
                                                 hum2.graph_title, 'Humidity ({})'.format(hum2.units)),
                'date_selector_form': form}
 
-    # title3 = ProcessInfo.objects.get(name='Lab Temp. 3').graph_title
-    # title4 = ProcessInfo.objects.get(name='Lab Temp. 4').graph_title
-    # title5 = ProcessInfo.objects.get(name='Lab Temp. 5').graph_title
-    # title6 = ProcessInfo.objects.get(name='Lab Temp. 6').graph_title
-
     for tag, name in (('sensehat_temp1', 'Lab Temp. 2'),
                       ('tprobe_temp3', 'Lab Temp. 3'),
                       ('tprobe_temp4', 'Lab Temp. 4'),
@@ -320,16 +296,9 @@ def all_temps(request):
 def vacuum(request):
     post, form = get_post(request)
 
-    # hums = Measurement.objects.filter(process_info__name='Lab Hum.')
-    # pos = ProcessInfo.objects
-    # hum = pos.get(name='Lab Hum.')
-    # humidity_units = hum.units
-    #
-    # hums2 = Measurement.objects.filter(process_info__name='Lab Hum. 2')
-    # hum2 = ProcessInfo.objects.get(name='Lab Hum. 2')
-
     context = {'date_selector_form': form}
     ytitle = 'Pressure (torr)'
+    bs = []
     for ctxkey, pikey in (('big', 'BoneIonGauge'),
                           ('mbig', 'MicroBoneIonGauge'),
                           ('rig', 'RoughingIonGauge'),
@@ -349,5 +318,10 @@ def vacuum(request):
         po = ProcessInfo.objects.get(name=pikey)
         data = get_data(obj, post)
         context[ctxkey] = make_bokeh_graph(data, po.graph_title, ytitle)
+
+        bt = calc_bloodtest(pikey, data)
+        bs.append(bt)
+
+    context['bloodtests'] = bs
 
     return render(request, 'status/vacuum.html', context)

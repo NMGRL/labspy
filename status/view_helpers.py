@@ -21,8 +21,9 @@ import time
 from collections import namedtuple
 
 import flot
-from datetime import datetime
-from numpy import array, histogram, argmax
+from datetime import datetime, timedelta
+from django import forms
+from numpy import array, histogram, argmax, hanning, ones, asarray, r_, convolve
 from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.plotting import figure
 from bokeh.resources import CDN
@@ -34,14 +35,69 @@ from status.models import Connections, Measurement
 # bokeh graph
 DataPoint = namedtuple('DataPoint', 'pub_date value')
 
+DS = [{"hours": 1}, {'hours': 24}, {'weeks': 1}, {'weeks': 4}]
+FMTS = ['%M:%S', '%H:%M', '%m/%d', '%m/%d']
+
+
+class DateSelectorForm(forms.Form):
+    date_range_name = forms.ChoiceField(label='', choices=(('0', 'Last Hour'),
+                                                           ('1', 'Last Day'),
+                                                           ('2', 'Last Week'),
+                                                           ('3', 'Last Month')),
+                                        initial='1')
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+
+def get_post(request):
+    dt = None
+    if request.method == 'POST':
+        form = DateSelectorForm(request.POST)
+        if form.is_valid():
+            d = int(form.cleaned_data['date_range_name'])
+            dt = timedelta(**DS[d])
+    else:
+        form = DateSelectorForm()
+
+    if not dt:
+        dt = timedelta(**DS[1])
+
+    now = datetime.now()
+    post = (now - dt)
+    return post, form
 
 def get_data(table, post):
     data = table.filter(pub_date__gte=post).all()
-    if not data or len(data)==1:
+    if not data or len(data) == 1:
         v = table.order_by('pub_date').last()
         if v:
             data = [v, DataPoint(datetime.now(), v.value)]
     return data
+
+
+def smooth(x, window_len=11, window='flat'):
+    x = asarray(x)
+    s = r_[2 * x[0] - x[window_len - 1::-1], x, 2 * x[-1] - x[-1:-window_len:-1]]
+
+    if window == 'flat':  # moving average
+        w = ones(window_len, 'd')
+    else:
+        if window == 'hanning':
+            w = hanning(window_len)
+        # mod = __import__('numpy', fromlist=[window])
+        # func = getattr(mod, window)
+        # w = func(window_len)
+        # w = eval('np.' + window + '(window_len)')
+
+    y = convolve(w / w.sum(), s, mode='same')
+    return y[window_len:-window_len + 1]
 
 
 def make_bokeh_graph(data, title, ytitle):
@@ -51,9 +107,10 @@ def make_bokeh_graph(data, title, ytitle):
                tools='pan,box_zoom,reset,save')
     if data:
         xs, ys = zip(*[(m.pub_date, m.value) for m in data])
-    else:
-        xs, ys = [], []
-    p.line(xs, ys)
+        p.line(xs, ys)
+
+        p.line(xs, smooth(ys))
+
     p.xaxis.axis_label = 'Time'
     p.yaxis.axis_label = ytitle
     return _make_bokeh_components(p)
