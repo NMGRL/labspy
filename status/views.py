@@ -319,7 +319,7 @@ def vacuum(request):
         data = get_data(obj, post)
         context[ctxkey] = make_bokeh_graph(data, po.graph_title, ytitle)
 
-        bt = calc_bloodtest(pikey, data)
+        bt = calc_bloodtest(pikey, data.all())
         bs.append(bt)
 
     context['bloodtests'] = bs
