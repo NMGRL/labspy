@@ -27,7 +27,7 @@
             <td>{{ row.mean|floatformat:2 }}</td>
             <td>{{ row.std|floatformat:2 }}</td>
             <td>{{ row.latest|floatformat:2 }}</td>
-            <td>{{ row.timestamp }}</td>
+            <td>{{ row.timestamp|date:"SHORT_DATETIME_FORMAT" }}</td>
         </tr>
     {% endfor %}
     </table>

@@ -18,6 +18,7 @@
 # ============= standard library imports ========================
 import string
 import time
+import math
 from collections import namedtuple
 
 import flot
@@ -45,6 +46,76 @@ class DateSelectorForm(forms.Form):
                                                            ('2', 'Last Week'),
                                                            ('3', 'Last Month')),
                                         initial='1')
+
+
+def floatfmt(f, n=4, s=4, max_width=None, default='NaN', use_scientific=True):
+    """
+        f: value to format
+        n: number of sig figs
+
+        use scientific notation
+        if f<10^-n (e.g n=#.## f=0.00001)
+        or
+        f>10^(s+1) (e.g  s=### f=3001)
+
+    """
+    if isinstance(f, str):
+        return f
+    if f is None:
+        return default
+
+    absf = abs(f)
+    if absf < 1e-20:
+        v = '0.0'
+    else:
+        if absf < math.pow(10, -n) or absf > math.pow(10, s + 1):
+            if use_scientific:
+                fmt = '{{:0.{}E}}'.format(s)
+            else:
+                if absf < math.pow(10, s + 1):
+                    # f = Decimal(f)
+                    # n = int(math.ceil(abs(math.log10(absf))))
+                    n = int(round(abs(math.log10(absf))))
+
+                fmt = '{{:0.{}f}}'.format(n)
+
+        else:
+            fmt = '{{:0.{}f}}'.format(n)
+
+        v = fmt.format(f)
+        if max_width:
+            if len(v) > max_width:
+                v = v[:max_width]
+
+    return v
+
+
+def calc_bloodtest(name, data):
+    mi, ma, mean, std, latest, timestamp = 0, 0, 0, 0, 0, ''
+    if data:
+        if isinstance(data, list):
+            la = data[-1]
+        else:
+            la = data.last()
+
+        latest = la.value
+        timestamp = la.pub_date
+
+        data = array([di.value for di in data])
+        mi = data.min()
+        ma = data.max()
+        mean = data.mean()
+        std = data.std()
+
+    bd = {'name': name,
+          'min': floatfmt(mi),
+          'max': floatfmt(ma),
+          'mean': floatfmt(mean),
+          'std': floatfmt(std),
+          'latest': floatfmt(latest),
+          'timestamp': timestamp}
+
+    return bd
 
 
 def get_client_ip(request):
@@ -105,7 +176,7 @@ def make_bokeh_graph(data, title, ytitle):
     p = figure(title=title, x_axis_type='datetime',
                plot_width=450,
                plot_height=250,
-               background_fill_color="beige",
+               background_fill="beige",
                tools='pan,box_zoom,reset,save')
     if data:
         xs, ys = zip(*[(m.pub_date, m.value) for m in data])

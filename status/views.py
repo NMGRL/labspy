@@ -13,7 +13,7 @@ from numpy import array
 
 from status.models import Measurement, ProcessInfo, Analysis, Experiment
 from status.view_helpers import make_current, connection_timestamp, make_connections, make_ideogram, \
-    make_bokeh_graph, make_spectrometer_dict, get_data, get_post, get_client_ip
+    make_bokeh_graph, make_spectrometer_dict, get_data, get_post, get_client_ip, calc_bloodtest
 
 
 # views
@@ -198,34 +198,6 @@ def bloodtest(request):
 
     context['bloodtests'] = bs
     return render(request, 'status/bloodtest.html', context)
-
-
-def calc_bloodtest(name, data):
-    mi, ma, mean, std, latest, timestamp = 0, 0, 0, 0, 0, ''
-    if data:
-        if isinstance(data, list):
-            la = data[-1]
-        else:
-            la = data.last()
-
-        latest = la.value
-        timestamp = la.pub_date
-
-        data = array([di.value for di in data])
-        mi = data.min()
-        ma = data.max()
-        mean = data.mean()
-        std = data.std()
-
-    bd = {'name': name,
-          'min': mi,
-          'max': ma,
-          'mean': mean,
-          'std': std,
-          'latest': latest,
-          'timestamp': timestamp}
-
-    return bd
 
 
 def make_temp_graph(post, name='Lab Temp.', title='Temperature'):
