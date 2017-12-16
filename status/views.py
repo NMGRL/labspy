@@ -203,9 +203,13 @@ def bloodtest(request):
 def calc_bloodtest(name, data):
     mi, ma, mean, std, latest, timestamp = 0, 0, 0, 0, 0, ''
     if data:
-        l = data.last()
-        latest = l.value
-        timestamp = l.pub_date
+        if isinstance(data, list):
+            la = data[-1]
+        else:
+            la = data.last()
+
+        latest = la.value
+        timestamp = la.pub_date
 
         data = array([di.value for di in data])
         mi = data.min()
@@ -319,7 +323,7 @@ def vacuum(request):
         data = get_data(obj, post)
         context[ctxkey] = make_bokeh_graph(data, po.graph_title, ytitle)
 
-        bt = calc_bloodtest(pikey, data.all())
+        bt = calc_bloodtest(pikey, data)
         bs.append(bt)
 
     context['bloodtests'] = bs

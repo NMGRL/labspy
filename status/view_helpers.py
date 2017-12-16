@@ -73,6 +73,7 @@ def get_post(request):
     post = (now - dt)
     return post, form
 
+
 def get_data(table, post):
     data = table.filter(pub_date__gte=post).all()
     if not data or len(data) == 1:
