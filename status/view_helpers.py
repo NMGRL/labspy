@@ -105,12 +105,12 @@ def make_bokeh_graph(data, title, ytitle):
     p = figure(title=title, x_axis_type='datetime',
                plot_width=450,
                plot_height=250,
+               background_fill_color="beige",
                tools='pan,box_zoom,reset,save')
     if data:
         xs, ys = zip(*[(m.pub_date, m.value) for m in data])
-        p.line(xs, ys)
-
-        p.line(xs, smooth(ys))
+        p.line(xs, ys, line_width=2)
+        p.line(xs, smooth(ys), line_color='yellow', line_dash='dashed')
 
     p.xaxis.axis_label = 'Time'
     p.yaxis.axis_label = ytitle
