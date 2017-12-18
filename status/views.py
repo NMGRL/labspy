@@ -178,7 +178,7 @@ def render_spectrometer_status(request, name, oname):
 
 def bloodtest(request):
     now = datetime.now()
-    post = now - timedelta(weeks=400)
+    post = now - timedelta(weeks=4)
     context = {}
     bs = []
     for name, piname in (('Lab Temp.', 'Lab Temp.'),
