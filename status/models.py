@@ -18,6 +18,7 @@ class ProcessInfo(models.Model):
     device = models.ForeignKey(Device)
     graph_title = models.CharField(max_length=80, default='')
     ytitle = models.CharField(max_length=80, default='')
+    bloodtest_enabled = models.BooleanField(default=True)
 
     def __str__(self):
         return '{} {} ({})'.format(self.device.name, self.name, self.units)

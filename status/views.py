@@ -190,11 +190,14 @@ def bloodtest(request):
                          ('BoneIonGauge', 'BoneIonGauge'),
                          ('MicroBoneIonGauge', 'MicroBoneIonGauge'),
                          ('RoughingIonGauge', 'RoughingIonGauge'),):
-        table = Measurement.objects.filter(process_info__name=piname)
-        data = table.filter(pub_date__gte=post).all()
+        p = ProcessInfo.objects.filter(name=piname)
+        if p.bloodtest_enabled:
 
-        bt = calc_bloodtest(name, data)
-        bs.append(bt)
+            table = Measurement.objects.filter(process_info__name=piname)
+            data = table.filter(pub_date__gte=post).all()
+
+            bt = calc_bloodtest(name, data)
+            bs.append(bt)
 
     context['bloodtests'] = bs
     return render(request, 'status/bloodtest.html', context)
