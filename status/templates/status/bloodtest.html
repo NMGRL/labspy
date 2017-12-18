@@ -22,11 +22,11 @@
     {% for row in bloodtests %}
         <tr>
             <td>{{ row.name }}</td>
-            <td>{{ row.min|floatformat:2 }}</td>
-            <td>{{ row.max|floatformat:2 }}</td>
-            <td>{{ row.mean|floatformat:2 }}</td>
-            <td>{{ row.std|floatformat:2 }}</td>
-            <td>{{ row.latest|floatformat:2 }}</td>
+            <td>{{ row.min}}</td>
+            <td>{{ row.max }}</td>
+            <td>{{ row.mean }}</td>
+            <td>{{ row.std }}</td>
+            <td>{{ row.latest }}</td>
             <td>{{ row.timestamp|date:"SHORT_DATETIME_FORMAT" }}</td>
         </tr>
     {% endfor %}
