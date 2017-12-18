@@ -190,7 +190,7 @@ def bloodtest(request):
                          ('BoneIonGauge', 'BoneIonGauge'),
                          ('MicroBoneIonGauge', 'MicroBoneIonGauge'),
                          ('RoughingIonGauge', 'RoughingIonGauge'),):
-        p = ProcessInfo.objects.filter(name=piname)
+        p = ProcessInfo.objects.filter(name=piname).first()
         if p.bloodtest_enabled:
 
             table = Measurement.objects.filter(process_info__name=piname)
