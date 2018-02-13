@@ -46,6 +46,11 @@ class DateSelectorForm(forms.Form):
                                                            ('2', 'Last Week'),
                                                            ('3', 'Last Month')),
                                         initial='1')
+    use_last = forms.BooleanField(initial=True,
+                                  required=False)
+
+    low_post = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'), input_formats=('%m/%d/%Y',)) #widget=forms.widgets.DateInput(format="%m/%d/%Y"))
+    high_post = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'), input_formats=('%m/%d/%Y',)) #widget=forms.widgets.DateInput(format="%m/%d/%Y"))
 
 
 def floatfmt(f, n=4, s=4, max_width=None, default='NaN', use_scientific=True):
@@ -128,25 +133,37 @@ def get_client_ip(request):
 
 
 def get_post(request):
-    dt = None
+
     if request.method == 'POST':
         form = DateSelectorForm(request.POST)
+        print 'asfasf', form.is_valid()
         if form.is_valid():
-            d = int(form.cleaned_data['date_range_name'])
-            dt = timedelta(**DS[d])
+
+            if form.cleaned_data['use_last']:
+                d = int(form.cleaned_data['date_range_name'])
+                high = datetime.now()
+                low = high - timedelta(**DS[d])
+            else:
+                low = form.cleaned_data['low_post']
+                high = form.cleaned_data['high_post']
+        else:
+            print form.errors
     else:
         form = DateSelectorForm()
+        high = datetime.now()
+        low = high - timedelta(**DS[1])
 
-    if not dt:
-        dt = timedelta(**DS[1])
+    # if not dt:
 
-    now = datetime.now()
-    post = (now - dt)
-    return post, form
+    # now = datetime.now()
+    # post = (now - dt)
+    return (high, low), form
 
 
 def get_data(table, post):
-    data = table.filter(pub_date__gte=post).all()
+    high, low = post
+    print high, low
+    data = table.filter(pub_date__gte=low).filter(pub_date__lte=high).all()
     if not data or len(data) == 1:
         v = table.order_by('pub_date').last()
         if v:
