@@ -162,7 +162,6 @@ def get_post(request):
 
 def get_data(table, post):
     high, low = post
-    print high, low
     data = table.filter(pub_date__gte=low).filter(pub_date__lte=high).all()
     if not data or len(data) == 1:
         v = table.order_by('pub_date').last()
