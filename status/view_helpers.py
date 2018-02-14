@@ -24,6 +24,7 @@ from collections import namedtuple
 import flot
 from datetime import datetime, timedelta
 from django import forms
+from django.forms.extras import SelectDateWidget
 from numpy import array, histogram, argmax, hanning, ones, asarray, r_, convolve
 from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.plotting import figure
@@ -41,16 +42,22 @@ FMTS = ['%M:%S', '%H:%M', '%m/%d', '%m/%d']
 
 
 class DateSelectorForm(forms.Form):
+    use_last = forms.BooleanField(initial=True,
+                                  required=False)
+
     date_range_name = forms.ChoiceField(label='', choices=(('0', 'Last Hour'),
                                                            ('1', 'Last Day'),
                                                            ('2', 'Last Week'),
                                                            ('3', 'Last Month')),
                                         initial='1')
-    use_last = forms.BooleanField(initial=True,
-                                  required=False)
 
-    low_post = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'), input_formats=('%m/%d/%Y',)) #widget=forms.widgets.DateInput(format="%m/%d/%Y"))
-    high_post = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'), input_formats=('%m/%d/%Y',)) #widget=forms.widgets.DateInput(format="%m/%d/%Y"))
+    # low_post = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'),
+    #                            input_formats=('%m/%d/%Y',))
+    # high_post = forms.DateField(widget=forms.DateInput(format='%m/%d/%Y'),
+    #                             input_formats=('%m/%d/%Y',))
+
+    low_post = forms.DateField(widget=SelectDateWidget(years=[2017, 2018, 2019, 2020]))
+    high_post = forms.DateField(widget=SelectDateWidget(years=[2017, 2018, 2019, 2020]))
 
 
 def floatfmt(f, n=4, s=4, max_width=None, default='NaN', use_scientific=True):
@@ -133,7 +140,6 @@ def get_client_ip(request):
 
 
 def get_post(request):
-
     if request.method == 'POST':
         form = DateSelectorForm(request.POST)
         print 'asfasf', form.is_valid()
