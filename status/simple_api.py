@@ -19,7 +19,7 @@ from django.http import JsonResponse
 
 from status.models import Analysis
 
-OFFSET = 91542
+OFFSET = 400000
 
 def analysis_count(request):
     d = {'analysis_count': Analysis.objects.count()+OFFSET}
