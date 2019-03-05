@@ -34,7 +34,7 @@ urlpatterns = [
     url(r'^felix_status/$', views.felix_status, name='felix_status_index'),
     url(r'^repository_status/$', views.repository_status, name='repository_status_index'),
     url(r'^calendar/$', views.calender, name='calendar_index'),
-    url(r'^sparrow/$', views.sparrow, name='sparrow_index'),
+    # url(r'^sparrow/$', views.sparrow, name='sparrow_index'),
     url(r'^all_temps/$', views.all_temps, name='all_temps_index'),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
