@@ -17,7 +17,7 @@ from django.conf.urls import include, url
 from django.contrib import admin
 from rest_framework import routers
 
-from status import views, analysis_views, api_views
+from status import views, analysis_views, api_views, simple_api
 
 router = routers.DefaultRouter()
 router.register('devices', api_views.DeviceViewSet)
@@ -34,10 +34,11 @@ urlpatterns = [
     url(r'^felix_status/$', views.felix_status, name='felix_status_index'),
     url(r'^repository_status/$', views.repository_status, name='repository_status_index'),
     url(r'^calendar/$', views.calender, name='calendar_index'),
+    url(r'^sparrow/$', views.sparrow, name='sparrow_index'),
     url(r'^all_temps/$', views.all_temps, name='all_temps_index'),
     url(r'^', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
-
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^api/v1/analysis_count', simple_api.analysis_count, name='simple_api_index')
     # url(r'^it/$', views.it_status, name='it_index'),
     # url(r'^jan_analysis_summary', analysis_views.jan_analysis_summary, name='jan_analysis_summary'),
     # url(r'^',include(router.urls)),
