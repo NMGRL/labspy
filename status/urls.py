@@ -38,7 +38,8 @@ urlpatterns = [
     url(r'^all_temps/$', views.all_temps, name='all_temps_index'),
     url(r'^', include(router.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^api/v1/analysis_count', simple_api.analysis_count, name='simple_api_index')
+    url(r'^api/v1/generic_lab_info', simple_api.generic_lab_info, name='generic_lab_info'),
+    url(r'^api/v1/analysis_count', simple_api.generic_lab_info, name='analysis_count')
     # url(r'^it/$', views.it_status, name='it_index'),
     # url(r'^jan_analysis_summary', analysis_views.jan_analysis_summary, name='jan_analysis_summary'),
     # url(r'^',include(router.urls)),

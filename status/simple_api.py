@@ -14,15 +14,23 @@
 # limitations under the License.
 # ===============================================================================
 import json
-
+from datetime import datetime
 from django.http import JsonResponse
 
 from status.models import Analysis
 
 OFFSET = 400000
+EXPERIENCE_OFFSET = 40
+EXPERIENCE_START = 2019
+EXPERIENCE_MULTIPLIER = 2
 
-def analysis_count(request):
-    d = {'analysis_count': Analysis.objects.count()+OFFSET}
+
+def generic_lab_info(request):
+    now = datetime.now()
+    combined_experience = EXPERIENCE_OFFSET + (now.year - EXPERIENCE_START)*EXPERIENCE_MULTIPLIER
+
+    d = {'analysis_count': Analysis.objects.count()+OFFSET,
+         'years_combined_experience': combined_experience}
 
     return JsonResponse(d)
 # ============= EOF =============================================
